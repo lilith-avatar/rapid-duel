@@ -3,7 +3,7 @@
 --- @copyright Lilith Games, Project Da Vinci(Avatar Team)
 --- @see https://www.projectdavinci.com/
 --- @see https://github.com/endaye/avatar-ava-xls2lua
---- source file: ./Csv/GlobalConfig.xls
+--- source file: ./Xls/GlobalConfig.xls
 
 local GlobalConfigXls = {
     Stronghold_PointRange = 2.0,
@@ -11,7 +11,7 @@ local GlobalConfigXls = {
     Stronghold_SpeedUp = 30.0,
     Stronghold_SpeedMax = 50.0,
     Stronghold_PointGrade = {0.45,1},
-    PlayerNum = 2.0,
+    PlayerNum = 1.0,
     TeamMinNum = 3.0,
     Hall2GameWait = 5.0,
     GameReadyWait = 20.0,
@@ -48,7 +48,12 @@ local GlobalConfigXls = {
     DefaultFPS = "Middle",
     FrameUpdateDelay = 0.2,
     LogicListLength = 50.0,
-    RenderListLength = 20.0
+    RenderListLength = 20.0,
+    Lv_BaseEXP = 20000.0,
+    Lv_PerformanceEXPRate = 1.0,
+    Lv_MVPEXP = 500.0,
+    Lv_WinEXP = 200.0,
+    Item_KeyID = 9999.0
 }
 
 return GlobalConfigXls

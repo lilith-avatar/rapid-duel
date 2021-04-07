@@ -3,7 +3,7 @@
 --- @copyright Lilith Games, Project Da Vinci(Avatar Team)
 --- @see https://www.projectdavinci.com/
 --- @see https://github.com/endaye/avatar-ava-xls2lua
---- source file: ./Csv/Mode.xls
+--- source file: ./Xls/Mode.xls
 
 local ModeXls = {
     [1] = {

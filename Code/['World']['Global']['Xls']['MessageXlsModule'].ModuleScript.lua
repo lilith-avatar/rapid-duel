@@ -3,7 +3,7 @@
 --- @copyright Lilith Games, Project Da Vinci(Avatar Team)
 --- @see https://www.projectdavinci.com/
 --- @see https://github.com/endaye/avatar-ava-xls2lua
---- source file: ./Csv/Message.xls
+--- source file: ./Xls/Message.xls
 
 local MessageXls = {
     [1001] = {
