@@ -1,20 +1,22 @@
+--- 全局Debug模块
 --- @module DebugModeLogic
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
 local DebugModeLogic = {}
 
---- 初始化
+--- 初始化Hook
 function DebugModeLogic.InitHook()
     HookFunc()
 end
 
+--- 初始化客户端
 function DebugModeLogic.InitClient()
     InitClientLogic()
 end
 
 --- 显示报错信息
----@param _location number 报错位置
----@param _content string 报错信息
+--- @param _location number 报错位置
+--- @param _content string 报错信息
 function ErrorShow(_location, _content)
     local self = DebugModeLogic
     if self.root.Bg.ActiveSelf then
@@ -31,12 +33,13 @@ function ErrorShow(_location, _content)
     self.root.Bg:SetActive(true)
 end
 
----显示当前游戏未结束
+--- 显示当前游戏未结束
 function StillInGameShow()
     local self = DebugModeLogic
     self.stillInGameRoot:SetActive(true)
 end
 
+--- 初始化相关事件
 function InitEvent()
     if localPlayer.C_Event == nil then
         world:CreateObject('FolderObject', 'C_Event', localPlayer)
@@ -47,6 +50,7 @@ function InitEvent()
     event:Connect(StillInGameShow)
 end
 
+--- 初始化UI
 function InitUI()
     local self = DebugModeLogic
     self.root = world:CreateInstance('ErrorGUI', 'ErrorGUI', localPlayer.Local)
@@ -83,6 +87,7 @@ function InitUI()
     )
 end
 
+--- Hook的执行函数
 function HookFunc()
     if FrameworkConfig.DebugMode then
         for _, module in pairs(_G) do
@@ -126,12 +131,14 @@ function HookFunc()
     end
 end
 
+--- 初始化客户端逻辑
 function InitClientLogic()
     InitEvent()
     InitUI()
     InitBakeNav()
 end
 
+--- 初始化烘培寻路
 function InitBakeNav()
     local self = DebugModeLogic
     if FrameworkConfig.DebugMode then
@@ -149,6 +156,7 @@ function InitBakeNav()
     end
 end
 
+--- 创建寻路数据
 function BakeNav()
     BakeNavMesh.CreateData()
 end
