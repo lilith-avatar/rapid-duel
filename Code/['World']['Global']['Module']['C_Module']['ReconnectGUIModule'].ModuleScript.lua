@@ -30,7 +30,6 @@ end
 --- Update函数
 --- @param _dt number delta time 每帧时间
 function ReconnectGUI:Update(_dt, _tt)
-    
 end
 
 --- FixUpdate函数
@@ -75,11 +74,13 @@ function ReconnectGUI:OnPlayerLeaveEventHandler()
     Client:Stop()
     self.root:SetActive(true)
     self.quitPnl:SetActive(true)
-    invoke(function()
-        wait(3)
-        print('自动退出')
-        Game.Quit()
-    end)
+    invoke(
+        function()
+            wait(3)
+            print('自动退出')
+            Game.Quit()
+        end
+    )
 end
 
 --- 玩家点击按钮

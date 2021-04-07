@@ -15,7 +15,7 @@ Events.ServerEvents = {
     'NpcCreateEvent',
     'NpcDestroyEvent',
     'CameraMoveEndEvent',
-    'PlayerDoChangeOccEvent',
+    'PlayerDoChangeOccEvent'
 }
 
 -- 客户端事件列表

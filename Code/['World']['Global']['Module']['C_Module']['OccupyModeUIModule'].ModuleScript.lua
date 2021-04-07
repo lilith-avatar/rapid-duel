@@ -25,7 +25,6 @@ function OccupyModeUI:Init()
 
     self.root:SetActive(false)
     self.enable = false
-
 end
 
 --- 占点模式开始
@@ -41,24 +40,26 @@ end
 
 function OccupyModeUI:SetStartValue(_pointsList, _sceneObj)
     local selfTeam = localPlayer.PlayerType.Value
-    NotReplicate(function()
-        for i, v in pairs(_pointsList) do
-            if selfTeam == Const.TeamEnum.Team_A then
-                v.Flag.Progress.ProgressTeamA.Color = selfColor
-                v.Flag.Progress.ProgressTeamB.Color = enemyColor
-            elseif selfTeam == Const.TeamEnum.Team_B then
-                v.Flag.Progress.ProgressTeamA.Color = enemyColor
-                v.Flag.Progress.ProgressTeamB.Color = selfColor
+    NotReplicate(
+        function()
+            for i, v in pairs(_pointsList) do
+                if selfTeam == Const.TeamEnum.Team_A then
+                    v.Flag.Progress.ProgressTeamA.Color = selfColor
+                    v.Flag.Progress.ProgressTeamB.Color = enemyColor
+                elseif selfTeam == Const.TeamEnum.Team_B then
+                    v.Flag.Progress.ProgressTeamA.Color = enemyColor
+                    v.Flag.Progress.ProgressTeamB.Color = selfColor
+                end
+            end
+            if localPlayer.PlayerType.Value == Const.TeamEnum.Team_A then
+                _sceneObj.Team_B_Boundary.Boundary.Cube.Color = enemyColor
+                _sceneObj.Team_A_Boundary.Boundary.Cube.Color = selfColor
+            elseif localPlayer.PlayerType.Value == Const.TeamEnum.Team_B then
+                _sceneObj.Team_B_Boundary.Boundary.Cube.Color = selfColor
+                _sceneObj.Team_A_Boundary.Boundary.Cube.Color = enemyColor
             end
         end
-        if localPlayer.PlayerType.Value == Const.TeamEnum.Team_A then
-            _sceneObj.Team_B_Boundary.Boundary.Cube.Color = enemyColor
-            _sceneObj.Team_A_Boundary.Boundary.Cube.Color = selfColor
-        elseif localPlayer.PlayerType.Value == Const.TeamEnum.Team_B then
-            _sceneObj.Team_B_Boundary.Boundary.Cube.Color = selfColor
-            _sceneObj.Team_A_Boundary.Boundary.Cube.Color = enemyColor
-        end
-    end)
+    )
     self.pointsObjList = _pointsList
     self.selfTeamGrade.Text = '0'
     self.enemyTeamGrade.Text = '0'
@@ -74,7 +75,7 @@ end
 function OccupyModeUI:CreateHangPointUI1(_pointsList)
     local pointsNum = table.nums(_pointsList)
     local startX = 0.5 - (pointsNum - 1) * 0.075
-    local function sortFunc(a , b)
+    local function sortFunc(a, b)
         if tostring(a) < tostring(b) then
             return true
         end
@@ -91,7 +92,7 @@ end
 ---创建动态UI
 function OccupyModeUI:CreateHangPointUI2(_pointsList)
     for i, v in pairs(_pointsList) do
-        local moveUi = IndicatorUI:CreateUI('OccupyCircleMove', v,  Vector3.Up * 3)
+        local moveUi = IndicatorUI:CreateUI('OccupyCircleMove', v, Vector3.Up * 3)
         moveUi.AnchorsX = Vector2.Zero
         moveUi.AnchorsY = Vector2.Zero
         moveUi.NameTxt.Text = i
@@ -126,7 +127,6 @@ function OccupyModeUI:Update(dt, tt)
     if not self.enable then
         return
     end
-
 end
 
 --- FixUpdate函数

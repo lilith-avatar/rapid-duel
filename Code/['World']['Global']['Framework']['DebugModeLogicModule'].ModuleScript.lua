@@ -60,19 +60,27 @@ function InitUI()
     self.root.Bg:SetActive(false)
     self.stillInGameRoot:SetActive(false)
 
-    self.okBtn.OnClick:Connect(function()
-        self.root.Bg:SetActive(false)
-    end)
-    self.root.BakeBtn.OnClick:Connect(function()
-        BakeNav()
-    end)
+    self.okBtn.OnClick:Connect(
+        function()
+            self.root.Bg:SetActive(false)
+        end
+    )
+    self.root.BakeBtn.OnClick:Connect(
+        function()
+            BakeNav()
+        end
+    )
     ---仍在游戏中的提示框
-    self.stillInGameRoot.Bg.WAIT.OnClick:Connect(function()
-        self.stillInGameRoot:SetActive(false)
-    end)
-    self.stillInGameRoot.Bg.QUIT.OnClick:Connect(function()
-        Game.Quit()
-    end)
+    self.stillInGameRoot.Bg.WAIT.OnClick:Connect(
+        function()
+            self.stillInGameRoot:SetActive(false)
+        end
+    )
+    self.stillInGameRoot.Bg.QUIT.OnClick:Connect(
+        function()
+            Game.Quit()
+        end
+    )
 end
 
 function HookFunc()
@@ -90,7 +98,7 @@ function HookFunc()
                 for funcName, func in pairs(funcTable) do
                     if type(func) == 'function' and funcName ~= 'Update' and funcName ~= 'FixUpdate' then
                         local hookedFunc = function(...)
-                            local res = { pcall(func, ...) }
+                            local res = {pcall(func, ...)}
                             local success = res[1]
                             table.remove(res, 1)
                             if success then
@@ -98,10 +106,15 @@ function HookFunc()
                             else
                                 if localPlayer then
                                     ---客户端报错
-                                    NetUtil.Fire_C('ErrorShowEvent', localPlayer, Const.ErrorLocationEnum.Client, res[1])
+                                    NetUtil.Fire_C(
+                                        'ErrorShowEvent',
+                                        localPlayer,
+                                        Const.ErrorLocationEnum.Client,
+                                        res[1]
+                                    )
                                 else
                                     ---服务端报错
-                                    NetUtil.Broadcast('ErrorShowEvent',  Const.ErrorLocationEnum.Server, res[1])
+                                    NetUtil.Broadcast('ErrorShowEvent', Const.ErrorLocationEnum.Server, res[1])
                                 end
                             end
                         end
@@ -122,15 +135,17 @@ end
 function InitBakeNav()
     local self = DebugModeLogic
     if FrameworkConfig.DebugMode then
-        Input.OnKeyDown:Connect(function()
-            if Input.GetPressKeyData(Enum.KeyCode.F1) == Enum.KeyState.KeyStatePress then
-                if self.root.BakeBtn.ActiveSelf then
-                    self.root.BakeBtn:SetActive(false)
-                else
-                    self.root.BakeBtn:SetActive(true)
+        Input.OnKeyDown:Connect(
+            function()
+                if Input.GetPressKeyData(Enum.KeyCode.F1) == Enum.KeyState.KeyStatePress then
+                    if self.root.BakeBtn.ActiveSelf then
+                        self.root.BakeBtn:SetActive(false)
+                    else
+                        self.root.BakeBtn:SetActive(true)
+                    end
                 end
             end
-        end)
+        )
     end
 end
 

@@ -4,26 +4,26 @@
 --- @author Yuancheng Zhang
 local GunCsv = ModuleUtil.New('GunCsv', ServerBase)
 local gunConfig = {
-	{
-		name = 'GunConfig',
-		csv = 'GunConfigTable',
-		ids = { 'Id' },
-	},
-	{
-		name = 'Magazine',
-		csv = 'MagazineTable',
-		ids = { 'Id' },
-	},
-	{
-		name = 'GunAnimation',
-		csv = 'GunAnimationTable',
-		ids = { 'GunId', 'GunEvent' },
-	},
-	{
-		name = 'Sound',
-		csv = 'Sound',
-		ids = { 'GunId', 'GunEvent' },
-	},
+    {
+        name = 'GunConfig',
+        csv = 'GunConfigTable',
+        ids = {'Id'}
+    },
+    {
+        name = 'Magazine',
+        csv = 'MagazineTable',
+        ids = {'Id'}
+    },
+    {
+        name = 'GunAnimation',
+        csv = 'GunAnimationTable',
+        ids = {'GunId', 'GunEvent'}
+    },
+    {
+        name = 'Sound',
+        csv = 'Sound',
+        ids = {'GunId', 'GunEvent'}
+    }
 }
 
 --- 初始化:加载所有预加载表格

@@ -18,7 +18,6 @@ end
 --- Update函数
 --- @param dt number delta time 每帧时间
 function IndicatorUI:Update(dt, tt)
-
 end
 
 ---创建一个UI,并和场景中的对象绑定

@@ -9,52 +9,52 @@ function WeaponGUI:initialize(_gunController)
     self.m_gui = world:CreateInstance('WeaponGUI', 'WeaponGUI', localPlayer.Local)
     self.gunController = _gunController
     self.m_gui:SetActive(false)
-	self:GetScreenSize()
+    self:GetScreenSize()
     ---枪的准星
     self.aimer = nil
     self.banShooting = self.m_gui.BanShooting
     self.crosshair = self.m_gui.LineCrosshair
     self.scope = self.m_gui.OpticalSight.Telescope
     self.dot = self.m_gui.OpticalSight.RedDot
-	--镜的跳动部分
-	self.uiJumpOmega = self.gunController.m_recoil.config_uiJumpOmega
-	self.uiJumpMax = self.gunController.m_recoil.config_uiJumpMax
-	self.uiJumpAmpl = self.gunController.m_recoil.config_uiJumpAmpl
-	self.uiJumpDump = self.gunController.m_recoil.config_uiJumpDump
-	self.uiJumpAngle = self.gunController.m_recoil.config_uiJumpAngle * math.pi / 180
-	--默认镜
+    --镜的跳动部分
+    self.uiJumpOmega = self.gunController.m_recoil.config_uiJumpOmega
+    self.uiJumpMax = self.gunController.m_recoil.config_uiJumpMax
+    self.uiJumpAmpl = self.gunController.m_recoil.config_uiJumpAmpl
+    self.uiJumpDump = self.gunController.m_recoil.config_uiJumpDump
+    self.uiJumpAngle = self.gunController.m_recoil.config_uiJumpAngle * math.pi / 180
+    --默认镜
     self.scopeName, self.dotName, self.crosshairName = table.unpack(self.gunController.defaultAimImage)
     ---屏幕数据
     self.scopeStandardSize = nil
-	---初始化资源
-	if(self.gunController.WaistAimMode == 'RightAngle') then
-		self.crosshair.Size = Vector2(24, 17)
-		self.crosshair.Color = Color(255,255,255,255)
-	elseif(self.gunController.WaistAimMode == 'Ring') then
-		for i = 1, 4 do
-			self.crosshair['LineCrosshair'..tostring(i)].Texture = 
-				ResourceManager.GetTexture('WeaponPackage/UI/WeaponGUI/Img_Ring_' .. tostring(i))
-			self.crosshair['LineCrosshair'..tostring(i)].Size = Vector2(21 * (i % 2) + 7, 28 - 21 * (i % 2))
-			self.crosshair['LineCrosshair'..tostring(i)].Color = Color(255,255,255,255)
-		end
-	elseif(self.gunController.WaistAimMode == 'Crosshair') then
-		self.crosshair.Size = Vector2(5, 5)
-		self.crosshair.Texture = ResourceManager.GetTexture('WeaponPackage/UI/WeaponGUI/Img_Crosshair_Middle')
-		self.crosshair.Color = Color(255,255,255,255)
-		for i = 1, 4 do
-			self.crosshair['LineCrosshair'..tostring(i)].Color = Color(255,255,255,255)
-		end
-	else
-		error('undefined WaistAimMode!!!')
-	end
-	self.crosshair.Size = self.crosshair.Size
-	for i = 1, 4 do
-		self.crosshair['LineCrosshair'..tostring(i)].Size = self.crosshair['LineCrosshair'..tostring(i)].Size
-	end
-	
+    ---初始化资源
+    if (self.gunController.WaistAimMode == 'RightAngle') then
+        self.crosshair.Size = Vector2(24, 17)
+        self.crosshair.Color = Color(255, 255, 255, 255)
+    elseif (self.gunController.WaistAimMode == 'Ring') then
+        for i = 1, 4 do
+            self.crosshair['LineCrosshair' .. tostring(i)].Texture =
+                ResourceManager.GetTexture('WeaponPackage/UI/WeaponGUI/Img_Ring_' .. tostring(i))
+            self.crosshair['LineCrosshair' .. tostring(i)].Size = Vector2(21 * (i % 2) + 7, 28 - 21 * (i % 2))
+            self.crosshair['LineCrosshair' .. tostring(i)].Color = Color(255, 255, 255, 255)
+        end
+    elseif (self.gunController.WaistAimMode == 'Crosshair') then
+        self.crosshair.Size = Vector2(5, 5)
+        self.crosshair.Texture = ResourceManager.GetTexture('WeaponPackage/UI/WeaponGUI/Img_Crosshair_Middle')
+        self.crosshair.Color = Color(255, 255, 255, 255)
+        for i = 1, 4 do
+            self.crosshair['LineCrosshair' .. tostring(i)].Color = Color(255, 255, 255, 255)
+        end
+    else
+        error('undefined WaistAimMode!!!')
+    end
+    self.crosshair.Size = self.crosshair.Size
+    for i = 1, 4 do
+        self.crosshair['LineCrosshair' .. tostring(i)].Size = self.crosshair['LineCrosshair' .. tostring(i)].Size
+    end
+
     self.crs1offsets = {}
     for k, v in ipairs(self.crosshair:GetChildren()) do
-		v.Offset = v.Offset * self.screenSize.x / 2000
+        v.Offset = v.Offset * self.screenSize.x / 2000
         table.insert(self.crs1offsets, v.Offset)
     end
 
@@ -67,111 +67,118 @@ function WeaponGUI:initialize(_gunController)
     ---准心的回复倍率（屏幕宽度为1,单位为1/s）
     self.backRate = 5
     ---准心的最大偏移（屏幕为1）
-	self.maxProportion = GunConfig.GlobalConfig.DotAnchorMax
+    self.maxProportion = GunConfig.GlobalConfig.DotAnchorMax
     ---准心的最大偏移（单位为像素）
     self.maxAngle = nil
     ---动画控制器
     self.UpdateTable = {}
     self.FixUpdateTable = {}
     ---开镜总动画
-    self.aimController = TweenController:new(
-            'aim',
-            self,
-            function()
-                return self.gunController.m_cameraControl:GetAimTime()
-            end,
-            function(_t1, _t2, _dt)
-                local por = math.sqrt(_t1 / _t2)
-                self.scope.Angle = (1 - por) * self.aimController.initAngle + por * self.aimController.finalAngle
-                self.scope.Size = (1 - por) * self.aimController.initSize + por * self.aimController.finalSize
-                local poor = math.sqrt(por)
-                self.scope.Offset = Vector2(
-                        (1 - por) * self.aimController.initOffset.x + por * self.aimController.finalOffset.x,
-                        (1 - poor) * self.aimController.initOffset.y + poor * self.aimController.finalOffset.y
-                )
-                self:SizeEqual()
-            end,
-            function()
-                self.scope.Offset = self.aimController.finalOffset
-                self.scope.Angle = self.aimController.finalAngle
-                self.scope.Size = self.aimController.finalSize
-                self:SizeEqual()
-            end,
-            true,
-            function()
-                self.deltaAngle = Vector2.Zero
-                self.m_gui.OpticalSight:SetActive(true)
-                self.aimController.finalOffset = Vector2.Zero
-                self.aimController.finalAngle = 0
-                self.aimController.finalSize = self.scopeStandardSize * 1.1
-                self.aimController.initOffset = self.scope.Offset
-                self.aimController.initAngle = (self.scope.Angle < 0) and self.scope.Angle or self.scope.Angle - 360
-                self.aimController.initSize = self.scope.Size
-                self:SizeEqual()
-            end
+    self.aimController =
+        TweenController:new(
+        'aim',
+        self,
+        function()
+            return self.gunController.m_cameraControl:GetAimTime()
+        end,
+        function(_t1, _t2, _dt)
+            local por = math.sqrt(_t1 / _t2)
+            self.scope.Angle = (1 - por) * self.aimController.initAngle + por * self.aimController.finalAngle
+            self.scope.Size = (1 - por) * self.aimController.initSize + por * self.aimController.finalSize
+            local poor = math.sqrt(por)
+            self.scope.Offset =
+                Vector2(
+                (1 - por) * self.aimController.initOffset.x + por * self.aimController.finalOffset.x,
+                (1 - poor) * self.aimController.initOffset.y + poor * self.aimController.finalOffset.y
+            )
+            self:SizeEqual()
+        end,
+        function()
+            self.scope.Offset = self.aimController.finalOffset
+            self.scope.Angle = self.aimController.finalAngle
+            self.scope.Size = self.aimController.finalSize
+            self:SizeEqual()
+        end,
+        true,
+        function()
+            self.deltaAngle = Vector2.Zero
+            self.m_gui.OpticalSight:SetActive(true)
+            self.aimController.finalOffset = Vector2.Zero
+            self.aimController.finalAngle = 0
+            self.aimController.finalSize = self.scopeStandardSize * 1.1
+            self.aimController.initOffset = self.scope.Offset
+            self.aimController.initAngle = (self.scope.Angle < 0) and self.scope.Angle or self.scope.Angle - 360
+            self.aimController.initSize = self.scope.Size
+            self:SizeEqual()
+        end
     )
-	
-	self.uiJumpController = TweenController:new(
-		'uiJump',
-		self,
-		function()
-			local remnPhase = 2 * math.pi - self.uiJumpController.phaseY
-			return remnPhase / self.uiJumpOmega
-		end,
-		function(_time, _totalTime, _dt)
-			local exp = math.exp(-self.uiJumpDump * _time) 
-			self.uiJumpController.valueY = self.uiJumpController.AmplY
-				* exp
-				* math.sin(self.uiJumpOmega * _time + self.uiJumpController.phaseY)
-			self.uiJumpController.valueX = self.uiJumpController.AmplX
-				* exp
-				* math.sin(self.uiJumpOmega * _time + self.uiJumpController.phaseX)
-			local finValueY = self.uiJumpMax == 0 and 0 or
-				self.uiJumpMax * AsymtoteBi(self.uiJumpController.valueY / self.uiJumpMax) / 12 + 0.5
-			local finValueX = self.uiJumpMax == 0 and 0 or
-				self.uiJumpMax * AsymtoteBi(self.uiJumpController.valueX / self.uiJumpMax) / 12 + 0.5
-			self.uiJumpController.ui.AnchorsY = Vector2(finValueY, finValueY)
-			self.uiJumpController.ui.AnchorsX = Vector2(finValueX, finValueX)
-		end,
-		function()
-			self.uiJumpController.ui.AnchorsY = Vector2(0.5, 0.5)
-			self.uiJumpController.ui.AnchorsX = Vector2(0.5, 0.5)
-		end,
-		true,
-		function()
-			self.uiJumpController.valueY = self.uiJumpController.valueY or 0
-			self.uiJumpController.valueX = self.uiJumpController.valueX or 0
-			self.uiJumpController.ui = self.scope.Parent
-			local remn = self.FixUpdateTable.uiJump
-			if(not remn) then
-				self.uiJumpController.phaseY = 0
-				self.uiJumpController.phaseX = 0
-				self.uiJumpController.angle = self.uiJumpAngle * GaussRandom()
-				self.uiJumpController.AmplY = self.uiJumpAmpl
-				self.uiJumpController.AmplX = self.uiJumpController.AmplY * math.tan(self.uiJumpController.angle)
-			else
-				local exp = math.exp(-self.uiJumpDump * self.uiJumpController.time)
-				local tempAY = self.uiJumpController.AmplY * exp
-				local tempAX = self.uiJumpController.AmplX * exp
-				local tempOY = tempAY * self.uiJumpOmega * math.cos(self.uiJumpOmega * self.uiJumpController.time + self.uiJumpController.phaseY)
-				local tempOX = tempAX * self.uiJumpOmega * math.cos(self.uiJumpOmega * self.uiJumpController.time + self.uiJumpController.phaseX)
-				local deltaY = self.uiJumpOmega * self.uiJumpAmpl
-				self.uiJumpController.angle = self.uiJumpAngle * GaussRandom()
-				local deltaX = deltaY * math.tan(self.uiJumpController.angle)
-				local newPhaseY = math.atan(self.uiJumpController.valueY * self.uiJumpOmega/ (deltaY + tempOY))
-				local newPhaseX = math.atan(self.uiJumpController.valueX * self.uiJumpOmega/ (deltaX + tempOX))
-				local newAmplY = (deltaY + tempOY) / self.uiJumpOmega / math.cos(newPhaseY)
-				local newAmplX = (deltaX + tempOX) / self.uiJumpOmega / math.cos(newPhaseX)
-				self.uiJumpController.AmplY = newAmplY
-				self.uiJumpController.AmplX = newAmplX
-				self.uiJumpController.phaseY = newPhaseY
-				self.uiJumpController.phaseX = newPhaseX
-			end
-		end
-	)
-	self:GetScreenInfo()
-	self:RefreshAimer()
-	self:ScopeBack()
+
+    self.uiJumpController =
+        TweenController:new(
+        'uiJump',
+        self,
+        function()
+            local remnPhase = 2 * math.pi - self.uiJumpController.phaseY
+            return remnPhase / self.uiJumpOmega
+        end,
+        function(_time, _totalTime, _dt)
+            local exp = math.exp(-self.uiJumpDump * _time)
+            self.uiJumpController.valueY =
+                self.uiJumpController.AmplY * exp * math.sin(self.uiJumpOmega * _time + self.uiJumpController.phaseY)
+            self.uiJumpController.valueX =
+                self.uiJumpController.AmplX * exp * math.sin(self.uiJumpOmega * _time + self.uiJumpController.phaseX)
+            local finValueY =
+                self.uiJumpMax == 0 and 0 or
+                self.uiJumpMax * AsymtoteBi(self.uiJumpController.valueY / self.uiJumpMax) / 12 + 0.5
+            local finValueX =
+                self.uiJumpMax == 0 and 0 or
+                self.uiJumpMax * AsymtoteBi(self.uiJumpController.valueX / self.uiJumpMax) / 12 + 0.5
+            self.uiJumpController.ui.AnchorsY = Vector2(finValueY, finValueY)
+            self.uiJumpController.ui.AnchorsX = Vector2(finValueX, finValueX)
+        end,
+        function()
+            self.uiJumpController.ui.AnchorsY = Vector2(0.5, 0.5)
+            self.uiJumpController.ui.AnchorsX = Vector2(0.5, 0.5)
+        end,
+        true,
+        function()
+            self.uiJumpController.valueY = self.uiJumpController.valueY or 0
+            self.uiJumpController.valueX = self.uiJumpController.valueX or 0
+            self.uiJumpController.ui = self.scope.Parent
+            local remn = self.FixUpdateTable.uiJump
+            if (not remn) then
+                self.uiJumpController.phaseY = 0
+                self.uiJumpController.phaseX = 0
+                self.uiJumpController.angle = self.uiJumpAngle * GaussRandom()
+                self.uiJumpController.AmplY = self.uiJumpAmpl
+                self.uiJumpController.AmplX = self.uiJumpController.AmplY * math.tan(self.uiJumpController.angle)
+            else
+                local exp = math.exp(-self.uiJumpDump * self.uiJumpController.time)
+                local tempAY = self.uiJumpController.AmplY * exp
+                local tempAX = self.uiJumpController.AmplX * exp
+                local tempOY =
+                    tempAY * self.uiJumpOmega *
+                    math.cos(self.uiJumpOmega * self.uiJumpController.time + self.uiJumpController.phaseY)
+                local tempOX =
+                    tempAX * self.uiJumpOmega *
+                    math.cos(self.uiJumpOmega * self.uiJumpController.time + self.uiJumpController.phaseX)
+                local deltaY = self.uiJumpOmega * self.uiJumpAmpl
+                self.uiJumpController.angle = self.uiJumpAngle * GaussRandom()
+                local deltaX = deltaY * math.tan(self.uiJumpController.angle)
+                local newPhaseY = math.atan(self.uiJumpController.valueY * self.uiJumpOmega / (deltaY + tempOY))
+                local newPhaseX = math.atan(self.uiJumpController.valueX * self.uiJumpOmega / (deltaX + tempOX))
+                local newAmplY = (deltaY + tempOY) / self.uiJumpOmega / math.cos(newPhaseY)
+                local newAmplX = (deltaX + tempOX) / self.uiJumpOmega / math.cos(newPhaseX)
+                self.uiJumpController.AmplY = newAmplY
+                self.uiJumpController.AmplX = newAmplX
+                self.uiJumpController.phaseY = newPhaseY
+                self.uiJumpController.phaseX = newPhaseX
+            end
+        end
+    )
+    self:GetScreenInfo()
+    self:RefreshAimer()
+    self:ScopeBack()
     ---是否允许显示准星命中特效
     self.isAllowShowHitCross = true
     ---命中后的自身的准心反馈
@@ -200,9 +207,12 @@ function WeaponGUI:initialize(_gunController)
             ---低画质
             delay = 0.5
         end
-        invoke(function()
-            self.isAllowShowHitCross = true
-        end, delay)
+        invoke(
+            function()
+                self.isAllowShowHitCross = true
+            end,
+            delay
+        )
         local hitPart = _infoList.HitPart
         if hitPart and hitPart == HitPartEnum.Head then
             self.m_gui.ShootCross.Normal:SetActive(false)
@@ -211,11 +221,17 @@ function WeaponGUI:initialize(_gunController)
             self.m_gui.ShootCross.Normal:SetActive(true)
             self.m_gui.ShootCross.Head:SetActive(false)
         end
-        NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'Weapon_HitCross', false, {
-            self.m_gui.ShootCross,
-            self.m_gui.ShootCross.Normal,
-            self.m_gui.ShootCross.Head,
-        })
+        NetUtil.Fire_C(
+            'StartAnimationEvent',
+            localPlayer,
+            'Weapon_HitCross',
+            false,
+            {
+                self.m_gui.ShootCross,
+                self.m_gui.ShootCross.Normal,
+                self.m_gui.ShootCross.Head
+            }
+        )
     end
     ---绑定击中成功的回调
     self.gunController.successfullyHit:Bind(self.HitCrosshairEffect)
@@ -238,15 +254,15 @@ function WeaponGUI:Update(_deltaTime)
 end
 
 function WeaponGUI:Fire()
-	if(self.isZoomIn) then
-		self.uiJumpController:Start()
-	end
+    if (self.isZoomIn) then
+        self.uiJumpController:Start()
+    end
 end
 
 function WeaponGUI:FixUpdate(_dt)
-	if(not self.gunController.error) then
-		return
-	end
+    if (not self.gunController.error) then
+        return
+    end
     local Todo = {}
     for k, v in pairs(self.FixUpdateTable) do
         Todo[#Todo + 1] = v
@@ -254,9 +270,12 @@ function WeaponGUI:FixUpdate(_dt)
     for i, v in ipairs(Todo) do
         v:FixUpdate(_dt)
     end
-	for i, v in ipairs(self.crosshair:GetChildren()) do
-        v.Offset = v.Offset / (math.abs(v.Offset.x) + math.abs(v.Offset.y)) * (self.gunController.error / self.standardRatio * math.min(self.screenSize.x, 2 * self.screenSize.y) / 240)--ToRewrite
-			+ self.crs1offsets[i]
+    for i, v in ipairs(self.crosshair:GetChildren()) do
+        v.Offset =
+            v.Offset / (math.abs(v.Offset.x) + math.abs(v.Offset.y)) *
+            (self.gunController.error / self.standardRatio * math.min(self.screenSize.x, 2 * self.screenSize.y) / 240) +
+            --ToRewrite
+            self.crs1offsets[i]
     end
     if (self.isZoomIn) then
         self:DotFollow(_dt)
@@ -288,10 +307,11 @@ function WeaponGUI:RefreshAimer()
     self.aimer = self.gunController.m_weaponAccessoryList.sight
     if (not self.aimer) then
         self.scopeName, self.dotName, self.crosshairName = table.unpack(self.gunController.defaultAimImage)
-    elseif(self.aimer.sightImage[self.gunController.gun_Id]) then
-        self.scopeName, self.dotName, self.crosshairName = table.unpack(self.aimer.sightImage[self.gunController.gun_Id])
-	else
-		self.scopeName, self.dotName, self.crosshairName = table.unpack(self.aimer.sightImage[0])
+    elseif (self.aimer.sightImage[self.gunController.gun_Id]) then
+        self.scopeName, self.dotName, self.crosshairName =
+            table.unpack(self.aimer.sightImage[self.gunController.gun_Id])
+    else
+        self.scopeName, self.dotName, self.crosshairName = table.unpack(self.aimer.sightImage[0])
     end
 
     self.scope.Texture = ResourceManager.GetTexture('WeaponPackage/UI/WeaponGUI/' .. self.scopeName)
@@ -310,21 +330,22 @@ function WeaponGUI:RefreshAimer()
 end
 
 function WeaponGUI:GetScreenSize()
-	self.screenSize = self.m_gui.Size
+    self.screenSize = self.m_gui.Size
     if self.screenSize.x > 100000 or self.screenSize.x <= 0 then
         self.screenSize = Vector2(1920, 1080)
     end
     self.standardRatio = math.min(self.screenSize.x / 2000, self.screenSize.y / 1000)
-	return self.screenSize
+    return self.screenSize
 end
 
 ---和检测屏幕相关的逻辑全都在这
 function WeaponGUI:GetScreenInfo()
-	self:GetScreenSize()
+    self:GetScreenSize()
     self:ScopeAdapt()
     self:RedDotAdapt()
     local maxPhy = (self.gunController.m_cameraControl:GetSightFOV() * 2 * math.pi / 180) --开镜状态下屏幕从最左到最右的实际角度
-    self.dotAngleToOffset = self.screenSize.x / maxPhy / 5--math.max(1, 5 - (math.log(60 / world.CurrentCamera.FieldOfView, 2)))--ToRewrite
+    self.dotAngleToOffset = self.screenSize.x / maxPhy / 5
+    --math.max(1, 5 - (math.log(60 / world.CurrentCamera.FieldOfView, 2)))--ToRewrite
     self.maxAngle = self.maxProportion * maxPhy
 end
 
@@ -368,11 +389,11 @@ function WeaponGUI:MechanicalAimStop()
     if (not self.isZoomIn) then
         return
     end
-	local remn = self.FixUpdateTable.uiJump
-	if(remn) then
-		--print('结束枪口跳动动画')
-		remn:Stop()
-	end
+    local remn = self.FixUpdateTable.uiJump
+    if (remn) then
+        --print('结束枪口跳动动画')
+        remn:Stop()
+    end
     remn = self.FixUpdateTable.aim
     if (remn) then
         remn:Stop()
@@ -392,8 +413,13 @@ function WeaponGUI:DotFollow(_dt)
     local scaler = function(_x, _max)
         return _max * AsymtoteBi(_x / _max, 0.2)
     end
-    self.dot.ImgFill.Offset = self.scope.Offset - Vector2(scaler(self.deltaAngle.x, self.maxAngle), scaler(self.deltaAngle.y, self.maxAngle)) * self.dotAngleToOffset / 3
-    self.deltaAngle = self.deltaAngle - self.deltaAngle * _dt * self.backRate * 3 * math.sqrt(world.CurrentCamera.FieldOfView / 60)
+    self.dot.ImgFill.Offset =
+        self.scope.Offset -
+        Vector2(scaler(self.deltaAngle.x, self.maxAngle), scaler(self.deltaAngle.y, self.maxAngle)) *
+            self.dotAngleToOffset /
+            3
+    self.deltaAngle =
+        self.deltaAngle - self.deltaAngle * _dt * self.backRate * 3 * math.sqrt(world.CurrentCamera.FieldOfView / 60)
     --线性回归
 end
 
@@ -416,14 +442,14 @@ end
 ---惯性启用条件
 function WeaponGUI:InertiaActConditions(dt)
     if self.isZoomIn and not self.FixUpdateTable.aim then
-        ---self:ScopeInertia(dt)
+    ---self:ScopeInertia(dt)
     end
 end
 
 ---准镜惯性
 local siCoeff, joyNum = Vector2.zero, 0
 function WeaponGUI:ScopeInertia(dt)
-    joyNum = Vector2(BattleGUI.horizontal, BattleGUI.vertical)  
+    joyNum = Vector2(BattleGUI.horizontal, BattleGUI.vertical)
     siCoeff = Vector2.Slerp(joyNum, Vector2(BattleGUI.vertical, BattleGUI.horizontal), 0.5)
     print(siCoeff)
     self.m_gui.OpticalSight.Telescope.Offset = siCoeff * localPlayer.WalkSpeed * 10

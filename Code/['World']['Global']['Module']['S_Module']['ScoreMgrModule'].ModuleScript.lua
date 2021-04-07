@@ -17,13 +17,16 @@ function ScoreMgr:Init()
     ---玩家连杀通知数量
     self.continuousKillConfig = Config.GlobalConfig.ContinuousKill
 
-    world.OnPlayerAdded:Connect(function(_player)
-        self:PlayerAdd(_player)
-    end)
-    world.OnPlayerRemoved:Connect(function(_player)
-        --self:PlayerRemove(_player)
-    end)
-
+    world.OnPlayerAdded:Connect(
+        function(_player)
+            self:PlayerAdd(_player)
+        end
+    )
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            --self:PlayerRemove(_player)
+        end
+    )
 end
 
 --- Update函数
@@ -148,7 +151,7 @@ function ScoreMgr:CalculateContinuousKill(_killer, _killed)
     self.continuousKillNumList[_killer] = self.continuousKillNumList[_killer] + 1
     self.continuousKillNumList[_killed] = 0
     ---计算连杀积分
-    local curKillNum  = self.continuousKillNumList[_killer]
+    local curKillNum = self.continuousKillNumList[_killer]
     local addScore = self.killScore[curKillNum] or self.killScore[#self.killScore]
     self:BroadcastKill(_killer, curKillNum)
     self:AddScore(_killer, addScore)

@@ -13,7 +13,6 @@ end
 --- Update函数
 --- @param dt number delta time 每帧时间
 function NavMesh:Update(dt, tt)
-
 end
 
 ---根据Json字符串生成table
@@ -46,7 +45,6 @@ function NavMesh:CreateNavMesh()
     for i, v in pairs(self.navMeshList) do
         --printTable(v.SafePoints)
     end
-
 end
 
 ---检查两个点之间是否可以通过
@@ -54,8 +52,8 @@ function NavMesh:CheckBlock(_pos1, _pos2)
     if _pos1 == _pos2 then
         return false
     end
-    local hitResult = Physics:RaycastAll(_pos1, _pos2,false)
-    for i,v in pairs(hitResult.HitObjectAll) do
+    local hitResult = Physics:RaycastAll(_pos1, _pos2, false)
+    for i, v in pairs(hitResult.HitObjectAll) do
         if v.Name ~= 'Node' and v.Block and v.Parent and v.Parent.Name ~= 'Door' then
             return true
         end

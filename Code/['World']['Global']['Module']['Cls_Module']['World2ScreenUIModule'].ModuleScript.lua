@@ -83,7 +83,7 @@ function World2ScreenUI:UIProjectionRefresh()
         end
     elseif usedType == 2 then
         local dis = dir.Magnitude
-        if dis <= redis and z >= 0  then
+        if dis <= redis and z >= 0 then
             ---视野范围内
             if uiDir then
                 uiDir:SetActive(false)

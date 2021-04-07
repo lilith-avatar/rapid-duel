@@ -79,7 +79,6 @@ function HallUI:StartMatchBtnClick()
     end
 end
 ]]
-
 ---匹配的玩家数量发生变化的事件
 function HallUI:MatchPlayerChangeEventHandler(_num)
     --[[

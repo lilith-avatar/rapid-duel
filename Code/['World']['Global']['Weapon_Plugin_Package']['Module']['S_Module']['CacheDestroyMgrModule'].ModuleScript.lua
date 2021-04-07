@@ -8,9 +8,11 @@ function CacheDestroyMgr:Init()
     this = self
     self:InitListeners()
     self.allCacheList = {}
-    world.OnPlayerRemoved:Connect(function(_player)
-        self:PlayerRemoved(_player)
-    end)
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            self:PlayerRemoved(_player)
+        end
+    )
 end
 
 --- 初始化CacheDestroyMgr自己的监听事件

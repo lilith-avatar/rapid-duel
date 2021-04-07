@@ -3,8 +3,8 @@
 ---@author Sharif Ma
 local GunBase = class('GunBase')
 if localPlayer == nil then
-    ---模块必须在客户端运行
-    ---return
+---模块必须在客户端运行
+---return
 end
 
 local accValueName = {
@@ -12,7 +12,7 @@ local accValueName = {
     [WeaponAccessoryTypeEnum.Grip] = 'grip',
     [WeaponAccessoryTypeEnum.Magazine] = 'magazine',
     [WeaponAccessoryTypeEnum.Sight] = 'sight',
-    [WeaponAccessoryTypeEnum.Butt] = 'butt',
+    [WeaponAccessoryTypeEnum.Butt] = 'butt'
 }
 
 ---GunBase类的构造函数
@@ -205,7 +205,10 @@ function GunBase:Update(_deltaTime)
     end
     ---自动装弹开启后进行装弹监测
     if self.config_autoReload then
-        if self.m_magazine.m_isEmptyLoaded and self.m_magazine.m_canLoad and not self.m_onReload and not self.m_isPumping then
+        if
+            self.m_magazine.m_isEmptyLoaded and self.m_magazine.m_canLoad and not self.m_onReload and
+                not self.m_isPumping
+         then
             self:LoadMagazine()
         end
     end
@@ -277,7 +280,10 @@ function GunBase:Update(_deltaTime)
     if (self.m_pumpWait < 0.8 / self.config_shootSpeed and self.m_pumpWait > 0 and self.m_aimBeforePump) then
         self:MechanicalAimStop()
     end
-    if (self.m_pumpWait < 0.6 / self.config_shootSpeed and self.m_pumpWait > 0 and self.m_isPumping and not self.m_pumpMakeShell) then
+    if
+        (self.m_pumpWait < 0.6 / self.config_shootSpeed and self.m_pumpWait > 0 and self.m_isPumping and
+            not self.m_pumpMakeShell)
+     then
         self:MakeBulletShell()
         self.m_pumpMakeShell = true
     end
@@ -318,7 +324,6 @@ function GunBase:Update(_deltaTime)
                         self.m_onReload = false
                         self.reloadFinished:Trigger()
                     end
-
                 else
                     ---换完子弹后弹药已经满了
                     self.m_isAllowed = true
@@ -485,7 +490,7 @@ function GunBase:Destructor()
     self.character.OnDead:Disconnect(self.characterDeadFunc)
     self.character.OnSpawn:Disconnect(self.characterRebornFunc)
 
-    ClearTable(self, { 'm_cacheList_beingUsed', 'm_cacheList_canBeUsed', 'm_cache_folder' })
+    ClearTable(self, {'m_cacheList_beingUsed', 'm_cacheList_canBeUsed', 'm_cache_folder'})
     self = nil
 end
 
@@ -496,7 +501,7 @@ function GunBase:CreateCacheObjects()
         HitEffect = self.hitEffect,
         BulletHole = self.bulletHole,
         BulletShell = self.bulletShell,
-        BulletName = self.bulletName,
+        BulletName = self.bulletName
     }
     GunBase.static.utility:CreateGunCacheObjects(self, nameList)
 end
@@ -564,20 +569,34 @@ function GunBase:MakeBulletShell()
         return
     end
     local temp = EulerDegree(180 * math.random(), 0, 180 * math.random())
-    local shell = GunBase.static.utility:UseCacheObject(self, self.bulletShell, true,
-            {
-                Position = self.toss.Position,
-                Forward = self.toss.Forward,
-                LinearVelocity = 2 * math.random() * RandomRotate(self.toss.Right, 30)
-                        + Vector3(localPlayer.LinearVelocity.x, 0, localPlayer.LinearVelocity.z),
-                Block = false,
-                Rotation = temp
-            }, nil, ObjectTypeEnum.Shell)
+    local shell =
+        GunBase.static.utility:UseCacheObject(
+        self,
+        self.bulletShell,
+        true,
+        {
+            Position = self.toss.Position,
+            Forward = self.toss.Forward,
+            LinearVelocity = 2 * math.random() * RandomRotate(self.toss.Right, 30) +
+                Vector3(localPlayer.LinearVelocity.x, 0, localPlayer.LinearVelocity.z),
+            Block = false,
+            Rotation = temp
+        },
+        nil,
+        ObjectTypeEnum.Shell
+    )
 end
 
 ---开枪后的枪口火光
 function GunBase:MakeFireEffect()
-    GunBase.static.utility:UseCacheObject(self, self.fireEffect, true, { Position = self.muzzleObj.Position }, self.muzzleObj, ObjectTypeEnum.FireEff)
+    GunBase.static.utility:UseCacheObject(
+        self,
+        self.fireEffect,
+        true,
+        {Position = self.muzzleObj.Position},
+        self.muzzleObj,
+        ObjectTypeEnum.FireEff
+    )
 end
 
 ---开枪后创建子弹,默认为直接在命中点创建一个弹孔,若命中的是玩家,则不会创建
@@ -590,12 +609,19 @@ function GunBase:MakeBullet(_endObj, _endPos, _endNorm)
         ---命中的是玩家
         return
     end
-    GunBase.static.utility:UseCacheObject(self, self.bulletHole, true, { Position = _endPos, Up = _endNorm, Size = Vector3(0.07, 0.07, 0.07) }, nil, ObjectTypeEnum.Hole)
+    GunBase.static.utility:UseCacheObject(
+        self,
+        self.bulletHole,
+        true,
+        {Position = _endPos, Up = _endNorm, Size = Vector3(0.07, 0.07, 0.07)},
+        nil,
+        ObjectTypeEnum.Hole
+    )
 end
 
 ---子弹落地调用,创建爆炸特效
 function GunBase:MakeHitEffect(_endPos)
-    GunBase.static.utility:UseCacheObject(self, self.hitEffect, true, { Position = _endPos }, nil, ObjectTypeEnum.HitEff)
+    GunBase.static.utility:UseCacheObject(self, self.hitEffect, true, {Position = _endPos}, nil, ObjectTypeEnum.HitEff)
 end
 
 ---禁止击中自己
@@ -647,7 +673,9 @@ function GunBase:TryPump(_bool)
         self.m_zoomInTryPump = true
     end
 
-    if _bool == nil then return end
+    if _bool == nil then
+        return
+    end
     self.autoFireAim = _bool
 end
 
@@ -722,9 +750,12 @@ function GunBase:DrawGun(info)
         self:PumpStart()
     end
     self.drawWeapon:Trigger()
-    invoke(function()
-        self.m_isWithDrawing = false
-    end, 1)
+    invoke(
+        function()
+            self.m_isWithDrawing = false
+        end,
+        1
+    )
 end
 
 ---消耗子弹
@@ -755,8 +786,8 @@ end
 
 ---枪口位置
 function GunBase:RayCastOrigin()
-    return self.m_isUsingCustomRayCast and self.m_customRayCastOrigin
-            or localPlayer.Position + 0.5 * localPlayer.Forward + (localPlayer.CharacterHeight - 0.1) * Vector3.Up
+    return self.m_isUsingCustomRayCast and self.m_customRayCastOrigin or
+        localPlayer.Position + 0.5 * localPlayer.Forward + (localPlayer.CharacterHeight - 0.1) * Vector3.Up
 end
 
 ---子弹的目标位置
@@ -792,7 +823,7 @@ function GunBase:OverloadRayCast(_dir)
             if string.startswith(v.Name, 'Target_') then
                 ---碰撞是靶子
                 result.IsTarget = true
-                ---print('碰撞是靶子')
+            ---print('碰撞是靶子')
             end
             return result
         end
@@ -918,7 +949,9 @@ function GunBase:Damage(_hit)
     end
     if damage > 0 then
         local targetPlayer = _hit.HitObject.Owner and _hit.HitObject.Owner.Value or _hit.HitObject
-        self.successfullyHit:Trigger( {Position = hitPos, Player = targetPlayer, Damage = damage, HitPart = _hit.HitPart})
+        self.successfullyHit:Trigger(
+            {Position = hitPos, Player = targetPlayer, Damage = damage, HitPart = _hit.HitPart}
+        )
         PlayerGunMgr:FireGunDamage(localPlayer, targetPlayer, self.gun_Id, damage, _hit.HitPart)
     end
 end

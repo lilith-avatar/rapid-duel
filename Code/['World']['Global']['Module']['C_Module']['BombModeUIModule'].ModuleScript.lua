@@ -39,16 +39,20 @@ function BombModeUI:Init()
     ---界面跟随UI,指示用
     self.bombPointsMoveUIList = {}
 
-    self.setOrRemoveBtn.OnClick:Connect(function()
-        if self.m_isReading then
-            self:StopReadLine()
-        else
-            self:StartReadLine()
+    self.setOrRemoveBtn.OnClick:Connect(
+        function()
+            if self.m_isReading then
+                self:StopReadLine()
+            else
+                self:StartReadLine()
+            end
         end
-    end)
-    localPlayer.OnDead:Connect(function()
-        self:StopReadLine()
-    end)
+    )
+    localPlayer.OnDead:Connect(
+        function()
+            self:StopReadLine()
+        end
+    )
 end
 
 --- Update函数
@@ -107,7 +111,7 @@ end
 function BombModeUI:CreateBombPointsUI(_pointsList)
     local pointsNum = table.nums(_pointsList)
     local startX = 0.5 - (pointsNum - 1) * 0.075
-    local function sortFunc(a , b)
+    local function sortFunc(a, b)
         if tostring(a) < tostring(b) then
             return true
         end
@@ -163,16 +167,20 @@ end
 ---绑定碰撞事件
 function BombModeUI:BindCollisionEvent(_pointsList)
     for i, v in pairs(_pointsList) do
-        v.Range.OnCollisionBegin:Connect(function(_hitObj)
-            if _hitObj == localPlayer then
-                self:PlayerEnter(i)
+        v.Range.OnCollisionBegin:Connect(
+            function(_hitObj)
+                if _hitObj == localPlayer then
+                    self:PlayerEnter(i)
+                end
             end
-        end)
-        v.Range.OnCollisionEnd:Connect(function(_hitObj)
-            if _hitObj == localPlayer then
-                self:PlayerLeave(i)
+        )
+        v.Range.OnCollisionEnd:Connect(
+            function(_hitObj)
+                if _hitObj == localPlayer then
+                    self:PlayerLeave(i)
+                end
             end
-        end)
+        )
     end
 end
 
@@ -220,7 +228,6 @@ function BombModeUI:BombStateChangeEventHandler(_oldState, _newState, _pointKey,
     if _newState == Const.BombStateEnum.NoBomb then
         bombUI.Color = bombNoneColor
     elseif _newState == Const.BombStateEnum.BombFlashing then
-
     elseif _newState == Const.BombStateEnum.Exploded then
         bombUI.Color = bombExplodedColor
     end

@@ -108,10 +108,10 @@ function InitEventsAndListeners()
     world.OnPlayerRemoved:Connect(
         function(_player)
             --if cache[_player] then
-                print('[Heartbeat][Server] OnPlayerLeaveEvent, 玩家主动离开游戏,', _player)
-                for _, m in pairs(leaveEventList) do
-                    m:OnPlayerLeaveEventHandler(_player)
-                end
+            print('[Heartbeat][Server] OnPlayerLeaveEvent, 玩家主动离开游戏,', _player)
+            for _, m in pairs(leaveEventList) do
+                m:OnPlayerLeaveEventHandler(_player)
+            end
             --end
         end
     )

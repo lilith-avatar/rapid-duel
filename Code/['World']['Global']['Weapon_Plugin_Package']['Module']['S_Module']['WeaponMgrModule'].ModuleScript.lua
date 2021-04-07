@@ -12,7 +12,7 @@ local _SERVER_EVENT_ = {
     'PlayerEventCreateOverEvent',
     'PlayerDataModifiEvent',
     'SyncAndSaveEvent',
-    'WeaponObjCreatedEvent',
+    'WeaponObjCreatedEvent'
 }
 
 ---服务端模块加载
@@ -46,17 +46,23 @@ function WeaponMgr:Init()
     self.accFolder = world:CreateObject('FolderObject', 'Accessories', world)
     ---世界下放置子弹的文件夹
     self.ammoFolder = world:CreateObject('FolderObject', 'Ammo', world)
-    world.OnPlayerAdded:Connect(function(_player)
-        self:OnPlayerAdded(_player)
-    end)
-    world.OnPlayerRemoved:Connect(function(_player)
-        self:OnPlayerRemoved(_player)
-    end)
+    world.OnPlayerAdded:Connect(
+        function(_player)
+            self:OnPlayerAdded(_player)
+        end
+    )
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            self:OnPlayerRemoved(_player)
+        end
+    )
     ---根据配置表刷新所有配置枪械
     self:CreateAllUnitSlot()
-	invoke(function()
-		self:StartUpdate()
-    end)
+    invoke(
+        function()
+            self:StartUpdate()
+        end
+    )
     DataMgr:Init()
     CacheDestroyMgr:Init()
 end
@@ -93,7 +99,6 @@ end
 ---Update函数
 ---@param dt number delta time 每帧时间
 function WeaponMgr:Update(dt)
-
 end
 
 ---创建一把枪,并放到指定的位置
@@ -219,9 +224,11 @@ function WeaponMgr:CreateAllUnitSlot()
         world:CreateObject('EulerDegreeValueObject', 'Rot', node).Value = v.Rotation
         world:CreateObject('FloatValueObject', 'RespawnTime', node).Value = v.RespawnTime
         self:CreateWeapon(v.UnitId, v.Position, v.Rotation, node, v.Count)
-        node.OnChildRemoved:Connect(function(_child)
-            self:OnSlotChildRemoved(_child, node)
-        end)
+        node.OnChildRemoved:Connect(
+            function(_child)
+                self:OnSlotChildRemoved(_child, node)
+            end
+        )
     end
     for k, v in pairs(accSpawnConfig) do
         local node = world:CreateObject('NodeObject', 'AccSlotNode', self.accFolder)
@@ -230,9 +237,11 @@ function WeaponMgr:CreateAllUnitSlot()
         world:CreateObject('EulerDegreeValueObject', 'Rot', node).Value = v.Rotation
         world:CreateObject('FloatValueObject', 'RespawnTime', node).Value = v.RespawnTime
         self:CreateWeaponAccessory(v.UnitId, v.Position, v.Rotation, node)
-        node.OnChildRemoved:Connect(function(_child)
-            self:OnSlotChildRemoved(_child, node)
-        end)
+        node.OnChildRemoved:Connect(
+            function(_child)
+                self:OnSlotChildRemoved(_child, node)
+            end
+        )
     end
     for k, v in pairs(ammoSpawnConfig) do
         local node = world:CreateObject('NodeObject', 'AmmoSlotNode', self.ammoFolder)
@@ -242,9 +251,11 @@ function WeaponMgr:CreateAllUnitSlot()
         world:CreateObject('EulerDegreeValueObject', 'Rot', node).Value = v.Rotation
         world:CreateObject('FloatValueObject', 'RespawnTime', node).Value = v.RespawnTime
         self:CreateWeaponAmmo(v.UnitId, v.Count, v.Position, v.Rotation, node)
-        node.OnChildRemoved:Connect(function(_child)
-            self:OnSlotChildRemoved(_child, node)
-        end)
+        node.OnChildRemoved:Connect(
+            function(_child)
+                self:OnSlotChildRemoved(_child, node)
+            end
+        )
     end
 end
 
@@ -255,20 +266,29 @@ function WeaponMgr:OnSlotChildRemoved(_child, _node)
         return
     end
     if _node.Parent == self.weaponFolder then
-        invoke(function()
-            self:CreateWeapon(_node.ID.Value, _node.Pos.Value, _node.Rot.Value, _node, _node.AmmoCount.Value)
-            world.Players:BroadcastEvent('CreateAllUnitEvent', self.weaponList, self.accessoryList, self.ammoList)
-        end, respawnTime)
+        invoke(
+            function()
+                self:CreateWeapon(_node.ID.Value, _node.Pos.Value, _node.Rot.Value, _node, _node.AmmoCount.Value)
+                world.Players:BroadcastEvent('CreateAllUnitEvent', self.weaponList, self.accessoryList, self.ammoList)
+            end,
+            respawnTime
+        )
     elseif _node.Parent == self.accFolder then
-        invoke(function()
-            self:CreateWeaponAccessory(_node.ID.Value, _node.Pos.Value, _node.Rot.Value, _node)
-            world.Players:BroadcastEvent('CreateAllUnitEvent', self.weaponList, self.accessoryList, self.ammoList)
-        end, respawnTime)
+        invoke(
+            function()
+                self:CreateWeaponAccessory(_node.ID.Value, _node.Pos.Value, _node.Rot.Value, _node)
+                world.Players:BroadcastEvent('CreateAllUnitEvent', self.weaponList, self.accessoryList, self.ammoList)
+            end,
+            respawnTime
+        )
     elseif _node.Parent == self.ammoFolder then
-        invoke(function()
-            self:CreateWeaponAmmo(_node.ID.Value,_node.Count.Value, _node.Pos.Value, _node.Rot.Value, _node)
-            world.Players:BroadcastEvent('CreateAllUnitEvent', self.weaponList, self.accessoryList, self.ammoList)
-        end, respawnTime)
+        invoke(
+            function()
+                self:CreateWeaponAmmo(_node.ID.Value, _node.Count.Value, _node.Pos.Value, _node.Rot.Value, _node)
+                world.Players:BroadcastEvent('CreateAllUnitEvent', self.weaponList, self.accessoryList, self.ammoList)
+            end,
+            respawnTime
+        )
     end
 end
 
@@ -282,16 +302,16 @@ end
 function WeaponMgr:WeaponHitPlayerEventHandler(_msg)
     local msg = {}
     for k, v in pairs(_msg) do
-		local shooter = v[1]
-		local receiver = v[2]
-		if(shooter.Health > 0 and receiver.Health > 0) then
-			msg[receiver] = msg[receiver] or {}
-			table.insert(msg[receiver], {shooter, v[3], v[4],v[5]})
-		end
+        local shooter = v[1]
+        local receiver = v[2]
+        if (shooter.Health > 0 and receiver.Health > 0) then
+            msg[receiver] = msg[receiver] or {}
+            table.insert(msg[receiver], {shooter, v[3], v[4], v[5]})
+        end
     end
-	for k, v in pairs(msg) do
-		k.C_Event.PlayerBeHitEvent:Fire(v)
-	end
+    for k, v in pairs(msg) do
+        k.C_Event.PlayerBeHitEvent:Fire(v)
+    end
 end
 
 ---玩家加入事件

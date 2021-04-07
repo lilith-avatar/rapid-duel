@@ -8,14 +8,14 @@ local UIBase = class('UIBase')
 UIBase.uiList = {}
 ---UI动画枚举
 UIBase.AniTypeEnum = {
-    None = -1,      ---无动效
-    Scale = 1,      ---缩放效果
+    None = -1, ---无动效
+    Scale = 1 ---缩放效果
 }
 ---UI动画播放状态
 UIBase.AniStateEnum = {
-    None = -1,      ---无状态
-    Playing = 1,    ---播放中
-    Completed = 2,  ---播放完成
+    None = -1, ---无状态
+    Playing = 1, ---播放中
+    Completed = 2 ---播放完成
 }
 
 ---创建
@@ -35,7 +35,8 @@ function UIBase:initialize(_strOrObj, _aniType, _parent)
     self.m_aniState = UIBase.AniStateEnum.None
     if type(_strOrObj) == 'string' then
         ---需要创建一个UI
-        self.m_ui = world:CreateInstance(_strOrObj, _strOrObj, _parent) or world:CreateObject(_strOrObj, _strOrObj, _parent)
+        self.m_ui =
+            world:CreateInstance(_strOrObj, _strOrObj, _parent) or world:CreateObject(_strOrObj, _strOrObj, _parent)
     elseif type(_strOrObj) == 'userdata' then
         ---已经存在这个UI
         self.m_ui = _strOrObj
@@ -77,12 +78,14 @@ function UIBase:SetValue(_key, _value)
     end
     ui[_key] = _value
     if isUpdate then
-        invoke(function()
-            wait()
-            if self.m_ui and not self.m_ui:IsNull() then
-                self:UpdateAniData()
+        invoke(
+            function()
+                wait()
+                if self.m_ui and not self.m_ui:IsNull() then
+                    self:UpdateAniData()
+                end
             end
-        end)
+        )
     end
 end
 
@@ -108,7 +111,6 @@ end
 
 ---更新动画数值
 function UIBase:UpdateAniData()
-
 end
 
 ---设置音效
@@ -134,7 +136,7 @@ function UIBase:BindHandler(_event, _handler, ...)
         self.m_events[_event] = EventHandler
         self.m_ui[_event]:Connect(EventHandler)
     end
-    table.insert(self.m_eventHandler[_event], { _handler, ... })
+    table.insert(self.m_eventHandler[_event], {_handler, ...})
 end
 
 ---更新函数
@@ -168,18 +170,15 @@ end
 ---动效播放
 ---@param _event string 事件名称
 function UIBase:PlayAnimation(_event)
-
 end
 
 ---音效播放
 ---@param _event string 事件的名字
 function UIBase:PlaySound(_event)
-
 end
 
 ---动效更新
 function UIBase:UpdateAni(_dt)
-
 end
 
 ---解绑事件,若不填具体函数则解绑所有同名事件
@@ -218,7 +217,8 @@ function ButtonBase:initialize(_strOrObj, _aniType, _parent)
     end
     ---按钮动画事件绑定
     if _aniType ~= UIBase.AniTypeEnum.None then
-        local function Nothing() end
+        local function Nothing()
+        end
         self:BindHandler('OnDown', Nothing)
         self:BindHandler('OnUp', Nothing)
     end
@@ -248,7 +248,7 @@ function ButtonBase:BindHandler(_event, _handler, ...)
             end
             self.m_events[_event] = EventHandler
         end
-        table.insert(self.m_eventHandler[_event], { _handler, ... })
+        table.insert(self.m_eventHandler[_event], {_handler, ...})
     else
         UIBase.BindHandler(self, _event, _handler, ...)
     end
@@ -302,7 +302,7 @@ end
 ---更新方法
 function ButtonBase:Update(_dt)
     if self.m_isPressed then
-        if self.m_longPressCD > 0 and self.m_longPressCD - _dt <= 0then
+        if self.m_longPressCD > 0 and self.m_longPressCD - _dt <= 0 then
             ---触发长按事件
             self:Trigger('OnLongPress')
         end
@@ -375,14 +375,14 @@ local PanelBase = class('PanelBase', UIBase)
 PanelBase.AlignmentEnum = {
     Left_Top = 1,
     Center_Top = 2,
-    Left_Middle = 3,
+    Left_Middle = 3
 }
 
 ---面板中元素的排布方式
 PanelBase.LayoutTypeEnum = {
     Horizontal = 1,
     Vertical = 2,
-    Grid = 3,
+    Grid = 3
 }
 
 function PanelBase:initialize(_strOrObj, _aniType, _parent)
@@ -465,16 +465,19 @@ function PanelBase:GridLayout()
     local columnNum = (finalSize.X - self.m_padding.Left - self.m_padding.Right) / (self.m_childSize.X + self.m_spacing)
     columnNum = math.floor(columnNum)
     self.m_totalRow = #self.m_childrenUI / columnNum
-    self.m_totalRow = self.m_totalRow == math.floor(self.m_totalRow) and math.floor(self.m_totalRow) - 1 or math.floor(self.m_totalRow)
+    self.m_totalRow =
+        self.m_totalRow == math.floor(self.m_totalRow) and math.floor(self.m_totalRow) - 1 or
+        math.floor(self.m_totalRow)
     self.m_totalRow = self.m_totalRow + 1
     self.m_totalColumn = childrenNum < columnNum and childrenNum or columnNum
     ---第一个元素左上角的位置,按照面板左上为原点
     local startPos
     if self.m_alignment == PanelBase.AlignmentEnum.Left_Middle then
         ---左中对齐
-        startPos = Vector2(
-                self.m_padding.Left,
-                finalSize.Y * 0.5 - (self.m_totalRow * (self.m_childSize.Y + self.m_spacing) - self.m_spacing) * 0.5
+        startPos =
+            Vector2(
+            self.m_padding.Left,
+            finalSize.Y * 0.5 - (self.m_totalRow * (self.m_childSize.Y + self.m_spacing) - self.m_spacing) * 0.5
         )
     elseif self.m_alignment == PanelBase.AlignmentEnum.Left_Top then
         ---左上对齐
@@ -482,9 +485,10 @@ function PanelBase:GridLayout()
     elseif self.m_alignment == PanelBase.AlignmentEnum.Center_Top then
         ---上中对齐
         if self.m_totalRow == 1 then
-            startPos = Vector2(
-                    finalSize.X * 0.5 - (self.m_totalColumn * (self.m_childSize.X + self.m_spacing) - self.m_spacing) * 0.5,
-                    self.m_padding.Top
+            startPos =
+                Vector2(
+                finalSize.X * 0.5 - (self.m_totalColumn * (self.m_childSize.X + self.m_spacing) - self.m_spacing) * 0.5,
+                self.m_padding.Top
             )
         else
             startPos = Vector2(self.m_padding.Left, self.m_padding.Top)
@@ -501,14 +505,21 @@ function PanelBase:GridLayout()
         ---当前元素的列数
         local column = i % columnNum == 0 and columnNum or i % columnNum
         local pos
-        pos = Vector2((column - 1) * (self.m_childSize.X + self.m_spacing), (row - 1) * (self.m_childSize.Y + self.m_spacing))
+        pos =
+            Vector2(
+            (column - 1) * (self.m_childSize.X + self.m_spacing),
+            (row - 1) * (self.m_childSize.Y + self.m_spacing)
+        )
         pos = pos + startPos
-        pos = Vector2(pos.X, finalSize.Y - pos.Y) - Vector2(0, 2) * self.m_padding.Top - Vector2(0, 1) * (0.5 * finalSize.Y - 2 * self.m_padding.Top)
+        pos =
+            Vector2(pos.X, finalSize.Y - pos.Y) - Vector2(0, 2) * self.m_padding.Top -
+            Vector2(0, 1) * (0.5 * finalSize.Y - 2 * self.m_padding.Top)
         if self.m_alignment == PanelBase.AlignmentEnum.Center_Top then
             ---上中对齐
             if row == self.m_totalRow and row ~= 1 then
                 ---当前是最后一行
-                local col_last = childrenNum % self.m_totalColumn == 0 and self.m_totalColumn or childrenNum % self.m_totalColumn
+                local col_last =
+                    childrenNum % self.m_totalColumn == 0 and self.m_totalColumn or childrenNum % self.m_totalColumn
                 local startX = finalSize.X - col_last * (self.m_childSize.X + self.m_spacing) + self.m_spacing
                 startX = startX * 0.5
                 local col_cur = i % self.m_totalColumn == 0 and self.m_totalColumn or i % self.m_totalColumn
@@ -529,15 +540,13 @@ function PanelBase:VerticalLayout()
     ---第一个元素左上角的位置
     local startPos
     if self.m_alignment == PanelBase.AlignmentEnum.Left_Middle then
-        startPos = Vector2(
-                self.m_padding.Left,
-                finalSize.Y * 0.5 - (self.m_totalRow * (self.m_childSize.Y + self.m_spacing) - self.m_spacing) * 0.5
+        startPos =
+            Vector2(
+            self.m_padding.Left,
+            finalSize.Y * 0.5 - (self.m_totalRow * (self.m_childSize.Y + self.m_spacing) - self.m_spacing) * 0.5
         )
     elseif self.m_alignment == PanelBase.AlignmentEnum.Center_Top then
-        startPos = Vector2(
-                finalSize.X * 0.5 - self.m_childSize.X * 0.5,
-                self.m_padding.Top
-        )
+        startPos = Vector2(finalSize.X * 0.5 - self.m_childSize.X * 0.5, self.m_padding.Top)
     else
         startPos = Vector2(self.m_padding.Left, self.m_padding.Top)
     end
@@ -565,9 +574,10 @@ function PanelBase:HorizontalLayout()
         startPos = Vector2(self.m_padding.Left, finalSize.Y * 0.5 - self.m_childSize.Y * 0.5)
     elseif self.m_alignment == PanelBase.AlignmentEnum.Center_Top then
         ---上中对齐
-        startPos = Vector2(
-                finalSize.X * 0.5 - (self.m_totalColumn * (self.m_childSize.X + self.m_spacing) - self.m_spacing) * 0.5,
-                self.m_padding.Top
+        startPos =
+            Vector2(
+            finalSize.X * 0.5 - (self.m_totalColumn * (self.m_childSize.X + self.m_spacing) - self.m_spacing) * 0.5,
+            self.m_padding.Top
         )
     end
     startPos = Vector2(-finalSize.X * 0.5 + startPos.X, finalSize.Y * 0.5 - startPos.Y)
@@ -607,10 +617,16 @@ end
 ---检测当前子物体数量是否满足开启滑动条的条件
 function PanelBase:CheckEnableScroll()
     local type
-    if (self.m_childSize.Y + self.m_spacing) * self.m_totalRow > self.m_ui.FinalSize.Y - self.m_padding.Top - self.m_padding.Bottom then
+    if
+        (self.m_childSize.Y + self.m_spacing) * self.m_totalRow >
+            self.m_ui.FinalSize.Y - self.m_padding.Top - self.m_padding.Bottom
+     then
         self.m_enableScroll = true
         type = Enum.ScrollBarType.Vertical
-    elseif (self.m_childSize.X + self.m_spacing) * self.m_totalColumn > self.m_ui.FinalSize.X - self.m_padding.Left - self.m_padding.Right then
+    elseif
+        (self.m_childSize.X + self.m_spacing) * self.m_totalColumn >
+            self.m_ui.FinalSize.X - self.m_padding.Left - self.m_padding.Right
+     then
         self.m_enableScroll = true
         type = Enum.ScrollBarType.Horizontal
     else
@@ -618,7 +634,8 @@ function PanelBase:CheckEnableScroll()
         type = Enum.ScrollBarType.None
     end
     self.m_ui.Scroll = type
-    local range = self.m_padding.Top + (self.m_childSize.Y + self.m_spacing) * self.m_totalRow + self.m_ui.FinalSize.Y * 0.5
+    local range =
+        self.m_padding.Top + (self.m_childSize.Y + self.m_spacing) * self.m_totalRow + self.m_ui.FinalSize.Y * 0.5
     self.m_ui.ScrollRange = range
 end
 

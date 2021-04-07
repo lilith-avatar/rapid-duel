@@ -14,11 +14,11 @@ end
 ---@param _key string 埋点的键
 function CloudLogUtil.UploadLog(_key, ...)
     local tableName = CloudLogUtil.gameId .. '_' .. _key
-    local args = { ... }
+    local args = {...}
     if localPlayer then
-        TrackService.CloudLogFromClient({ tableName, CloudLogUtil.gameId, table.unpack(args) })
+        TrackService.CloudLogFromClient({tableName, CloudLogUtil.gameId, table.unpack(args)})
     else
-        TrackService.CloudLogFromServer({ tableName, CloudLogUtil.gameId, table.unpack(args) })
+        TrackService.CloudLogFromServer({tableName, CloudLogUtil.gameId, table.unpack(args)})
     end
 end
 

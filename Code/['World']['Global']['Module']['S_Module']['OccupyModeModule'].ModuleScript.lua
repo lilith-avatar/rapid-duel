@@ -20,12 +20,16 @@ function OccupyMode:Init()
     ---上一帧游戏中的玩家和所有据点的距离
     self.prePlayerDisList = {}
 
-    world.OnPlayerAdded:Connect(function(_player)
-        self:PlayerAdd(_player)
-    end)
-    world.OnPlayerRemoved:Connect(function(_player)
-        --self:PlayerRemove(_player)
-    end)
+    world.OnPlayerAdded:Connect(
+        function(_player)
+            self:PlayerAdd(_player)
+        end
+    )
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            --self:PlayerRemove(_player)
+        end
+    )
     self.enable = false
     self.maxGrade = 0
     self.curTime = 0
@@ -102,7 +106,10 @@ function OccupyMode:Update(dt, tt)
     if not self.enable then
         return
     end
-    if GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady then
+    if
+        GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and
+            GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady
+     then
         return
     end
     ---更新玩家的距离以触发事件
@@ -143,8 +150,10 @@ function OccupyMode:Update(dt, tt)
                 ---当前B阵营还有积分,需要减少B阵营积分
                 v.teamValue[Const.TeamEnum.Team_B] = teamBValue - self:GetSpeedByNum(teamANUm) * dt
             end
-            v.teamValue[Const.TeamEnum.Team_A] = v.teamValue[Const.TeamEnum.Team_A] >= 100 and 100 or v.teamValue[Const.TeamEnum.Team_A]
-            v.teamValue[Const.TeamEnum.Team_B] = v.teamValue[Const.TeamEnum.Team_B] <= 0 and 0 or v.teamValue[Const.TeamEnum.Team_B]
+            v.teamValue[Const.TeamEnum.Team_A] =
+                v.teamValue[Const.TeamEnum.Team_A] >= 100 and 100 or v.teamValue[Const.TeamEnum.Team_A]
+            v.teamValue[Const.TeamEnum.Team_B] =
+                v.teamValue[Const.TeamEnum.Team_B] <= 0 and 0 or v.teamValue[Const.TeamEnum.Team_B]
         elseif teamBNUm > 0 and teamANUm == 0 then
             ---此点B阵营占点中
             if teamAValue == 0 then
@@ -158,11 +167,15 @@ function OccupyMode:Update(dt, tt)
                 ---当前A阵营还有积分,需要减少A阵营积分
                 v.teamValue[Const.TeamEnum.Team_A] = teamAValue - self:GetSpeedByNum(teamBNUm) * dt
             end
-            v.teamValue[Const.TeamEnum.Team_B] = v.teamValue[Const.TeamEnum.Team_B] >= 100 and 100 or v.teamValue[Const.TeamEnum.Team_B]
-            v.teamValue[Const.TeamEnum.Team_A] = v.teamValue[Const.TeamEnum.Team_A] <= 0 and 0 or v.teamValue[Const.TeamEnum.Team_A]
+            v.teamValue[Const.TeamEnum.Team_B] =
+                v.teamValue[Const.TeamEnum.Team_B] >= 100 and 100 or v.teamValue[Const.TeamEnum.Team_B]
+            v.teamValue[Const.TeamEnum.Team_A] =
+                v.teamValue[Const.TeamEnum.Team_A] <= 0 and 0 or v.teamValue[Const.TeamEnum.Team_A]
         end
-        v.obj.Flag.Progress.ProgressTeamA.LocalPosition = Vector3(0, progressStart + (progressEnd - progressStart) * v.teamValue[Const.TeamEnum.Team_A] * 0.01, 0)
-        v.obj.Flag.Progress.ProgressTeamB.LocalPosition = Vector3(0, progressStart + (progressEnd - progressStart) * v.teamValue[Const.TeamEnum.Team_B] * 0.01, 0)
+        v.obj.Flag.Progress.ProgressTeamA.LocalPosition =
+            Vector3(0, progressStart + (progressEnd - progressStart) * v.teamValue[Const.TeamEnum.Team_A] * 0.01, 0)
+        v.obj.Flag.Progress.ProgressTeamB.LocalPosition =
+            Vector3(0, progressStart + (progressEnd - progressStart) * v.teamValue[Const.TeamEnum.Team_B] * 0.01, 0)
     end
     ---更新每个点的积分产出
     for i, v in pairs(self.holdPointsList) do
@@ -175,7 +188,6 @@ function OccupyMode:Update(dt, tt)
                 self.teamATotalGrade = self.teamATotalGrade + self.teamGradeAdd
                 NetUtil.Broadcast('GradeChangeEvent', Const.TeamEnum.Team_A, self.teamATotalGrade)
             end
-
         elseif v.teamValue[Const.TeamEnum.Team_B] >= 100 then
             ---这个点由B阵营占领
             self.teamBGradeAddWait = self.teamBGradeAddWait - dt

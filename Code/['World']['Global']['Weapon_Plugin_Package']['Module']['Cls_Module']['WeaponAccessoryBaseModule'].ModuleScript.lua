@@ -19,7 +19,6 @@ function WeaponAccessoryBase:initialize(_weaponAccessory)
 end
 
 function WeaponAccessoryBase:Update()
-
 end
 
 ---玩家装备此配件到指定的枪上调用
@@ -50,11 +49,14 @@ function WeaponAccessoryBase:PickSound()
     audio.Loop = false
     audio.Doppler = 0
     audio:Play()
-    invoke(function()
-        if audio then
-            audio:Destroy()
-        end
-    end, 2)
+    invoke(
+        function()
+            if audio then
+                audio:Destroy()
+            end
+        end,
+        2
+    )
 end
 
 return WeaponAccessoryBase

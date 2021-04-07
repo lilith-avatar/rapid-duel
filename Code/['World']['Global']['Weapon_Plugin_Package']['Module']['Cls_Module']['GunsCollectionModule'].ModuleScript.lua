@@ -24,18 +24,25 @@ function SniperRifleBase:MakeBulletShell()
         return
     end
     local temp = EulerDegree(180 * math.random(), 0, 180 * math.random())
-    local shell = GunBase.static.utility:UseCacheObject(self, self.bulletShell, true,
-            {
-                Position = self.toss.Position,
-                Forward = self.toss.Forward,
-                Block = false
-            }, nil, ObjectTypeEnum.Shell)
+    local shell =
+        GunBase.static.utility:UseCacheObject(
+        self,
+        self.bulletShell,
+        true,
+        {
+            Position = self.toss.Position,
+            Forward = self.toss.Forward,
+            Block = false
+        },
+        nil,
+        ObjectTypeEnum.Shell
+    )
     shell.Rotation = temp
-    local dir = (-0.7 * self.character.Forward.Normalized
-            + 0.5 * self.character.Right.Normalized
-            + 0.3 * Vector3.Up).Normalized
-    shell.LinearVelocity = (3 + 2 * math.random()) * RandomRotate(dir, 30)
-            + Vector3(self.character.LinearVelocity.x, 0, self.character.LinearVelocity.z)
+    local dir =
+        (-0.7 * self.character.Forward.Normalized + 0.5 * self.character.Right.Normalized + 0.3 * Vector3.Up).Normalized
+    shell.LinearVelocity =
+        (3 + 2 * math.random()) * RandomRotate(dir, 30) +
+        Vector3(self.character.LinearVelocity.x, 0, self.character.LinearVelocity.z)
 end
 
 ---@module RocketLauncherBase:GunBase 实体子弹发射器逻辑,命中后爆炸,给予爆炸范围内的敌人一定伤害
@@ -47,7 +54,7 @@ function RocketLauncherBase:Fire(delay, consume)
     local hit = self:OverloadRayCast(direction)
 
     if self.character then
-        --self.Character:IK()
+    --self.Character:IK()
     end
 
     if not isFriend and hit then
@@ -90,42 +97,50 @@ function RocketLauncherBase:MakeBullet(_endObj, _endPos, _endNorm)
         bullet.IsStatic = false
         bullet.LinearVelocity = dir * speed
         bullet.Trailing:SetActive(true)
-        bullet.OnCollisionBegin:Connect(function(_obj, _point, _normal)
-            if not self or not self.character then
-                return
-            end
-            if _obj.Block and ParentPlayer(_obj) ~= self.character then
-                _point = _point - 0.4 * dir
-                self:MakeHitEffect(_point)
-                invoke(function()
-                    ---进行伤害的判定和计算
-                    if _obj and not _obj:IsNull() then
-                        self:Damage({ HitPoint = _point, HitObject = _obj, HitNormal = _normal })
-                    end
-                end, self.config_damageResponseWaitTime)
-                hasCollide = true
-                bullet.OnCollisionBegin:Clear()
-                bullet.Trailing:SetActive(false)
-                bullet.LinearVelocity = Vector3.Zero
-                bullet.AngularVelocity = Vector3.Zero
-                rocket:Destroy()
+        bullet.OnCollisionBegin:Connect(
+            function(_obj, _point, _normal)
+                if not self or not self.character then
+                    return
+                end
+                if _obj.Block and ParentPlayer(_obj) ~= self.character then
+                    _point = _point - 0.4 * dir
+                    self:MakeHitEffect(_point)
+                    invoke(
+                        function()
+                            ---进行伤害的判定和计算
+                            if _obj and not _obj:IsNull() then
+                                self:Damage({HitPoint = _point, HitObject = _obj, HitNormal = _normal})
+                            end
+                        end,
+                        self.config_damageResponseWaitTime
+                    )
+                    hasCollide = true
+                    bullet.OnCollisionBegin:Clear()
+                    bullet.Trailing:SetActive(false)
+                    bullet.LinearVelocity = Vector3.Zero
+                    bullet.AngularVelocity = Vector3.Zero
+                    rocket:Destroy()
                 --GunBase.static.utility:Recycle(self, self.bulletName, rocket)
+                end
             end
-        end)
+        )
         local time = self.config_distance / speed
-        invoke(function()
-            if not hasCollide then
-                bullet.OnCollisionBegin:Clear()
-                bullet.Trailing:SetActive(false)
-                bullet.LinearVelocity = Vector3.Zero
-                bullet.AngularVelocity = Vector3.Zero
-                rocket:Destroy()
+        invoke(
+            function()
+                if not hasCollide then
+                    bullet.OnCollisionBegin:Clear()
+                    bullet.Trailing:SetActive(false)
+                    bullet.LinearVelocity = Vector3.Zero
+                    bullet.AngularVelocity = Vector3.Zero
+                    rocket:Destroy()
                 --GunBase.static.utility:Recycle(self, self.bulletName, rocket)
-            end
-        end, time)
+                end
+            end,
+            time
+        )
         world.S_Event.WeaponObjCreatedEvent:Fire(self.character, rocket)
     else
-        print("Rocket creation failed! Make sure rocket \"" .. self.bulletName .. "\" exist")
+        print('Rocket creation failed! Make sure rocket "' .. self.bulletName .. '" exist')
     end
 end
 
@@ -141,7 +156,14 @@ function RocketLauncherBase:Damage(_hit)
     end
     local hitRes = {}
     local playersInRange, fortsInRange =
-    GunBase.static.utility:GetEnemyByRange(self.character, self.config_isHitSelf, self.config_isHitFriend, self.config_explosionRange, 180, _hit.HitPoint)
+        GunBase.static.utility:GetEnemyByRange(
+        self.character,
+        self.config_isHitSelf,
+        self.config_isHitFriend,
+        self.config_explosionRange,
+        180,
+        _hit.HitPoint
+    )
     for _, v in pairs(playersInRange) do
         ---表示此玩家在爆炸范围内,检查玩家和爆炸中心之间是否有阻挡
         local dis = (v.Position - _hit.HitPoint).Magnitude
@@ -176,7 +198,7 @@ function RocketLauncherBase:Damage(_hit)
                 Player = v,
                 Damage = damage,
                 HitPart = HitPartEnum.None,
-                HitPos = _hit.HitPoint,
+                HitPos = _hit.HitPoint
             }
             table.insert(hitRes, info)
         end
@@ -193,7 +215,7 @@ function RocketLauncherBase:Damage(_hit)
                 Player = v.Owner.Value,
                 Damage = damage,
                 HitPart = HitPartEnum.Fort,
-                HitPos = _hit.HitPoint,
+                HitPos = _hit.HitPoint
             }
             table.insert(hitRes, info)
         end
@@ -253,31 +275,42 @@ end
 ---真实子弹
 function GrenadeLauncherBase:MakeBullet(_dir)
     local speed = self:GetBulletSpeed()
-    local rocket = world:CreateInstance(self.bulletName, self.bulletName, world, self.muzzleObj.Position + self.character.Forward * 0.5)
+    local rocket =
+        world:CreateInstance(
+        self.bulletName,
+        self.bulletName,
+        world,
+        self.muzzleObj.Position + self.character.Forward * 0.5
+    )
     if rocket then
         rocket.Forward = _dir
         rocket.Cartridge.LocalPosition = Vector3.Zero
         rocket.Cartridge.GravityEnable = true
         rocket.Cartridge.GravityScale = self.config_gravityScale
-        rocket.Cartridge.OnCollisionBegin:Connect(function(_obj, _point, _normal)
-            if ParentPlayer(_obj) ~= self.character then
-                self:MakeHitEffect(_point)
-                rocket:Destroy()
-                ---进行伤害的判定和计算
-                self:Damage({ HitPoint = _point, HitObject = _obj, HitNormal = _normal })
+        rocket.Cartridge.OnCollisionBegin:Connect(
+            function(_obj, _point, _normal)
+                if ParentPlayer(_obj) ~= self.character then
+                    self:MakeHitEffect(_point)
+                    rocket:Destroy()
+                    ---进行伤害的判定和计算
+                    self:Damage({HitPoint = _point, HitObject = _obj, HitNormal = _normal})
+                end
             end
-        end)
+        )
         rocket.Cartridge.AngularVelocity = _dir
         rocket.Cartridge.LinearVelocity = _dir * speed
         local time = 10
-        invoke(function()
-            if (rocket) then
-                rocket:Destroy()
-            end
-        end, time)
+        invoke(
+            function()
+                if (rocket) then
+                    rocket:Destroy()
+                end
+            end,
+            time
+        )
         world.S_Event.WeaponObjCreatedEvent:Fire(self.character, rocket)
     else
-        print("Rocket creation failed! Make sure rocket \"" .. self.bulletName .. "\" exist")
+        print('Rocket creation failed! Make sure rocket "' .. self.bulletName .. '" exist')
     end
 end
 
@@ -320,56 +353,68 @@ function TrailingGunBase:MakeBullet(_endObj, _endPos)
         enemy = _endObj
     end
     --
-    invoke(function()
-        local bullet = world:CreateInstance(self.bulletName, self.bulletName, world, self.muzzleObj.Position + world.CurrentCamera.Forward * 0.3, EulerDegree.LookRotation(-1 * world.CurrentCamera.Forward, Vector3.Up))
-        bullet.OnCollisionBegin:Connect(function(_obj, _point, _normal)
-            if (not _obj) then
-                bullet:Destroy()
-                return
-            end
+    invoke(
+        function()
+            local bullet =
+                world:CreateInstance(
+                self.bulletName,
+                self.bulletName,
+                world,
+                self.muzzleObj.Position + world.CurrentCamera.Forward * 0.3,
+                EulerDegree.LookRotation(-1 * world.CurrentCamera.Forward, Vector3.Up)
+            )
+            bullet.OnCollisionBegin:Connect(
+                function(_obj, _point, _normal)
+                    if (not _obj) then
+                        bullet:Destroy()
+                        return
+                    end
 
-            local maybePlayer = ParentPlayer(_obj)
-            --碰撞到了子弹或者自身玩家
-            if (_obj.Name == self.bulletName or maybePlayer == self.character) then
-                goto Continue
-                ---非玩家
-            elseif (maybePlayer == nil) then
-                bullet:Destroy()
-                self:MakeHitEffect(_endPos)
-                goto Continue
-            end
-            ---碰撞到其他玩家
-            self:Damage({ HitObject = maybePlayer })
+                    local maybePlayer = ParentPlayer(_obj)
+                    --碰撞到了子弹或者自身玩家
+                    if (_obj.Name == self.bulletName or maybePlayer == self.character) then
+                        ---非玩家
+                        goto Continue
+                    elseif (maybePlayer == nil) then
+                        bullet:Destroy()
+                        self:MakeHitEffect(_endPos)
+                        goto Continue
+                    end
+                    ---碰撞到其他玩家
+                    self:Damage({HitObject = maybePlayer})
 
-            ---TODO
-            bullet:Destroy()
-            self:MakeHitEffect(_endPos)
-            :: Continue ::
-        end)
+                    ---TODO
+                    bullet:Destroy()
+                    self:MakeHitEffect(_endPos)
+                    ::Continue::
+                end
+            )
 
-        local firstDis = _endPos - bullet.Position
-        local firstSpd = RandomRotate(speed * world.CurrentCamera.Forward.Normalized, self.error)
-        bullet.LinearVelocity = firstSpd
-        local time = 0
-        local targetPos = _endPos
-        while (bullet) do
-            time = time + wait()
-            if (enemy) then
-                targetPos = enemy.Position + Vector3(0, 1, 0)
+            local firstDis = _endPos - bullet.Position
+            local firstSpd = RandomRotate(speed * world.CurrentCamera.Forward.Normalized, self.error)
+            bullet.LinearVelocity = firstSpd
+            local time = 0
+            local targetPos = _endPos
+            while (bullet) do
+                time = time + wait()
+                if (enemy) then
+                    targetPos = enemy.Position + Vector3(0, 1, 0)
+                end
+                if (not bullet) then
+                    return
+                end
+                if (((bullet.Position - targetPos).Magnitude < 0.5 and time > 3) or time > 7) then
+                    bullet:Destroy()
+                    return
+                end
+                local nowDis = targetPos - bullet.Position
+                local alpha = math.clamp(1 - nowDis.Magnitude / firstDis.Magnitude, 0, 1)
+                bullet.LinearVelocity =
+                    Vector3.Slerp(firstSpd.Normalized, nowDis.Normalized, math.sqrt(alpha)).Normalized * speed
+                bullet.Up = bullet.LinearVelocity.Normalized
             end
-            if (not bullet) then
-                return
-            end
-            if (((bullet.Position - targetPos).Magnitude < 0.5 and time > 3) or time > 7) then
-                bullet:Destroy()
-                return
-            end
-            local nowDis = targetPos - bullet.Position
-            local alpha = math.clamp(1 - nowDis.Magnitude / firstDis.Magnitude, 0, 1)
-            bullet.LinearVelocity = Vector3.Slerp(firstSpd.Normalized, nowDis.Normalized, math.sqrt(alpha)).Normalized * speed
-            bullet.Up = bullet.LinearVelocity.Normalized
         end
-    end)
+    )
 end
 
 ---@module GatlingBase : GunBase 加特林机枪的实体类,开镜逻辑替换为部署
@@ -421,12 +466,14 @@ function GatlingBase:StopFort()
     ---重置动画
     self.config_weight = self.originWeight
     self.fortObj:SetActive(false)
-    invoke(function()
-        if self.allowFort ~= nil then
-            self.allowFort = true
-        end
-    end, 3)
-
+    invoke(
+        function()
+            if self.allowFort ~= nil then
+                self.allowFort = true
+            end
+        end,
+        3
+    )
 end
 
 ---部署结束后的调用
@@ -463,7 +510,8 @@ function GatlingBase:MechanicalAimStart()
 end
 
 function GatlingBase:RayCastOrigin()
-    return localPlayer.Position + 0.3 * localPlayer.Forward + 0.2 * localPlayer.Right + (localPlayer.CharacterHeight / 2) * Vector3.Up
+    return localPlayer.Position + 0.3 * localPlayer.Forward + 0.2 * localPlayer.Right +
+        (localPlayer.CharacterHeight / 2) * Vector3.Up
 end
 
 ---加特林关镜更改为退出架枪模式
@@ -489,11 +537,14 @@ function GatlingBase:MechanicalAimStop()
     self.m_recoil.config_horizontalJumpRange = self.originHorizontalJumpRange
     self.config_weight = self.originWeight
     self.fortObj:SetActive(false)
-    invoke(function()
-        if self.allowFort ~= nil then
-            self.allowFort = true
-        end
-    end, 3)
+    invoke(
+        function()
+            if self.allowFort ~= nil then
+                self.allowFort = true
+            end
+        end,
+        3
+    )
 end
 
 function GatlingBase:WithdrawGun()
@@ -540,7 +591,8 @@ end
 
 function BarrettBase:MakeBullet(_endObj, _endPos, _endNorm)
     local speed = self:GetBulletSpeed()
-    local bullet = world:CreateInstance(self.bulletName, self.bulletName, world, self.muzzleObj.Position, self.muzzleObj.Rotation)
+    local bullet =
+        world:CreateInstance(self.bulletName, self.bulletName, world, self.muzzleObj.Position, self.muzzleObj.Rotation)
     local isHit = false
     if bullet then
         local dir = (_endPos - bullet.Position).Normalized
@@ -567,13 +619,27 @@ function BarrettBase:MakeBullet(_endObj, _endPos, _endNorm)
                     _endNorm = hitResults.HitNormalAll[k]
                     _endPos = hitResults.HitPointAll[k]
                     self:MakeHitEffect(_endPos)
-                    GunBase.static.utility:UseCacheObject(self, self.bulletHole, true, { Position = _endPos, Up = _endNorm, Size = Vector3(0.07, 0.07, 0.07) }, _endObj, nil, ObjectTypeEnum.Hole)
+                    GunBase.static.utility:UseCacheObject(
+                        self,
+                        self.bulletHole,
+                        true,
+                        {Position = _endPos, Up = _endNorm, Size = Vector3(0.07, 0.07, 0.07)},
+                        _endObj,
+                        nil,
+                        ObjectTypeEnum.Hole
+                    )
                     bullet.IsStatic = true
                     bullet.Position = _endPos
                     bullet.LinearVelocity = Vector3.Zero
-                    invoke(function()
-                        if bullet then bullet:SetActive(false) bullet:Destroy() end
-                    end, 3)
+                    invoke(
+                        function()
+                            if bullet then
+                                bullet:SetActive(false)
+                                bullet:Destroy()
+                            end
+                        end,
+                        3
+                    )
                     isHit = true
                     world.OnRenderStepped:Disconnect(CheckCollision)
                     return
@@ -600,9 +666,12 @@ function BarrettBase:MakeBullet(_endObj, _endPos, _endNorm)
                         break
                     end
                 end
-                if bullet then bullet:SetActive(false) bullet:Destroy() end
+                if bullet then
+                    bullet:SetActive(false)
+                    bullet:Destroy()
+                end
                 ---进行伤害的判定和计算
-                self:Damage({ HitPoint = _endPos, HitObject = _endObj, HitNormal = _endNorm, HitPart = hitPart })
+                self:Damage({HitPoint = _endPos, HitObject = _endObj, HitNormal = _endNorm, HitPart = hitPart})
                 world.OnRenderStepped:Disconnect(CheckCollision)
                 return
             end
@@ -610,13 +679,19 @@ function BarrettBase:MakeBullet(_endObj, _endPos, _endNorm)
         world.OnRenderStepped:Connect(CheckCollision)
 
         local time = self.config_distance / speed
-        invoke(function()
-            if bullet and not isHit then bullet:SetActive(false) bullet:Destroy() end
-            world.OnRenderStepped:Disconnect(CheckCollision)
-        end, time)
+        invoke(
+            function()
+                if bullet and not isHit then
+                    bullet:SetActive(false)
+                    bullet:Destroy()
+                end
+                world.OnRenderStepped:Disconnect(CheckCollision)
+            end,
+            time
+        )
         world.S_Event.WeaponObjCreatedEvent:Fire(self.character, bullet)
     else
-        print("Rocket creation failed! Make sure bullet \"" .. self.bulletName .. "\" exist")
+        print('Rocket creation failed! Make sure bullet "' .. self.bulletName .. '" exist')
     end
 end
 
@@ -654,7 +729,8 @@ function MeleeBase:LaterInitialize()
             return
         end
         for i = 1, self.pointsCount + 1 do
-            self.curPointsPosList[i] = self.toss.Position + (i - 1) / self.pointsCount * (self.muzzleObj.Position - self.toss.Position)
+            self.curPointsPosList[i] =
+                self.toss.Position + (i - 1) / self.pointsCount * (self.muzzleObj.Position - self.toss.Position)
         end
         for i, v in pairs(self.curPointsPosList) do
             local raycastAll = Physics:RaycastAll(v, self.prePointsPosList[i], false)
@@ -688,10 +764,15 @@ function MeleeBase:LaterInitialize()
         ---检测命中的玩家是否在范围内,和是否有阻挡
         for i, v in pairs(self.hitPlayersList) do
             local dis = (i.Position - self.character.Position).Magnitude
-            if dis > self.config_distance or Vector3.Angle(i.Position - self.character.Position, self.character.Forward) > 40 or v == self.character then
+            if
+                dis > self.config_distance or
+                    Vector3.Angle(i.Position - self.character.Position, self.character.Forward) > 40 or
+                    v == self.character
+             then
                 self.hitPlayersList[i] = nil
             end
-            local raycastAll = Physics:RaycastAll(self.character.Avatar.Bone_Pelvis.Position, i.Avatar.Bone_Pelvis.Position, false)
+            local raycastAll =
+                Physics:RaycastAll(self.character.Avatar.Bone_Pelvis.Position, i.Avatar.Bone_Pelvis.Position, false)
             local hasBlock = false
             for i1, v1 in pairs(raycastAll.HitObjectAll) do
                 if v1.Block and not ParentPlayer(v1) and v1.CollisionGroup ~= 10 then
@@ -710,15 +791,15 @@ function MeleeBase:LaterInitialize()
                 if v.HeadPoint then
                     ---爆头命中
                     print('爆头命中', i)
-                    self:Damage({ HitObject = i, HitPart = HitPartEnum.Head })
+                    self:Damage({HitObject = i, HitPart = HitPartEnum.Head})
                 elseif v.BodyPoint then
                     ---躯干命中
                     print('躯干命中', i)
-                    self:Damage({ HitObject = i, HitPart = HitPartEnum.Body })
+                    self:Damage({HitObject = i, HitPart = HitPartEnum.Body})
                 else
                     ---四肢命中
                     print('四肢命中', i)
-                    self:Damage({ HitObject = i, HitPart = HitPartEnum.Limb })
+                    self:Damage({HitObject = i, HitPart = HitPartEnum.Limb})
                 end
                 self.hadHitPlaysList[i] = true
             end
@@ -729,12 +810,14 @@ function MeleeBase:LaterInitialize()
         end
     end
     ---绑定攻击结束的事件
-    self.waveOver:Bind(function()
-        if self.DifFrameCheck then
-            world.OnRenderStepped:Disconnect(self.DifFrameCheck)
-            self.hadHitPlaysList = {}
+    self.waveOver:Bind(
+        function()
+            if self.DifFrameCheck then
+                world.OnRenderStepped:Disconnect(self.DifFrameCheck)
+                self.hadHitPlaysList = {}
+            end
         end
-    end)
+    )
     local function HitShake(_sender, _infoList)
         if _infoList.Player.Health <= 0 then
             return
@@ -747,19 +830,22 @@ end
 ---重写枪械基类的开火方法,自定义攻击检测
 function MeleeBase:Fire()
     ---一秒钟后触发攻击结束事件
-    invoke(function()
-        wait(0.2)
-        if self and self.DifFrameCheck then
-            world.OnRenderStepped:Connect(self.DifFrameCheck)
+    invoke(
+        function()
+            wait(0.2)
+            if self and self.DifFrameCheck then
+                world.OnRenderStepped:Connect(self.DifFrameCheck)
+            end
+            wait(0.3)
+            if self and self.waveOver then
+                self.waveOver:Trigger()
+            end
         end
-        wait(0.3)
-        if self and self.waveOver then
-            self.waveOver:Trigger()
-        end
-    end)
+    )
     ---进行刀剑多段差帧射线检测
     for i = 1, self.pointsCount + 1 do
-        self.prePointsPosList[i] = self.toss.Position + (i - 1) / self.pointsCount * (self.muzzleObj.Position - self.toss.Position)
+        self.prePointsPosList[i] =
+            self.toss.Position + (i - 1) / self.pointsCount * (self.muzzleObj.Position - self.toss.Position)
     end
     return true
 end
@@ -773,19 +859,15 @@ function MeleeBase:MechanicalAimStop()
 end
 
 function MeleeBase:LoadMagazine()
-
 end
 
 function MeleeBase:Consume()
-
 end
 
 function MeleeBase:ChangeShootMode()
-    
 end
 
 function MeleeBase:MakeBulletShell()
-    
 end
 
 ---刀销毁方法中,解绑事件
@@ -815,7 +897,8 @@ function FlameLauncher:MakeFireEffect()
     self.m_flame_recycleTime = 0.3
     if not self.m_flame_isFiring then
         ---当前没有播放开火特效
-        self.m_flame_fireEffObj = GunBase.static.utility:UseCacheObject(self, self.fireEffect, false, { }, nil, ObjectTypeEnum.FireEff)
+        self.m_flame_fireEffObj =
+            GunBase.static.utility:UseCacheObject(self, self.fireEffect, false, {}, nil, ObjectTypeEnum.FireEff)
         self.m_flame_fireEffObj:SetParentTo(self.muzzleObj, Vector3.Zero, EulerDegree(0, 0, 0))
         self.m_flame_isFiring = true
     end
@@ -855,7 +938,14 @@ function FlameLauncher:Damage()
         totalWeight = totalWeight + v
     end
     local otherPlayers, otherForts =
-    GunBase.static.utility:GetEnemyByRange(self.character, self.config_isHitSelf, self.config_isHitFriend, self.config_distance, 50, self.muzzleObj.Position)
+        GunBase.static.utility:GetEnemyByRange(
+        self.character,
+        self.config_isHitSelf,
+        self.config_isHitFriend,
+        self.config_distance,
+        50,
+        self.muzzleObj.Position
+    )
 
     for _, v in pairs(otherPlayers) do
         ---检查玩家和喷火点中心之间是否有阻挡
@@ -887,7 +977,7 @@ function FlameLauncher:Damage()
         damage = damage <= 0 and 0 or damage
         damage = damage * rate
         if damage > 0 then
-            self.successfullyHit:Trigger({ Player = v ,Damage = damage, HitPart = HitPartEnum.None})
+            self.successfullyHit:Trigger({Player = v, Damage = damage, HitPart = HitPartEnum.None})
             print('命中敌人')
             PlayerGunMgr:FireGunDamage(self.character, v, self.gun_Id, damage, HitPartEnum.None)
         end
@@ -907,15 +997,12 @@ function FlameLauncher:Damage()
 end
 
 function FlameLauncher:MechanicalAimStart()
-
 end
 
 function FlameLauncher:MechanicalAimStop()
-
 end
 
 function FlameLauncher:MakeBulletShell()
-
 end
 
 ---粘弹发射器
@@ -941,7 +1028,6 @@ function ViscoelasticLauncher:Fire(delay, consume)
 end
 
 function ViscoelasticLauncher:MakeBulletShell()
-
 end
 
 ---粘弹发射
@@ -949,32 +1035,37 @@ function ViscoelasticLauncher:MakeBullet(_dir)
     local speed = self:GetBulletSpeed()
     local rocket = world:CreateInstance(self.bulletName, self.bulletName, world, self.muzzleObj.Position)
     if not rocket then
-        print("Rocket creation failed! Make sure rocket \"" .. self.bulletName .. "\" exist")
+        print('Rocket creation failed! Make sure rocket "' .. self.bulletName .. '" exist')
         return
     end
     table.insert(self.m_bulletsFired, rocket)
     world:CreateObject('Vector3ValueObject', 'HitNormal', rocket).Value = Vector3.Zero
     rocket.GravityEnable = true
     rocket.GravityScale = self.config_gravityScale
-    rocket.OnCollisionBegin:Connect(function(_obj, _point, _normal)
-        if ParentPlayer(_obj) ~= self.character and rocket then
-            rocket.HitNormal.Value = _normal
-            rocket.Position = _point + _normal * 0.2
-            rocket.IsStatic = true
+    rocket.OnCollisionBegin:Connect(
+        function(_obj, _point, _normal)
+            if ParentPlayer(_obj) ~= self.character and rocket then
+                rocket.HitNormal.Value = _normal
+                rocket.Position = _point + _normal * 0.2
+                rocket.IsStatic = true
+            end
         end
-    end)
+    )
     rocket.AngularVelocity = _dir
     rocket.LinearVelocity = _dir * speed
     ---10秒后自动爆炸
-    invoke(function()
-        if rocket and not rocket:IsNull() then
-            self:MakeHitEffect(rocket.Position + rocket.HitNormal.Value * 0.4)
-            rocket:Destroy()
-            if self.m_bulletsFired then
-                table.removebyvalue(self.m_bulletsFired, rocket)
+    invoke(
+        function()
+            if rocket and not rocket:IsNull() then
+                self:MakeHitEffect(rocket.Position + rocket.HitNormal.Value * 0.4)
+                rocket:Destroy()
+                if self.m_bulletsFired then
+                    table.removebyvalue(self.m_bulletsFired, rocket)
+                end
             end
-        end
-    end, self.config_damageResponseWaitTime)
+        end,
+        self.config_damageResponseWaitTime
+    )
     world.S_Event.WeaponObjCreatedEvent:Fire(self.character, rocket)
 end
 
@@ -983,11 +1074,13 @@ function ViscoelasticLauncher:Detonate()
     for i, v in pairs(self.m_bulletsFired) do
         if not v:IsNull() then
             local pos, normal = v.Position, v.HitNormal.Value
-            invoke(function()
-                if self.config_damage then
-                    self:Damage({ HitPoint = pos + normal * 0.4 })
+            invoke(
+                function()
+                    if self.config_damage then
+                        self:Damage({HitPoint = pos + normal * 0.4})
+                    end
                 end
-            end)
+            )
             self:MakeHitEffect(v.Position + v.HitNormal.Value * 0.4)
             v:Destroy()
         end
@@ -1007,7 +1100,6 @@ function ViscoelasticLauncher:MechanicalAimStart()
 end
 
 function ViscoelasticLauncher:MechanicalAimStop()
-
 end
 
 function ViscoelasticLauncher:EarlyDestructor()
@@ -1047,7 +1139,9 @@ function MedicalGun:Damage(_hit)
     end
     if damage ~= 0 then
         print('开始调用击中事件')
-        self.successfullyHit:Trigger({Position = hitPos, Player = _hit.HitObject, Damage = damage, HitPart = _hit.HitPart})
+        self.successfullyHit:Trigger(
+            {Position = hitPos, Player = _hit.HitObject, Damage = damage, HitPart = _hit.HitPart}
+        )
         PlayerGunMgr:FireGunDamage(localPlayer, _hit.HitObject, self.gun_Id, damage, _hit.HitPart)
     end
 end
@@ -1095,7 +1189,14 @@ end
 function MedicalGun:MakeHitEffect(_hit)
     local player = _hit.HitObject
     if player.ClassName == 'PlayerInstance' then
-        GunBase.static.utility:UseCacheObject(self, self.hitEffect, true, { Position = player.Position }, player, ObjectTypeEnum.HitEff)
+        GunBase.static.utility:UseCacheObject(
+            self,
+            self.hitEffect,
+            true,
+            {Position = player.Position},
+            player,
+            ObjectTypeEnum.HitEff
+        )
     end
 end
 
@@ -1119,7 +1220,6 @@ function AutoShootFort:LaterInitialize()
     self.m_fortBeHit = function(self, _player, _damage)
         print('炮台受击', _player, _damage)
     end
-
 end
 
 function AutoShootFort:EarlyDestructor()
@@ -1147,7 +1247,7 @@ function AutoShootFort:OverloadRayCast(_dir)
             end
         end
     end
-    return { HitPoint = target }
+    return {HitPoint = target}
 end
 
 function AutoShootFort:FixUpdate(_dt)
@@ -1226,23 +1326,18 @@ function AutoShootFort:CreateFort(_id, _fortObj, _pos)
 end
 
 function AutoShootFort:MechanicalAimStop()
-
 end
 
 function AutoShootFort:MechanicalAimStart()
-
 end
 
 function AutoShootFort:Consume()
-
 end
 
 function AutoShootFort:MakeBulletShell()
-
 end
 
 function AutoShootFort:LoadMagazine()
-
 end
 
 ---销毁当前的炮台
@@ -1291,7 +1386,14 @@ function GrenadeBase:TryKeepFire()
     end
     local dir = self:CalculateRayCastDirection() + Vector3.Up
     dir = dir.Normalized
-    local curve = GenerateCurve(self.character.Avatar.Bone_Head.Position + self.character.Right * 0.1 + Vector3.Up * 0.2, self:GetBulletSpeed() * dir, 20, 0.05, self.config_gravityScale)
+    local curve =
+        GenerateCurve(
+        self.character.Avatar.Bone_Head.Position + self.character.Right * 0.1 + Vector3.Up * 0.2,
+        self:GetBulletSpeed() * dir,
+        20,
+        0.05,
+        self.config_gravityScale
+    )
     for i = 1, 20 do
         self.curveObjList[i].Position = curve[i]
     end
@@ -1311,33 +1413,42 @@ function GrenadeBase:MakeBullet(_dir)
     local speed = self:GetBulletSpeed()
     local rocket = world:CreateInstance(self.bulletName, self.bulletName, world)
     if not rocket then
-        print("Rocket creation failed! Make sure rocket \"" .. self.bulletName .. "\" exist")
+        print('Rocket creation failed! Make sure rocket "' .. self.bulletName .. '" exist')
         return
     end
     rocket:SetActive(false)
     local interval = 1 / self.config_shootSpeed
 
-    invoke(function()
-        if self.gun then
-            self.gun.Module.Origin.G_Bomb_Black_01:SetActive(true)
-        end
-    end, interval)
-    invoke(function()
-        rocket:SetActive(true)
-        rocket.Position = self.character.Avatar.Bone_Head.Position + self.character.Right * 0.1 + Vector3.Up * 0.2
-        rocket.GravityEnable = true
-        rocket.GravityScale = self.config_gravityScale
-        rocket.LinearVelocity = _dir * speed
-        self.gun.Module.Origin.G_Bomb_Black_01:SetActive(false)
-    end, 0.4)
-    invoke(function()
-        if self.hitEffect then
-            self:MakeHitEffect(rocket.Position)
-            self:Damage( { HitPoint = rocket.Position + Vector3.Up * 0.5 } )
-            self.bombExplosion:Trigger(rocket.Position)
-        end
-        rocket:Destroy()
-    end, self.config_damageResponseWaitTime)
+    invoke(
+        function()
+            if self.gun then
+                self.gun.Module.Origin.G_Bomb_Black_01:SetActive(true)
+            end
+        end,
+        interval
+    )
+    invoke(
+        function()
+            rocket:SetActive(true)
+            rocket.Position = self.character.Avatar.Bone_Head.Position + self.character.Right * 0.1 + Vector3.Up * 0.2
+            rocket.GravityEnable = true
+            rocket.GravityScale = self.config_gravityScale
+            rocket.LinearVelocity = _dir * speed
+            self.gun.Module.Origin.G_Bomb_Black_01:SetActive(false)
+        end,
+        0.4
+    )
+    invoke(
+        function()
+            if self.hitEffect then
+                self:MakeHitEffect(rocket.Position)
+                self:Damage({HitPoint = rocket.Position + Vector3.Up * 0.5})
+                self.bombExplosion:Trigger(rocket.Position)
+            end
+            rocket:Destroy()
+        end,
+        self.config_damageResponseWaitTime
+    )
     world.S_Event.WeaponObjCreatedEvent:Fire(self.character, rocket)
 end
 
@@ -1359,7 +1470,14 @@ function GrenadeBase:Damage(_hit)
     end
     local hitRes = {}
     local playersInRange, fortsInRange =
-    GunBase.static.utility:GetEnemyByRange(self.character, self.config_isHitSelf, self.config_isHitFriend, self.config_explosionRange, 180, _hit.HitPoint)
+        GunBase.static.utility:GetEnemyByRange(
+        self.character,
+        self.config_isHitSelf,
+        self.config_isHitFriend,
+        self.config_explosionRange,
+        180,
+        _hit.HitPoint
+    )
     for _, v in pairs(playersInRange) do
         ---表示此玩家在爆炸范围内,检查玩家和爆炸中心之间是否有阻挡
         local dis = (v.Position - _hit.HitPoint).Magnitude
@@ -1394,7 +1512,7 @@ function GrenadeBase:Damage(_hit)
                 Player = v,
                 Damage = damage,
                 HitPart = HitPartEnum.None,
-                HitPos = _hit.HitPoint,
+                HitPos = _hit.HitPoint
             }
             table.insert(hitRes, info)
         end
@@ -1411,7 +1529,7 @@ function GrenadeBase:Damage(_hit)
                 Player = v.Owner.Value,
                 Damage = damage,
                 HitPart = HitPartEnum.Fort,
-                HitPos = _hit.HitPoint,
+                HitPos = _hit.HitPoint
             }
             table.insert(hitRes, info)
         end
@@ -1424,22 +1542,27 @@ function GrenadeBase:Damage(_hit)
 end
 
 function GrenadeBase:MechanicalAimStart()
-
 end
 
 function GrenadeBase:MechanicalAimStop()
-    
 end
 
 ---@module SmokeBombBase:GrenadeBase 烟雾弹
 local SmokeBombBase = class('SmokeBombBase', GrenadeBase)
 
 function SmokeBombBase:Damage(_hit)
-
 end
 
 function SmokeBombBase:MakeHitEffect(_endPos)
-    local eff = GunBase.static.utility:UseCacheObject(self, self.hitEffect, true, { Position = _endPos }, nil, ObjectTypeEnum.HitEff)
+    local eff =
+        GunBase.static.utility:UseCacheObject(
+        self,
+        self.hitEffect,
+        true,
+        {Position = _endPos},
+        nil,
+        ObjectTypeEnum.HitEff
+    )
     eff.BaseParticle.Duration = 10
     eff.BaseParticle.LifeTime = Vector2(10, 10)
 end

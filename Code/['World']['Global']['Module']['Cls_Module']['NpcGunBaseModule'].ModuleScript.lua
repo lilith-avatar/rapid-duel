@@ -44,8 +44,8 @@ function NpcGunBase:initialize(_npc)
     self.npcModel:Aim(0, 2)
     self.npcModel.Avatar:SetBlendSubtree(Enum.BodyPart.UpperBody, 2)
 
-    self:PreloadEff({ self.fireEff })
-    self:PreloadSound({ self.attackSound, self.reloadSound })
+    self:PreloadEff({self.fireEff})
+    self:PreloadSound({self.attackSound, self.reloadSound})
 end
 
 --- Update函数
@@ -54,7 +54,6 @@ function NpcGunBase:Update(dt, tt)
     if self.m_state == GunState.AllowFire then
         ---当前状态为允许射击
         self.npcModel:Aim(0, 2)
-
     elseif self.m_state == GunState.FireWaiting then
         ---当前状态为开火后的等待阶段
         self.m_shootWait = self.m_shootWait - dt
@@ -145,7 +144,7 @@ end
 ---@param _target PlayerInstance
 function NpcGunBase:Damage(_target)
     ---暂时固定击中玩家的躯干
-    NetUtil.Fire_C('PlayerBeHitEvent', _target, { { self.npcModel, self.gunId, self.damage, HitPartEnum.Body } })
+    NetUtil.Fire_C('PlayerBeHitEvent', _target, {{self.npcModel, self.gunId, self.damage, HitPartEnum.Body}})
 end
 
 ---创建NPC使用的音频
@@ -160,9 +159,11 @@ function NpcGunBase:PreloadSound(_infoList)
                 audio:SetActive(false)
                 audio.PlayOnAwake = true
                 ---给音频添加播放完成后置灰
-                audio.OnComplete:Connect(function()
-                    audio:SetActive(false)
-                end)
+                audio.OnComplete:Connect(
+                    function()
+                        audio:SetActive(false)
+                    end
+                )
             end
         end
     end
@@ -188,7 +189,11 @@ function NpcGunBase:PlayAudio(_fileName)
     if _fileName == '' or _fileName == nil then
         return
     end
-    NetUtil.Broadcast('WorldSoundEvent', 'WeaponPackage/Audio/' .. _fileName, { Position = self.model.Position, Volume = 15})
+    NetUtil.Broadcast(
+        'WorldSoundEvent',
+        'WeaponPackage/Audio/' .. _fileName,
+        {Position = self.model.Position, Volume = 15}
+    )
     --[[
     local res = self.m_soundCacheList[_fileName][1]
     for i, v in pairs(self.m_soundCacheList[_fileName]) do
@@ -212,11 +217,14 @@ function NpcGunBase:PlayEff(_effName)
     end
     res:SetActive(false)
     res:SetActive(true)
-    invoke(function()
-        if not res:IsNull() then
-            res:SetActive(false)
-        end
-    end, 2)
+    invoke(
+        function()
+            if not res:IsNull() then
+                res:SetActive(false)
+            end
+        end,
+        2
+    )
 end
 
 return NpcGunBase

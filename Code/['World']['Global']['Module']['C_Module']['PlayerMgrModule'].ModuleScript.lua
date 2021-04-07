@@ -17,20 +17,20 @@ function PlayerMgr:Init()
     self:PlayHallBGM()
     self:ChangeSky(1011)
 
-    localPlayer.OnStateChanged:Connect(function(_old, _new)
-        self:PlayerStateChange(_old, _new)
-    end)
+    localPlayer.OnStateChanged:Connect(
+        function(_old, _new)
+            self:PlayerStateChange(_old, _new)
+        end
+    )
 end
 
 --- Update函数
 -- @param dt delta time 每帧时间
 function PlayerMgr:Update(dt)
-
 end
 
 ---物理更新函数
 function PlayerMgr:FixUpdate(_dt)
-
 end
 
 ---玩家传送到指定的位置
@@ -53,14 +53,19 @@ function PlayerMgr:GameStartEventHandler(_mode, _sceneId, _pointsList, _sceneObj
     self.curSceneId = _sceneId
     self:PlayGameBGM()
     ---先展示界面
-    LoadingUI:Show({
-        CallBack = CamMgr.AnimationStart,
-        Params = { _mode, _sceneId, _pointsList, _sceneObj },
-        Self = CamMgr
-    })
-    invoke(function()
-        self:ChangeSky(_sceneId)
-    end, 1)
+    LoadingUI:Show(
+        {
+            CallBack = CamMgr.AnimationStart,
+            Params = {_mode, _sceneId, _pointsList, _sceneObj},
+            Self = CamMgr
+        }
+    )
+    invoke(
+        function()
+            self:ChangeSky(_sceneId)
+        end,
+        1
+    )
 end
 
 ---游戏重置
@@ -103,13 +108,17 @@ function PlayerMgr:GameOverEventHandler(info, fakeNpcList)
     wait()
     for i, v in pairs(fakeNpcList) do
         local dir = Config.Scenes[self.curSceneId].GameOverCamPos - v.Position
-        NotReplicate(function()
-            v.Forward = dir
-        end)
+        NotReplicate(
+            function()
+                v.Forward = dir
+            end
+        )
         wait()
-        NotReplicate(function()
-            v.Rotation = EulerDegree(0, v.Rotation.Y, 0)
-        end)
+        NotReplicate(
+            function()
+                v.Rotation = EulerDegree(0, v.Rotation.Y, 0)
+            end
+        )
     end
 end
 
@@ -134,20 +143,25 @@ function PlayerMgr:WorldSoundEventHandler(_fileName, _infoList)
         audio.PlayMode = Enum.AudioSourcePlayMode.K3D
     end
     audio.SoundClip = ResourceManager.GetSoundClip(_fileName)
-    audio.OnComplete:Connect(function()
-        if not audio:IsNull() then
-            audio:Destroy()
-            self.audioList[audio] = nil
+    audio.OnComplete:Connect(
+        function()
+            if not audio:IsNull() then
+                audio:Destroy()
+                self.audioList[audio] = nil
+            end
         end
-    end)
+    )
     self.audioList[audio] = _fileName
     audio:Play()
-    invoke(function()
-        if not audio:IsNull() then
-            audio:Destroy()
-            self.audioList[audio] = nil
-        end
-    end, 10)
+    invoke(
+        function()
+            if not audio:IsNull() then
+                audio:Destroy()
+                self.audioList[audio] = nil
+            end
+        end,
+        10
+    )
 end
 
 function PlayerMgr:StopSoundEventHandler(_fileName)
@@ -174,12 +188,16 @@ function PlayerMgr:CreateBGM()
     self.runSound.PlayMode = Enum.AudioSourcePlayMode.K2D
     self.runSound.PlayOnAwake = true
     self.runSound:SetActive(false)
-    NetUtil.Broadcast('PlayerObjCreatedEvent', self.runSound, {
-        SoundClip = self.runSound.SoundClip,
-        Loop = true,
-        PlayMode = Enum.AudioSourcePlayMode.K2D,
-        PlayOnAwake = true
-    })
+    NetUtil.Broadcast(
+        'PlayerObjCreatedEvent',
+        self.runSound,
+        {
+            SoundClip = self.runSound.SoundClip,
+            Loop = true,
+            PlayMode = Enum.AudioSourcePlayMode.K2D,
+            PlayOnAwake = true
+        }
+    )
 end
 
 ---播放大厅音乐
@@ -200,19 +218,23 @@ function PlayerMgr:NpcCreateEventHandler(_npcModel, _cloths)
     if _npcModel:IsNull() then
         return
     end
-    NotReplicate(function()
-        for i, v in pairs(_cloths) do
-            if _npcModel.Avatar[i] ~= nil then
-                _npcModel.Avatar[i] = v
+    NotReplicate(
+        function()
+            for i, v in pairs(_cloths) do
+                if _npcModel.Avatar[i] ~= nil then
+                    _npcModel.Avatar[i] = v
+                end
             end
         end
-    end)
+    )
     local deadAniEvent = _npcModel.Avatar:AddAnimationEvent('Dead', 1)
-    deadAniEvent:Connect(function()
-        if _npcModel then
-            _npcModel.Avatar:PlayAnimation('DeadKeep', 3, 1, 0, true, true, 1)
+    deadAniEvent:Connect(
+        function()
+            if _npcModel then
+                _npcModel.Avatar:PlayAnimation('DeadKeep', 3, 1, 0, true, true, 1)
+            end
         end
-    end)
+    )
     _npcModel:Aim(0, 2)
 end
 

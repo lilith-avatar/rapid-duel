@@ -4,10 +4,10 @@
 local GameOverUI = ModuleUtil.New('GameOverUI', ClientBase)
 
 local StateEnum = {
-    None = -1,              ---未展示
-    GameResult = 1,         ---展示比赛结果
-    MVPShow = 2,            ---展示最强的几个人
-    InfoShow = 3,           ---展示最终的队伍详细信息
+    None = -1, ---未展示
+    GameResult = 1, ---展示比赛结果
+    MVPShow = 2, ---展示最强的几个人
+    InfoShow = 3 ---展示最终的队伍详细信息
 }
 local gameResultTime = 5
 local showMVPTime = 5
@@ -69,7 +69,7 @@ function GameOverUI:Show(_info, _mvpPlayers)
             self.winImg.ImgWin.ImgWin1,
             self.winImg.ImgWin.ImgWin2,
             self.winImg.TxtWin_Lose1,
-            self.winImg.TxtWin_Lose2,
+            self.winImg.TxtWin_Lose2
         }
         self.winImg:SetActive(true)
         self.loseImg:SetActive(false)
@@ -82,7 +82,7 @@ function GameOverUI:Show(_info, _mvpPlayers)
             self.loseImg.ImgLose.ImgLose1,
             self.loseImg.ImgLose.ImgLose2,
             self.loseImg.TxtWin_Lose1,
-            self.loseImg.TxtWin_Lose2,
+            self.loseImg.TxtWin_Lose2
         }
         self.winImg:SetActive(false)
         self.loseImg:SetActive(true)
@@ -188,7 +188,6 @@ function GameOverUI:Update(dt, tt)
             self:ShowTwoTeamInfo()
             return
         end
-
     elseif self.m_state == StateEnum.InfoShow then
         ---最终的详细信息展示
         self.m_curStateLeftTime = self.m_curStateLeftTime - dt
@@ -229,38 +228,45 @@ function GameOverUI:GameOverEventHandler(_info, _fakeNpcList, _mvpPlayers)
     print('游戏结束')
     self:Show(_info, _mvpPlayers)
     wait()
-    NotReplicate(function()
-        for i, v in pairs(_fakeNpcList) do
-            if v:IsNull() then
-                return
-            end
-            local playerType = _mvpPlayers[i].Player.PlayerType.Value
-            if playerType == localPlayer.PlayerType.Value then
-                v.SurfaceGUI.Panel.ImgBlue:SetActive(true)
-                v.SurfaceGUI.Panel.ImgRed:SetActive(false)
-            else
-                v.SurfaceGUI.Panel.ImgRed:SetActive(true)
-                v.SurfaceGUI.Panel.ImgBlue:SetActive(false)
-            end
-            v.NpcAvatar:PlayAnimation(self.celebrationAni[i], 2, 1, 0, true, true, 1)
-            if v.PlayerRef.Value and not v.PlayerRef.Value:IsNull() then
-                copyAvatar(v.PlayerRef.Value.Avatar, v.Avatar)
+    NotReplicate(
+        function()
+            for i, v in pairs(_fakeNpcList) do
+                if v:IsNull() then
+                    return
+                end
+                local playerType = _mvpPlayers[i].Player.PlayerType.Value
+                if playerType == localPlayer.PlayerType.Value then
+                    v.SurfaceGUI.Panel.ImgBlue:SetActive(true)
+                    v.SurfaceGUI.Panel.ImgRed:SetActive(false)
+                else
+                    v.SurfaceGUI.Panel.ImgRed:SetActive(true)
+                    v.SurfaceGUI.Panel.ImgBlue:SetActive(false)
+                end
+                v.NpcAvatar:PlayAnimation(self.celebrationAni[i], 2, 1, 0, true, true, 1)
+                if v.PlayerRef.Value and not v.PlayerRef.Value:IsNull() then
+                    copyAvatar(v.PlayerRef.Value.Avatar, v.Avatar)
+                end
             end
         end
-    end)
-
+    )
 end
 
 function GameOverUI:ShowTwoTeamInfo()
     for i, v in pairs(self.m_playersInfoUI_red) do
-        invoke(function()
-            NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'GameOverShowRed' .. i, false, { v })
-        end, (i - 1) * 0.2)
+        invoke(
+            function()
+                NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'GameOverShowRed' .. i, false, {v})
+            end,
+            (i - 1) * 0.2
+        )
     end
     for i, v in pairs(self.m_playersInfoUI_blue) do
-        invoke(function()
-            NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'GameOverShowBlue' .. i, false, { v })
-        end, (i - 1) * 0.2)
+        invoke(
+            function()
+                NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'GameOverShowBlue' .. i, false, {v})
+            end,
+            (i - 1) * 0.2
+        )
     end
 end
 

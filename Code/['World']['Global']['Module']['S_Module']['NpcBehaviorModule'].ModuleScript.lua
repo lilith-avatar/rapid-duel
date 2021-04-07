@@ -8,7 +8,7 @@ local BTJson = {}
 
 ---占点模式的行为树
 BTJson[Const.GameModeEnum.OccupyMode] =
-[[
+    [[
 {
   "version": "0.3.0",
   "scope": "tree",
@@ -573,7 +573,7 @@ BTJson[Const.GameModeEnum.OccupyMode] =
 
 ---死斗模式的行为树
 BTJson[Const.GameModeEnum.DeathmatchMode] =
-[[
+    [[
 {
   "version": "0.3.0",
   "scope": "tree",
@@ -1073,7 +1073,7 @@ function NpcBehavior:Init()
     B3.AttackAction = attackAction
     function attackAction:ctor()
         B3.Action.ctor(self)
-        self.name = "AttackAction"
+        self.name = 'AttackAction'
     end
     function attackAction:tick(_tick)
         ---@type NpcEnemyBase
@@ -1087,7 +1087,7 @@ function NpcBehavior:Init()
     B3.DisCheck = disCheck
     function disCheck:ctor()
         B3.Condition.ctor(self)
-        self.name = "DisCheck"
+        self.name = 'DisCheck'
     end
     function disCheck:tick(_tick)
         local hasView = self.properties.hasView
@@ -1113,7 +1113,7 @@ function NpcBehavior:Init()
     B3.GetHoldPoint = getHoldPoint
     function getHoldPoint:ctor()
         B3.Condition.ctor(self)
-        self.name = "GetHoldPoint"
+        self.name = 'GetHoldPoint'
     end
     function getHoldPoint:tick(_tick)
         ---@type NpcEnemyBase
@@ -1128,7 +1128,6 @@ function NpcBehavior:Init()
             return B3.FAILURE
         end
     end
-
 end
 
 ---根据Json数据和传入的游戏模式,创建一个行为树并返回行为树实例

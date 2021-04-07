@@ -1,9 +1,11 @@
 ---@module PlayerBehavior
 ---@copyright Lilith Games, Avatar Team
 ---@author RopzTao
-local  PlayerBehavior,this = {
-    playerActionStateFunc = {}, ---状态触发表
-},nil
+local PlayerBehavior, this =
+    {
+        playerActionStateFunc = {} ---状态触发表
+    },
+    nil
 
 local firParam = nil
 
@@ -18,7 +20,7 @@ local function OnKeyDown()
         PlayerBehavior:PlayerBehaviorChanged('isQuickly')
         ---准星消失
         if PlayerGunMgr.gun then
-            ---PlayerBehavior.gun.m_gui.crosshair:SetActive(false)
+        ---PlayerBehavior.gun.m_gui.crosshair:SetActive(false)
         end
     end
     ---按下空格键跳
@@ -56,10 +58,12 @@ function PlayerBehavior:Init()
 
     Input.OnKeyDown:Connect(OnKeyDown)
     Input.OnKeyUp:Connect(OnKeyUp)
-    self.player.OnDead:Connect(function()
-        self.state = PlayerActionModeEnum.Run
-        self.BehJudgeTab.isAim = false
-    end)
+    self.player.OnDead:Connect(
+        function()
+            self.state = PlayerActionModeEnum.Run
+            self.BehJudgeTab.isAim = false
+        end
+    )
 end
 
 ---监听函数
@@ -74,7 +78,7 @@ function PlayerBehavior:InitialDataRead()
         isRun = false,
         isCrouch = false,
         isQuickly = false,
-        isAim = false,
+        isAim = false
     }
     self.keyDownTab = {}
 end
@@ -93,7 +97,9 @@ end
 
 ---装备枪更新跳跃速度
 function PlayerBehavior:OnEquipWeaponEventHandler()
-    if PlayerGunMgr.curGun == nil then return end
+    if PlayerGunMgr.curGun == nil then
+        return
+    end
     self.player.JumpUpVelocity = GunConfig.GlobalConfig.JumpSpeed * self.SpeedStdCoeft * self.GunWeight
 end
 
@@ -105,27 +111,27 @@ function PlayerBehavior:PlayerBehaviorChanged(_behavior)
         self.BehJudgeTab[_behavior] = true
     end
 
-    for k,v in pairs(self.BehJudgeTab) do
+    for k, v in pairs(self.BehJudgeTab) do
         if v then
-            table.insert(self.keyDownTab,k)
+            table.insert(self.keyDownTab, k)
         end
     end
 
     if #self.keyDownTab == 1 then
-        firParam = string.gsub(tostring(self.keyDownTab[1]),'is','')
+        firParam = string.gsub(tostring(self.keyDownTab[1]), 'is', '')
         self:PlayerModeChanged(firParam)
     elseif #self.keyDownTab == 2 then
         for i, j in pairs(self.keyDownTab) do
-            firParam = string.gsub(tostring(j),'is','')
+            firParam = string.gsub(tostring(j), 'is', '')
             if firParam ~= 'Run' then
-                self:PlayerModeChanged(firParam..'Run')
+                self:PlayerModeChanged(firParam .. 'Run')
             end
         end
     elseif #self.keyDownTab == 3 then
         for m, n in pairs(self.keyDownTab) do
-            firParam = string.gsub(tostring(n),'is','')
+            firParam = string.gsub(tostring(n), 'is', '')
             if firParam ~= 'Run' and firParam ~= 'Crouch' then
-                self:PlayerModeChanged(firParam..'CrouchRun')
+                self:PlayerModeChanged(firParam .. 'CrouchRun')
             end
         end
     end
@@ -148,8 +154,10 @@ local directionFactor = Vector2.Zero
 ---前后左右移动速度不一致
 function PlayerBehavior:DiffDireMovement(dt)
     ---如果摇杆的位移坐标前一帧为directionFactor,后一帧为原点
-    if Vector2(BattleGUI.horizontal, BattleGUI.vertical) == directionFactor 
-    and Vector2(BattleGUI.horizontal, BattleGUI.vertical) == Vector2.Zero then
+    if
+        Vector2(BattleGUI.horizontal, BattleGUI.vertical) == directionFactor and
+            Vector2(BattleGUI.horizontal, BattleGUI.vertical) == Vector2.Zero
+     then
         tt = 0
         self.coefInertia = 1
     else
@@ -176,10 +184,11 @@ function PlayerBehavior:Update(dt)
     self:DiffDireMovement(dt)
     self:CharacterStartInertia()
     ---更新速度
-    for k,v in pairs(PlayerActionModeEnum) do
+    for k, v in pairs(PlayerActionModeEnum) do
         if v == self.state then
-            self.player.WalkSpeed = GunConfig.GlobalConfig[tostring(k)..'Speed'] * self.SpeedStdCoeft
-            * self.coefInertia * direParam * self.GunWeight
+            self.player.WalkSpeed =
+                GunConfig.GlobalConfig[tostring(k) .. 'Speed'] * self.SpeedStdCoeft * self.coefInertia * direParam *
+                self.GunWeight
         end
     end
 end

@@ -8,15 +8,18 @@ function GameFlowMgr:Init()
     self.scenesFolder = world.Scenes or world:CreateObject('FolderObject', 'Scenes', world)
     ---游戏结算时候大厅准备区域的阻挡
     self.readyBlock = world.HallStaticObj.ReadyBlock
-    local fms = StateMachineUtil.create({
-        initial = Const.GameStateEnum.OnHall,
-        events = {
-            { name = 'ReturnToHall', from = Const.GameStateEnum.OnOver, to = Const.GameStateEnum.OnHall },
-            { name = 'StartReady', from = Const.GameStateEnum.OnHall, to = Const.GameStateEnum.OnReady },
-            { name = 'StartGame', from = Const.GameStateEnum.OnReady, to = Const.GameStateEnum.OnGame },
-            { name = 'GameOver', from = Const.GameStateEnum.OnGame, to = Const.GameStateEnum.OnOver }
-        },
-    })
+    local fms =
+        StateMachineUtil.create(
+        {
+            initial = Const.GameStateEnum.OnHall,
+            events = {
+                {name = 'ReturnToHall', from = Const.GameStateEnum.OnOver, to = Const.GameStateEnum.OnHall},
+                {name = 'StartReady', from = Const.GameStateEnum.OnHall, to = Const.GameStateEnum.OnReady},
+                {name = 'StartGame', from = Const.GameStateEnum.OnReady, to = Const.GameStateEnum.OnGame},
+                {name = 'GameOver', from = Const.GameStateEnum.OnGame, to = Const.GameStateEnum.OnOver}
+            }
+        }
+    )
     function fms:onOnHall(event, from, to, msg)
         msg = msg or ''
         print('游戏状态更改为大厅状态 ' .. msg, event, from, to)
@@ -58,11 +61,11 @@ function GameFlowMgr:Init()
     self.notInMatchingPlayersList = {}
     ---结算状态的假玩家
     self.fakeNpcList = {}
-	 ---关房间的倒计时,会在游戏进行中重复执行关房间操作
+    ---关房间的倒计时,会在游戏进行中重复执行关房间操作
     self.closeRoomCD = 11
     ---开房间的倒计时
     self.openRoomCD = 11
-	
+
     ---玩家在模式中的信息
     self.playersInfoList = {}
     self.playersInfoList.PlayersInfo = {}
@@ -73,9 +76,11 @@ function GameFlowMgr:Init()
     self.hall2GameWaitTime = Config.GlobalConfig.Hall2GameWait
     self.gameReadyWait = Config.GlobalConfig.GameReadyWait
 
-    world.OnPlayerAdded:Connect(function(_player)
-        self:PlayerAdd(_player)
-    end)
+    world.OnPlayerAdded:Connect(
+        function(_player)
+            self:PlayerAdd(_player)
+        end
+    )
 
     self:OpenRoom()
 end
@@ -222,7 +227,6 @@ end
 
 function GameFlowMgr:Ready2Start()
     self.gameFms:StartGame()
-
 end
 
 function GameFlowMgr:GameOver(info)
@@ -256,9 +260,12 @@ function GameFlowMgr:GameOverInfo(info)
     for i = a_num + 1, a_num + b_num do
         addTable[i] = info.PlayersInfo[Const.TeamEnum.Team_B][i - a_num]
     end
-    table.sort(addTable, function(a, b)
-        return a.Score > b.Score
-    end)
+    table.sort(
+        addTable,
+        function(a, b)
+            return a.Score > b.Score
+        end
+    )
     local mvpPlayers = {}
     for i = 1, 3 do
         if not addTable[i] then
@@ -267,13 +274,16 @@ function GameFlowMgr:GameOverInfo(info)
         mvpPlayers[i] = {
             Player = addTable[i].Player,
             Kill = addTable[i].Kill,
-            IsMvp = false,
+            IsMvp = false
         }
     end
     mvpPlayers[1].IsMvp = true
-    table.sort(mvpPlayers, function(a, b)
-        return a.Kill > b.Kill
-    end)
+    table.sort(
+        mvpPlayers,
+        function(a, b)
+            return a.Kill > b.Kill
+        end
+    )
     for i, v in pairs(mvpPlayers) do
         mvpPlayers[i].Title = Const.TitleEnum[i]
     end
@@ -287,7 +297,6 @@ function GameFlowMgr:PlayerAdd(_player)
 end
 
 function GameFlowMgr:PlayerRemove(_player)
-
 end
 
 ---NPC创建成功事件
@@ -302,7 +311,6 @@ end
 
 ---NPC销毁事件
 function GameFlowMgr:NpcDestroyEventHandler(_npc)
-
 end
 
 ---玩家开始匹配
@@ -320,12 +328,18 @@ function GameFlowMgr:PlayerStartMatchEventHandler(_player)
     NetUtil.Broadcast('MatchPlayerChangeEvent', curMatchingNum)
     if curMatchingNum >= self.playersNumRequire then
         ---在匹配中的玩家数量达到要求
-        invoke(function()
-            self:Hall2Ready()
-        end, self.hall2GameWaitTime)
-        invoke(function()
-            self:Ready2Start()
-        end, self.hall2GameWaitTime + self.gameReadyWait)
+        invoke(
+            function()
+                self:Hall2Ready()
+            end,
+            self.hall2GameWaitTime
+        )
+        invoke(
+            function()
+                self:Ready2Start()
+            end,
+            self.hall2GameWaitTime + self.gameReadyWait
+        )
     end
 end
 
@@ -350,7 +364,10 @@ function GameFlowMgr:PlayerReturnHallEventHandler(_player)
     ---所有玩家全部返回大厅后修改状态
     local noHallNum = 0
     for i, v in pairs(world:FindPlayers()) do
-        if v.PlayerState.Value ~= Const.PlayerStateEnum.OnHall_NoMatching and v.PlayerState.Value ~= Const.PlayerStateEnum.OnHall_Matching then
+        if
+            v.PlayerState.Value ~= Const.PlayerStateEnum.OnHall_NoMatching and
+                v.PlayerState.Value ~= Const.PlayerStateEnum.OnHall_Matching
+         then
             noHallNum = noHallNum + 1
         end
     end
@@ -440,14 +457,16 @@ function GameFlowMgr:OnPlayerJoinEventHandler(_player)
     ---玩家成功加入游戏,判断当前游戏状态是否为大厅状态
     if self.gameFms.current ~= Const.GameStateEnum.OnHall then
         ---当前不是在大厅状态,通知玩家显示提示框
-        invoke(function()
-            while wait() do
-                if _player.C_Event and _player.C_Event.StillInGameEvent then
-                    NetUtil.Fire_C('StillInGameEvent', _player)
-                    return
+        invoke(
+            function()
+                while wait() do
+                    if _player.C_Event and _player.C_Event.StillInGameEvent then
+                        NetUtil.Fire_C('StillInGameEvent', _player)
+                        return
+                    end
                 end
             end
-        end)
+        )
     end
 end
 

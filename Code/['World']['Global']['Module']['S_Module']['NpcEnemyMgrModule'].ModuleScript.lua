@@ -11,9 +11,11 @@ function NpcEnemyMgr:Init()
     self.m_enable = false
     self.m_sceneId = -1
 
-    world.OnPlayerRemoved:Connect(function(_player)
-        --self:PlayerRemove(_player)
-    end)
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            --self:PlayerRemove(_player)
+        end
+    )
 end
 
 ---游戏开始后调用
@@ -85,10 +87,12 @@ end
 function NpcEnemyMgr:Reset()
     for i, v in pairs(self.npcList) do
         NetUtil.Fire_S('NpcDestroyEvent', v.model)
-        invoke(function()
-            wait()
-            v:Destroy()
-        end)
+        invoke(
+            function()
+                wait()
+                v:Destroy()
+            end
+        )
     end
     self.npcList = {}
 end
@@ -101,7 +105,10 @@ end
 --- 有玩家离开游戏,需要动态补齐NPC,游戏在进行中才会执行
 ---@param _player PlayerInstance 离开游戏的玩家
 function NpcEnemyMgr:OnPlayerLeaveEventHandler(_player)
-    if GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady then
+    if
+        GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and
+            GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady
+     then
         return
     end
     print('玩家退出游戏,补全机器人')
@@ -114,7 +121,10 @@ function NpcEnemyMgr:CameraMoveEndEventHandler(_player)
     if self.m_enable then
         return
     end
-    if GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady then
+    if
+        GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and
+            GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady
+     then
         return
     end
     self:StartGame()

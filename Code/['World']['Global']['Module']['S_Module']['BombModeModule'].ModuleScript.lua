@@ -88,7 +88,7 @@ function BombBase:Damage()
         end
         local damage = BombMode.explosionDamage * rate
         ---伤害的发起者  伤害来源的枪械  伤害的数值  伤害部位,暂时为UZI命中效果
-        NetUtil.Fire_C('PlayerBeHitEvent', v, { { v, 1001, damage, HitPartEnum.Body } })
+        NetUtil.Fire_C('PlayerBeHitEvent', v, {{v, 1001, damage, HitPartEnum.Body}})
     end
 end
 
@@ -102,10 +102,8 @@ function BombBase:Update(_dt)
         end
     elseif self.m_state == Const.BombStateEnum.NoBomb then
         ---没有炸弹状态下的更新
-
     elseif self.m_state == Const.BombStateEnum.BombFlashing then
-        ---炸弹闪烁状态下的更新
-
+    ---炸弹闪烁状态下的更新
     end
 end
 
@@ -124,12 +122,16 @@ function BombMode:Init()
     self.m_bombPointsList = {}
     ---A阵营下玩家持有的炸弹列表
     self.m_teamABombsList = {}
-    world.OnPlayerAdded:Connect(function(_player)
-        self:PlayerAdd(_player)
-    end)
-    world.OnPlayerRemoved:Connect(function(_player)
-        --self:PlayerRemove(_player)
-    end)
+    world.OnPlayerAdded:Connect(
+        function(_player)
+            self:PlayerAdd(_player)
+        end
+    )
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            --self:PlayerRemove(_player)
+        end
+    )
 end
 
 --- Update函数
@@ -138,7 +140,10 @@ function BombMode:Update(dt, tt)
     if not self.m_enable then
         return
     end
-    if GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady then
+    if
+        GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and
+            GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady
+     then
         return
     end
     ---更新场景中的所有炸弹
@@ -163,7 +168,6 @@ function BombMode:Update(dt, tt)
         ---游戏时间结束,判定防守方胜利
         self:GameOver(Const.TeamEnum.Team_B)
     end
-
 end
 
 ---爆破模式开始
@@ -184,11 +188,13 @@ function BombMode:CreateDepot()
     obj.Rotation = EulerDegree(0, 0, 0)
     obj.Position = self.armsPos
     print(self.armsPos)
-    obj.Range.OnCollisionBegin:Connect(function(_obj)
-        if _obj:IsA('PlayerInstance') then
-            self:PlayerEnterDepot(_obj)
+    obj.Range.OnCollisionBegin:Connect(
+        function(_obj)
+            if _obj:IsA('PlayerInstance') then
+                self:PlayerEnterDepot(_obj)
+            end
         end
-    end)
+    )
 end
 
 ---碰撞到弹药库的事件
@@ -274,9 +280,11 @@ end
 function BombMode:PlayerAdd(_player)
     table.insert(self.m_playersList, _player)
     self.m_teamABombsList[_player] = 1
-    _player.OnDead:Connect(function()
-        self:PlayerDead(_player)
-    end)
+    _player.OnDead:Connect(
+        function()
+            self:PlayerDead(_player)
+        end
+    )
 end
 
 function BombMode:OnPlayerLeaveEventHandler(_player)

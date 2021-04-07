@@ -9,12 +9,12 @@ function GunRecoil:initialize(_gun)
     self.id = _gun.recoilId
     self.gun = _gun
     ---自身属性部分(大多时变量，通过安装配件可能会变化)
-    self.m_verticalScale = 1    ---竖直缩放率
-    self.m_horizontalScale = 1  ---水平缩放率
-    self.m_minErrorScale = 1         ---散布缩放率
-    self.m_maxErrorScale = 1         ---散布缩放率
-    self.m_recoverRateScale = 1         ---散布缩放率
-    self.m_selfSpinRangeRateScale = 1         ---散布缩放率
+    self.m_verticalScale = 1 ---竖直缩放率
+    self.m_horizontalScale = 1 ---水平缩放率
+    self.m_minErrorScale = 1 ---散布缩放率
+    self.m_maxErrorScale = 1 ---散布缩放率
+    self.m_recoverRateScale = 1 ---散布缩放率
+    self.m_selfSpinRangeRateScale = 1 ---散布缩放率
 
     self.unstability = 0 ---后坐力参数，从0-1取值,表现相关的量理论上是它的函数,目前仅控制散布，以及它决定的ui表现
     self.currentError = 0
@@ -33,7 +33,8 @@ function GunRecoil:initialize(_gun)
     self.difFunction = function(_unstability)
         _unstability = _unstability or self.unstability
         if self.config_diffuseFunction == DiffuseFunctionEnum.Linear then
-            return _unstability---线性函数
+            ---线性函数
+            return _unstability
         elseif self.config_diffuseFunction == DiffuseFunctionEnum.Sqrt then
             return math.sqrt(_unstability)
         elseif self.config_diffuseFunction == DiffuseFunctionEnum.Square then
@@ -102,22 +103,22 @@ end
 
 ---返回最小散射
 function GunRecoil:GetMinError()
-	return self.config_minError * self.m_minErrorScale
+    return self.config_minError * self.m_minErrorScale
 end
 
 ---返回最大散射
 function GunRecoil:GetMaxError()
-	return self.config_maxError * self.m_maxErrorScale
+    return self.config_maxError * self.m_maxErrorScale
 end
 
 ---返回回复时间
 function GunRecoil:GetShakeTime()
-	return self.config_gunRecoil / (self.config_gunRecoverRate * self.m_recoverRateScale)
+    return self.config_gunRecoil / (self.config_gunRecoverRate * self.m_recoverRateScale)
 end
 
 ---返回Z轴抖动
 function GunRecoil:GetSelfSpinRange()
-	return self.config_selfSpinRange * self.m_selfSpinRangeRateScale
+    return self.config_selfSpinRange * self.m_selfSpinRangeRateScale
 end
 
 ---收到开火信号后的反应

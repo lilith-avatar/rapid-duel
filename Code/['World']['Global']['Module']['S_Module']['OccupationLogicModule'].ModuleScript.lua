@@ -7,19 +7,22 @@ function OccupationLogic:Init()
     --- key - player  value - occ
     self.playersList = {}
 
-    world.OnPlayerAdded:Connect(function(_player)
-        self:PlayerAdd(_player)
-    end)
-    world.OnPlayerRemoved:Connect(function(_player)
-        --self:PlayerRemove(_player)
-    end)
+    world.OnPlayerAdded:Connect(
+        function(_player)
+            self:PlayerAdd(_player)
+        end
+    )
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            --self:PlayerRemove(_player)
+        end
+    )
     self.allowChangeList = {}
 end
 
 --- Update
 --- @param dt number delta time
 function OccupationLogic:Update(dt, tt)
-
 end
 
 ---@param _player PlayerInstance
@@ -78,11 +81,14 @@ function OccupationLogic:PlayerTryChangeOccEventHandler(_player, _id)
     NetUtil.Fire_C('ChangeOccEvent', _player, _id)
     NetUtil.Fire_S('PlayerDoChangeOccEvent', _player, _id)
     self.allowChangeList[_player] = false
-    invoke(function()
-        if not _player:IsNull() then
-            self.allowChangeList[_player] = true
-        end
-    end, 3)
+    invoke(
+        function()
+            if not _player:IsNull() then
+                self.allowChangeList[_player] = true
+            end
+        end,
+        3
+    )
 end
 
 ---判断玩家是否在一个区域内

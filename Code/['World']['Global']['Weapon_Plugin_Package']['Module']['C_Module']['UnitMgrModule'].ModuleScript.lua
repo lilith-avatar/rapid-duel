@@ -27,53 +27,64 @@ end
 ---@param dt number delta time 每帧时间
 ---@param tt number total time 总时间
 function UnitMgr:Update(dt, tt)
-
 end
 
 function UnitMgr:CreateAllUnitEventHandler(_weaponUnitList, _accUnitList, _ammoUnitList)
     for k, v in pairs(_weaponUnitList) do
         if not self.weaponUnitList[k] then
             self.weaponUnitList[k] = v
-            v.PickRegion.OnCollisionBegin:Connect(function(_hitObj)
-                if _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
-                    self:PlayerNearWeaponUnit(v)
+            v.PickRegion.OnCollisionBegin:Connect(
+                function(_hitObj)
+                    if _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
+                        self:PlayerNearWeaponUnit(v)
+                    end
                 end
-            end)
-            v.PickRegion.OnCollisionEnd:Connect(function(_hitObj)
-                if  _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
-                    self:PlayerAwayWeaponUnit(v)
+            )
+            v.PickRegion.OnCollisionEnd:Connect(
+                function(_hitObj)
+                    if _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
+                        self:PlayerAwayWeaponUnit(v)
+                    end
                 end
-            end)
+            )
         end
     end
     for k, v in pairs(_accUnitList) do
         if not self.accUnitList[k] then
             self.accUnitList[k] = v
-            v.PickRegion.OnCollisionBegin:Connect(function(_hitObj)
-                if _hitObj and  _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
-                    self:PlayerNearAccUnit(v)
+            v.PickRegion.OnCollisionBegin:Connect(
+                function(_hitObj)
+                    if _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
+                        self:PlayerNearAccUnit(v)
+                    end
                 end
-            end)
-            v.PickRegion.OnCollisionEnd:Connect(function(_hitObj)
-                if  _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
-                    self:PlayerAwayAccUnit(v)
+            )
+            v.PickRegion.OnCollisionEnd:Connect(
+                function(_hitObj)
+                    if _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
+                        self:PlayerAwayAccUnit(v)
+                    end
                 end
-            end)
+            )
         end
     end
     for k, v in pairs(_ammoUnitList) do
         if not self.ammoUnitList[k] then
             self.ammoUnitList[k] = v
-            v.PickRegion.OnCollisionBegin:Connect(function(_hitObj)
-                if _hitObj and  _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
-                    self:PlayerNearAmmoUnit(v)
+            v.PickRegion.OnCollisionBegin:Connect(
+                function(_hitObj)
+                    if _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
+                        self:PlayerNearAmmoUnit(v)
+                    end
                 end
-            end)
-            v.PickRegion.OnCollisionEnd:Connect(function(_hitObj)
-                if _hitObj and  _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
-                    self:PlayerAwayAmmoUnit(v)
+            )
+            v.PickRegion.OnCollisionEnd:Connect(
+                function(_hitObj)
+                    if _hitObj and _hitObj.Name == 'PickJudge' and _hitObj.Parent == localPlayer then
+                        self:PlayerAwayAmmoUnit(v)
+                    end
                 end
-            end)
+            )
         end
     end
 end

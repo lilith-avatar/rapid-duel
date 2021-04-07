@@ -916,7 +916,15 @@ end
 --- 返回一个方向向量的欧拉角
 function LookRotation(fromDir)
     local eulerAngles = EulerDegree(0, 0, 0)
-    eulerAngles.x = math.deg(math.acos(math.sqrt((fromDir.x * fromDir.x + fromDir.z * fromDir.z) / (fromDir.x * fromDir.x + fromDir.y * fromDir.y + fromDir.z * fromDir.z))))
+    eulerAngles.x =
+        math.deg(
+        math.acos(
+            math.sqrt(
+                (fromDir.x * fromDir.x + fromDir.z * fromDir.z) /
+                    (fromDir.x * fromDir.x + fromDir.y * fromDir.y + fromDir.z * fromDir.z)
+            )
+        )
+    )
     if fromDir.y >= 0 then
         eulerAngles.x = 360 - eulerAngles.x
     end
@@ -971,13 +979,18 @@ end
 
 function pairsByKeys(t, f)
     local a = {}
-    for n in pairs(t) do table.insert(a, n) end
+    for n in pairs(t) do
+        table.insert(a, n)
+    end
     table.sort(a, f)
-    local i = 0                 -- iterator variable
-    local iter = function ()    -- iterator function
+    local i = 0 -- iterator variable
+    local iter = function()
+        -- iterator function
         i = i + 1
-        if a[i] == nil then return nil
-        else return a[i], t[a[i]]
+        if a[i] == nil then
+            return nil
+        else
+            return a[i], t[a[i]]
         end
     end
     return iter

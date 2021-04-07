@@ -126,17 +126,19 @@ function HallMgr:MatchPlayerChangeEventHandler(_num)
         self.root.ImgBG:SetActive(false)
         self.goReadyUI:SetActive(false)
         NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'StartMatch', true)
-        invoke(function()
-            while true do
-                self.timeLeftTxt.Text = tostring(math.floor(self.hall2GameWait))
-                self.hall2GameWait = self.hall2GameWait - 1
-                self.hall2GameWait = self.hall2GameWait < 0 and 0 or self.hall2GameWait
-                if not self.m_isSuccess then
-                    return
+        invoke(
+            function()
+                while true do
+                    self.timeLeftTxt.Text = tostring(math.floor(self.hall2GameWait))
+                    self.hall2GameWait = self.hall2GameWait - 1
+                    self.hall2GameWait = self.hall2GameWait < 0 and 0 or self.hall2GameWait
+                    if not self.m_isSuccess then
+                        return
+                    end
+                    wait(1)
                 end
-                wait(1)
             end
-        end)
+        )
     end
     self.curNum = _num
     localPlayer.Local.Independent.HallObjs.CurNumTV.SurfaceGUI.Image.Text.Text = tostring(_num)

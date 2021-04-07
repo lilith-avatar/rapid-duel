@@ -1,6 +1,6 @@
 -- ======================================================================
--- Copyright (c) 2012 RapidFire Studio Limited 
--- All Rights Reserved. 
+-- Copyright (c) 2012 RapidFire Studio Limited
+-- All Rights Reserved.
 -- http://www.rapidfirestudio.com
 
 -- Permission is hereby granted, free of charge, to any person obtaining
@@ -36,28 +36,23 @@ local cachedPaths = nil
 -- local functions
 ----------------------------------------------------------------
 
-function astar.dist (x1, y1, x2, y2)
-
+function astar.dist(x1, y1, x2, y2)
     return math.sqrt((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
 end
 
-function astar.dist_between (nodeA, nodeB)
-
+function astar.dist_between(nodeA, nodeB)
     return astar.dist(nodeA.x, nodeA.y, nodeB.x, nodeB.y)
 end
 
-function astar.heuristic_cost_estimate (nodeA, nodeB)
-
+function astar.heuristic_cost_estimate(nodeA, nodeB)
     return astar.dist(nodeA.x, nodeA.y, nodeB.x, nodeB.y)
 end
 
-function astar.is_valid_node (node, neighbor)
-
+function astar.is_valid_node(node, neighbor)
     return true
 end
 
-function astar.lowest_f_score (set, f_score)
-
+function astar.lowest_f_score(set, f_score)
     local lowest, bestNode = INF, nil
     for _, node in ipairs(set) do
         local score = f_score[node]
@@ -68,8 +63,7 @@ function astar.lowest_f_score (set, f_score)
     return bestNode
 end
 
-function astar.neighbor_nodes (theNode, nodes)
-
+function astar.neighbor_nodes(theNode, nodes)
     local neighbors = {}
     for _, node in pairs(nodes) do
         if theNode ~= node and astar.is_valid_node(theNode, node) then
@@ -79,8 +73,7 @@ function astar.neighbor_nodes (theNode, nodes)
     return neighbors
 end
 
-function astar.not_in (set, theNode)
-
+function astar.not_in(set, theNode)
     for _, node in ipairs(set) do
         if node == theNode then
             return false
@@ -89,8 +82,7 @@ function astar.not_in (set, theNode)
     return true
 end
 
-function astar.remove_node (set, theNode)
-
+function astar.remove_node(set, theNode)
     for i, node in ipairs(set) do
         if node == theNode then
             set[i] = set[#set]
@@ -100,8 +92,7 @@ function astar.remove_node (set, theNode)
     end
 end
 
-function astar.unwind_path (flat_path, map, current_node)
-
+function astar.unwind_path(flat_path, map, current_node)
     if map[current_node] then
         table.insert(flat_path, 1, map[current_node])
         return astar.unwind_path(flat_path, map, map[current_node])
@@ -114,10 +105,9 @@ end
 -- pathfinding functions
 ----------------------------------------------------------------
 
-function astar.a_star (start, goal, nodes, valid_node_func)
-
+function astar.a_star(start, goal, nodes, valid_node_func)
     local closedset = {}
-    local openset = { start }
+    local openset = {start}
     local came_from = {}
 
     if valid_node_func then
@@ -143,7 +133,6 @@ function astar.a_star (start, goal, nodes, valid_node_func)
         local neighbors = current.neighbor
         for _, neighbor in ipairs(neighbors) do
             if astar.not_in(closedset, neighbor) then
-
                 local tentative_g_score = g_score[current] + astar.dist_between(current, neighbor)
 
                 if astar.not_in(openset, neighbor) or tentative_g_score < g_score[neighbor] then
@@ -164,18 +153,15 @@ end
 -- exposed functions
 ----------------------------------------------------------------
 
-function astar.clear_cached_paths ()
-
+function astar.clear_cached_paths()
     cachedPaths = nil
 end
 
-function astar.distance (x1, y1, x2, y2)
-
+function astar.distance(x1, y1, x2, y2)
     return astar.dist(x1, y1, x2, y2)
 end
 
-function astar.path (start, goal, nodes, ignore_cache, valid_node_func)
-
+function astar.path(start, goal, nodes, ignore_cache, valid_node_func)
     if not cachedPaths then
         cachedPaths = {}
     end

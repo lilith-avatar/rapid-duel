@@ -41,12 +41,12 @@ function WeaponAmmoBase:PlayerDropAmmo(_count)
         ---丢弃了所有的子弹
         _count = self.count
         world.S_Event.CreateAmmoEvent:Fire(self.id, _count, self.character.Position)
-        world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, { [self.id] = -_count })
+        world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, {[self.id] = -_count})
         isDroppedAll = true
     else
         ---丢弃部分子弹
         world.S_Event.CreateAmmoEvent:Fire(self.id, _count, self.character.Position)
-        world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, { [self.id] = -_count })
+        world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, {[self.id] = -_count})
     end
     self.count = self.count - _count
     return isDroppedAll
@@ -90,11 +90,14 @@ function WeaponAmmoBase:PickSound()
     audio.Loop = false
     audio.Doppler = 0
     audio:Play()
-    invoke(function()
-        if audio then
-            audio:Destroy()
-        end
-    end, 2)
+    invoke(
+        function()
+            if audio then
+                audio:Destroy()
+            end
+        end,
+        2
+    )
 end
 
 return WeaponAmmoBase

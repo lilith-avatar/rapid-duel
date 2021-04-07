@@ -13,7 +13,7 @@ local renderListLength = 50
 QualityBalance.QualityEnum = {
     Low = 1,
     Middle = 2,
-    High = 3,
+    High = 3
 }
 
 --- 初始化
@@ -107,15 +107,17 @@ function QualityBalance.StartUpdate()
         return
     end
     world.OnRenderStepped:Connect(QualityBalance.FixUpdate)
-    invoke(function()
-        while true do
-            if not QualityBalance.update then
-                return
+    invoke(
+        function()
+            while true do
+                if not QualityBalance.update then
+                    return
+                end
+                local dt = wait()
+                QualityBalance.Update(dt)
             end
-            local dt = wait()
-            QualityBalance.Update(dt)
         end
-    end)
+    )
     QualityBalance.update = true
 end
 
@@ -144,8 +146,8 @@ function QualityChange(_old, _new)
     QualityBalance.event_qualityChange:Fire(_new)
     PlayerGunMgr:QualityChange(_new)
     if _old > _new then
-        ---画质降低了
-        --NetUtil.Fire_C('NoticeEvent', localPlayer, 2000)
+    ---画质降低了
+    --NetUtil.Fire_C('NoticeEvent', localPlayer, 2000)
     end
 end
 

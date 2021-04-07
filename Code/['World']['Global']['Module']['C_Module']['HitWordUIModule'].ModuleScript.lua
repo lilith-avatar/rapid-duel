@@ -23,7 +23,6 @@ end
 --- Update函数
 --- @param dt number delta time 每帧时间
 function HitWordUI:Update(dt, tt)
-
 end
 
 --- 游戏开始

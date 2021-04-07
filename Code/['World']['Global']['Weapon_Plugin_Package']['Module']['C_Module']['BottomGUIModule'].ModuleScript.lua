@@ -16,41 +16,59 @@ function BottomGUI:Init()
     self.weapon3 = self.root.BottomPart.Weapon3
     self.weapon4 = self.root.BottomPart.Prop1
     self.weapon5 = self.root.BottomPart.Prop2
-    self.weapon1.WeaponBtn.OnClick:Connect(function()
-        self:ChooseWeapon(1)
-    end)
-    self.weapon2.WeaponBtn.OnClick:Connect(function()
-        self:ChooseWeapon(2)
-    end)
-    self.weapon3.WeaponBtn.OnClick:Connect(function()
-        self:ChooseWeapon(3)
-    end)
-    self.weapon4.WeaponBtn.OnClick:Connect(function()
-        self:ChooseWeapon(4)
-    end)
-    self.weapon5.WeaponBtn.OnClick:Connect(function()
-        self:ChooseWeapon(5)
-    end)
-    self.weapon1.FireMode.OnClick:Connect(function()
-        self:ChangeWeaponShootMode(1)
-    end)
-    self.weapon2.FireMode.OnClick:Connect(function()
-        self:ChangeWeaponShootMode(2)
-    end)
-    self.weapon3.FireMode.OnClick:Connect(function()
-        self:ChangeWeaponShootMode(3)
-    end)
+    self.weapon1.WeaponBtn.OnClick:Connect(
+        function()
+            self:ChooseWeapon(1)
+        end
+    )
+    self.weapon2.WeaponBtn.OnClick:Connect(
+        function()
+            self:ChooseWeapon(2)
+        end
+    )
+    self.weapon3.WeaponBtn.OnClick:Connect(
+        function()
+            self:ChooseWeapon(3)
+        end
+    )
+    self.weapon4.WeaponBtn.OnClick:Connect(
+        function()
+            self:ChooseWeapon(4)
+        end
+    )
+    self.weapon5.WeaponBtn.OnClick:Connect(
+        function()
+            self:ChooseWeapon(5)
+        end
+    )
+    self.weapon1.FireMode.OnClick:Connect(
+        function()
+            self:ChangeWeaponShootMode(1)
+        end
+    )
+    self.weapon2.FireMode.OnClick:Connect(
+        function()
+            self:ChangeWeaponShootMode(2)
+        end
+    )
+    self.weapon3.FireMode.OnClick:Connect(
+        function()
+            self:ChangeWeaponShootMode(3)
+        end
+    )
 
     self.player = localPlayer
-    for k,v in pairs(self.root.BottomPart.Health:GetChildren()) do
+    for k, v in pairs(self.root.BottomPart.Health:GetChildren()) do
         self[tostring(v)] = v
     end
 
     self.isShing = false
     self.HealthFillRed:SetActive(false)
-    self.player.OnHealthChange:Connect(function()
-        self:BeHitHealthFill(self.player.Health)
-    end)
+    self.player.OnHealthChange:Connect(
+        function()
+            self:BeHitHealthFill(self.player.Health)
+        end
+    )
 end
 
 function BottomGUI:InitListeners()
@@ -67,8 +85,8 @@ function BottomGUI:Update(dt)
     end
     for i = 1, 3 do
         if curIndex ~= i then
-            --self['weapon' .. i].SelectedIcon:SetActive(false)
-            --self['weapon' .. i].Icon:SetActive(true)
+        --self['weapon' .. i].SelectedIcon:SetActive(false)
+        --self['weapon' .. i].Icon:SetActive(true)
         end
     end
     ---当前有枪并且持枪状态
@@ -139,7 +157,6 @@ function BottomGUI:Update(dt)
             self.weapon3.TotalAmmo.Color = Color(255, 175, 5, 255)
         end
     end]]
-
     self:LowHealthShing(dt)
 end
 
@@ -226,7 +243,7 @@ function BottomGUI:BeHitHealthFill(_health)
         showNum = _health
         self.HeartFill:SetActive(true)
         self.HeartFill.Size = Vector2(29, 24)
-        self.HeartBG.Size = Vector2(40,40)
+        self.HeartBG.Size = Vector2(40, 40)
         shined = true
     else
         showNum = 0
@@ -239,7 +256,6 @@ function BottomGUI:BeHitHealthFill(_health)
     end
     Tweener = Tween:TweenProperty(self.HealthFillRed, { FillAmount = self.HealthFill.FillAmount }, 0.25, Enum.EaseCurve.Linear)
     Tweener:Play()]]
-
     if _health > 0 and _health < 20 then
         self.HeartFill.Color = Color(255, 0, 0, 255)
         self.HealthFill.Color = Color(255, 0, 0, 255)
@@ -257,11 +273,11 @@ function BottomGUI:LowHealthShing(_dt)
     if self.isShing and tt > 0.5 then
         if shined then
             self.HeartFill.Size = Vector2(29, 24) * 1.35
-            self.HeartBG.Size = Vector2(40,40) * 1.35
+            self.HeartBG.Size = Vector2(40, 40) * 1.35
             shined = false
         else
             self.HeartFill.Size = Vector2(29, 24)
-            self.HeartBG.Size = Vector2(40,40)
+            self.HeartBG.Size = Vector2(40, 40)
             shined = true
         end
         tt = 0
@@ -279,18 +295,26 @@ function BottomGUI:Main_Deputy()
     self.weapon2.WeaponBtn.OnClick:Clear()
     self.weapon1.FireMode.OnClick:Clear()
     self.weapon2.FireMode.OnClick:Clear()
-    self.weapon1.WeaponBtn.OnClick:Connect(function()
-        self:ChooseWeapon(1)
-    end)
-    self.weapon2.WeaponBtn.OnClick:Connect(function()
-        self:ChooseWeapon(2)
-    end)
-    self.weapon1.FireMode.OnClick:Connect(function()
-        self:ChangeWeaponShootMode(1)
-    end)
-    self.weapon2.FireMode.OnClick:Connect(function()
-        self:ChangeWeaponShootMode(2)
-    end)
+    self.weapon1.WeaponBtn.OnClick:Connect(
+        function()
+            self:ChooseWeapon(1)
+        end
+    )
+    self.weapon2.WeaponBtn.OnClick:Connect(
+        function()
+            self:ChooseWeapon(2)
+        end
+    )
+    self.weapon1.FireMode.OnClick:Connect(
+        function()
+            self:ChangeWeaponShootMode(1)
+        end
+    )
+    self.weapon2.FireMode.OnClick:Connect(
+        function()
+            self:ChangeWeaponShootMode(2)
+        end
+    )
 end
 
 function BottomGUI:SetActive(_active)

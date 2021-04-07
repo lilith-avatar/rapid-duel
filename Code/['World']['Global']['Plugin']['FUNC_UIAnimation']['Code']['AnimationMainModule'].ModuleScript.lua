@@ -9,16 +9,21 @@ local AnimationMain = {}
 local DEFAULT_FPS = 60
 
 function AnimationMain:Init()
-    if localPlayer == nil then print('禁止在服务端使用UI动效模块,Init无效') return end
+    if localPlayer == nil then
+        print('禁止在服务端使用UI动效模块,Init无效')
+        return
+    end
 
     self.DataModule = require(script.Parent.DataModule)
     self.DataModule:Init()
 
     self.startEvent = localPlayer.C_Event.StartAnimationEvent
     self.stateEvent = localPlayer.C_Event.AnimationStateEvent
-    self.startEvent:Connect(function(_dataName,_isBackRun, _uiList)
-        self:StartAnimation(_dataName,_isBackRun, _uiList)
-    end)
+    self.startEvent:Connect(
+        function(_dataName, _isBackRun, _uiList)
+            self:StartAnimation(_dataName, _isBackRun, _uiList)
+        end
+    )
     self.funcList = {}
     self.timeInterval = 1 / DEFAULT_FPS
     self.timeDiff = 0
@@ -61,7 +66,7 @@ function AnimationMain:StartAnimation(_dataName, _isBackRun, _uiList)
     else
         for k, v in pairs(Data) do
             if k ~= 'count' and v.Obj and not v.Obj:IsNull() then
-               --[[ if not v.Obj or v.Obj:IsNull() then
+                --[[ if not v.Obj or v.Obj:IsNull() then
                     table.removebyvalue(self.funcList, update)
                     self.stateEvent:Fire(_dataName, 'Complete', _uiList)
                     return
@@ -108,7 +113,7 @@ end
 
 function AnimationMain:InsertParameter(_uiObj, _paraTable, _dataName, _uiList)
     if _uiObj == nil then
-        print('找不到Ui动画的节点',_dataName,'检查配置表与查看log寻找原因')
+        print('找不到Ui动画的节点', _dataName, '检查配置表与查看log寻找原因')
         return
     end
     if _paraTable.Size then

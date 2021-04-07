@@ -12,12 +12,14 @@ function GunSound:initialize(_gun, _root)
     self.table_Sound = GunConfig.Sound[_gun.gun_Id] or {}
     self.soundPlaying = {}
 
-    self.localCacheFolder = world:CreateObject('NodeObject', 'LocalSoundCache_' .. self.gun.name, self.gun.character.Local)
+    self.localCacheFolder =
+        world:CreateObject('NodeObject', 'LocalSoundCache_' .. self.gun.name, self.gun.character.Local)
     local worldCache = world.WorldSoundCache
     if not worldCache then
         worldCache = world:CreateObject('FolderObject', 'WorldSoundCache', world)
     end
-    self.worldCacheFolder = world:CreateObject('NodeObject', self.gun.character.Name .. self.gun.name .. '_Cache', worldCache)
+    self.worldCacheFolder =
+        world:CreateObject('NodeObject', self.gun.character.Name .. self.gun.name .. '_Cache', worldCache)
 
     ---可使用的音频缓存
     self.m_canUsedCache = {}
@@ -62,9 +64,8 @@ function GunSound:initialize(_gun, _root)
             self.gun[i]:Bind(PlaySound)
         end
     end
-    ---销毁所有的音效 
+    ---销毁所有的音效
     local function StopAllSound()
-
     end
     self.gun.withDrawWeapon:Bind(StopAllSound)
 end
@@ -88,7 +89,6 @@ function GunSound:UseSoundCache(_eventName, _parent, _isSilencer, _pos)
                 table.remove(self.m_canUsedCache.Local[_eventName], 1)
             else
                 ---没有可用的音频
-
             end
             audio = self:CreateSound(_eventName, _parent, _isSilencer)
             if not audio then
@@ -112,7 +112,6 @@ function GunSound:UseSoundCache(_eventName, _parent, _isSilencer, _pos)
                 table.remove(self.m_canUsedCache.World[_eventName], 1)
             else
                 ---没有可用的音频
-
             end
             audio = self:CreateSound(_eventName, _parent, _isSilencer)
             if not audio then
@@ -129,24 +128,28 @@ function GunSound:UseSoundCache(_eventName, _parent, _isSilencer, _pos)
             if v ~= localPlayer then
                 NetUtil.Fire_C('WeaponObjActiveChangeEvent', v, audio, true, ObjectTypeEnum.Sound, audio.Volume)
             else
-                NotReplicate(function()
-                    --audio:SetActive(true)
-                    audio:Play()
-                end)
+                NotReplicate(
+                    function()
+                        --audio:SetActive(true)
+                        audio:Play()
+                    end
+                )
             end
         end
     end
-    invoke(function()
-        if self.table_Sound and not audio:IsNull() then
-            while audio:GetAudioState() == Enum.AudioSourceState.Playing do
-                wait()
-                if audio:IsNull() then
-                    return
+    invoke(
+        function()
+            if self.table_Sound and not audio:IsNull() then
+                while audio:GetAudioState() == Enum.AudioSourceState.Playing do
+                    wait()
+                    if audio:IsNull() then
+                        return
+                    end
                 end
+                self:RecycleCache(_eventName, audio)
             end
-            self:RecycleCache(_eventName, audio)
         end
-    end)
+    )
 end
 
 function GunSound:RecycleCache(_eventName, _audio)
@@ -173,10 +176,12 @@ function GunSound:RecycleCache(_eventName, _audio)
             if v ~= localPlayer then
                 NetUtil.Fire_C('WeaponObjActiveChangeEvent', v, _audio, false, ObjectTypeEnum.Sound)
             else
-                NotReplicate(function()
-                    --audio:SetActive(false)
-                    _audio:Stop()
-                end)
+                NotReplicate(
+                    function()
+                        --audio:SetActive(false)
+                        _audio:Stop()
+                    end
+                )
             end
         end
     end
@@ -216,19 +221,26 @@ function GunSound:CreateSound(_eventName, _parent, _isSilencer)
     audio.PlayOnAwake = false --
     --audio:SetActive(false)
     world.S_Event.WeaponObjCreatedEvent:Fire(self.gun.character, audio)
-    invoke(function()
-        if audio and not audio:IsNull() then
-            world.Players:BroadcastEvent('WeaponObjCreatedEvent', audio, {
-                SoundClip = audioClip,
-                PlayOnAwake = false,
-                Volume = config.Volume,
-                Loop = config.IsLoop,
-                MaxDistance = 50,
-                MinDistance = 5,
-                Doppler = 0
-            })
-        end
-    end, 1)
+    invoke(
+        function()
+            if audio and not audio:IsNull() then
+                world.Players:BroadcastEvent(
+                    'WeaponObjCreatedEvent',
+                    audio,
+                    {
+                        SoundClip = audioClip,
+                        PlayOnAwake = false,
+                        Volume = config.Volume,
+                        Loop = config.IsLoop,
+                        MaxDistance = 50,
+                        MinDistance = 5,
+                        Doppler = 0
+                    }
+                )
+            end
+        end,
+        1
+    )
     return audio
 end
 

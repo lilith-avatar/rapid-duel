@@ -1,10 +1,12 @@
 ---@module PlayerGunMgr 玩家端的枪械管理模块.处理玩家的输入等
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
-local PlayerGunMgr, this = {
-    --- @type table 本玩家的数据
-	myData = {}
-}, nil
+local PlayerGunMgr, this =
+    {
+        --- @type table 本玩家的数据
+        myData = {}
+    },
+    nil
 
 ---枪械的客户端事件名称
 local _CLIENT_EVENT_ = {
@@ -31,12 +33,12 @@ local function OnKeyDown()
     if localPlayer.Health <= 0 then
         return
     end
-	if Input.GetPressKeyData(Enum.KeyCode.LeftAlt) == Enum.KeyState.KeyStatePress then
+    if Input.GetPressKeyData(Enum.KeyCode.LeftAlt) == Enum.KeyState.KeyStatePress then
         ---显示鼠标
-		local camera = world.CurrentCamera
-		--camera.EnableMouseDrag = false
-		camera.CursorLock = false
-		camera.CursorDisplay = true
+        local camera = world.CurrentCamera
+        --camera.EnableMouseDrag = false
+        camera.CursorLock = false
+        camera.CursorDisplay = true
     end
     if not PlayerGunMgr.curGun then
         return
@@ -55,7 +57,7 @@ local function OnKeyDown()
         ---尝试开镜
         PlayerGunMgr.curGun:MechanicalAimStart()
     end
---[[
+    --[[
     if Input.GetPressKeyData(Enum.KeyCode.Mouse0) == Enum.KeyState.KeyStatePress then
         ---开始拖动屏幕
         PlayerGunMgr.curGun.m_cameraControl:DragStart()
@@ -84,19 +86,19 @@ local function OnKeyHold()
             PlayerGunMgr.curGun.m_cameraControl:DragEnd()
             return
         end
-        ---中键拖动屏幕
-        --PlayerGunMgr.curGun.m_cameraControl:DragHold()
+    ---中键拖动屏幕
+    --PlayerGunMgr.curGun.m_cameraControl:DragHold()
     end
 end
 
 ---按键输入事件 抬起
 local function OnKeyUp()
-	if Input.GetPressKeyData(Enum.KeyCode.LeftAlt) == Enum.KeyState.KeyStateRelease then
-		---不显示鼠标
-		local camera = world.CurrentCamera
-		camera.CursorDisplay = false
-		camera.CursorLock = true
-		--camera.EnableMouseDrag = true
+    if Input.GetPressKeyData(Enum.KeyCode.LeftAlt) == Enum.KeyState.KeyStateRelease then
+        ---不显示鼠标
+        local camera = world.CurrentCamera
+        camera.CursorDisplay = false
+        camera.CursorLock = true
+    --camera.EnableMouseDrag = true
     end
     if not PlayerGunMgr.curGun then
         return
@@ -105,7 +107,7 @@ local function OnKeyUp()
         ---尝试离开瞄准
         PlayerGunMgr.curGun:MechanicalAimStop()
     end
---[[if Input.GetPressKeyData(Enum.KeyCode.Mouse0) == Enum.KeyState.KeyStateRelease then
+    --[[if Input.GetPressKeyData(Enum.KeyCode.Mouse0) == Enum.KeyState.KeyStateRelease then
         ---结束拖动屏幕
         PlayerGunMgr.curGun.m_cameraControl:DragEnd()
     end--]]
@@ -126,7 +128,6 @@ end
 
 ---开了一枪的回调
 local function Fired()
-
 end
 
 ---停止开火的回调
@@ -215,32 +216,34 @@ function PlayerGunMgr:Init()
     self.canUpdateGun = true
 
     ---切枪按钮事件的绑定
-    Input.OnKeyDown:Connect(function()
-        if Input.GetPressKeyData(Enum.KeyCode.One) == Enum.KeyState.KeyStatePress then
-            self:SwitchWeapon(1)
-        end
-        if Input.GetPressKeyData(Enum.KeyCode.Two) == Enum.KeyState.KeyStatePress then
-            self:SwitchWeapon(2)
-        end
-        if Input.GetPressKeyData(Enum.KeyCode.Three) == Enum.KeyState.KeyStatePress then
-            self:SwitchWeapon(3)
-        end
-        if Input.GetPressKeyData(Enum.KeyCode.Four) == Enum.KeyState.KeyStatePress then
-            self:SwitchWeapon(4)
-        end
-        if Input.GetPressKeyData(Enum.KeyCode.Five) == Enum.KeyState.KeyStatePress then
-            self:SwitchWeapon(5)
-        end
-        if Input.GetPressKeyData(Enum.KeyCode.X) == Enum.KeyState.KeyStatePress then
+    Input.OnKeyDown:Connect(
+        function()
+            if Input.GetPressKeyData(Enum.KeyCode.One) == Enum.KeyState.KeyStatePress then
+                self:SwitchWeapon(1)
+            end
+            if Input.GetPressKeyData(Enum.KeyCode.Two) == Enum.KeyState.KeyStatePress then
+                self:SwitchWeapon(2)
+            end
+            if Input.GetPressKeyData(Enum.KeyCode.Three) == Enum.KeyState.KeyStatePress then
+                self:SwitchWeapon(3)
+            end
+            if Input.GetPressKeyData(Enum.KeyCode.Four) == Enum.KeyState.KeyStatePress then
+                self:SwitchWeapon(4)
+            end
+            if Input.GetPressKeyData(Enum.KeyCode.Five) == Enum.KeyState.KeyStatePress then
+                self:SwitchWeapon(5)
+            end
+            if Input.GetPressKeyData(Enum.KeyCode.X) == Enum.KeyState.KeyStatePress then
             ---self:SwitchWeapon(0)
-        end
-        if Input.GetPressKeyData(Enum.KeyCode.G) == Enum.KeyState.KeyStatePress then
+            end
+            if Input.GetPressKeyData(Enum.KeyCode.G) == Enum.KeyState.KeyStatePress then
             ---self:DropWeapon()
+            end
+            if Input.GetPressKeyData(Enum.KeyCode.B) == Enum.KeyState.KeyStatePress then
+                self:ChangeShootMode()
+            end
         end
-        if Input.GetPressKeyData(Enum.KeyCode.B) == Enum.KeyState.KeyStatePress then
-            self:ChangeShootMode()
-        end
-    end)
+    )
 
     ---绑定按钮输入事件
     Input.OnKeyDown:Connect(OnKeyDown)
@@ -248,8 +251,10 @@ function PlayerGunMgr:Init()
     Input.OnKeyUp:Connect(OnKeyUp)
 
     ---玩家自身的爆头判定区域和身体判定区域初始化
-    world:CreateInstance('HeadPoint', 'HeadPoint', localPlayer.Avatar.Bone_Head).LocalPosition = Vector3(-0.229, 0.032, 0)
-    world:CreateInstance('BodyPoint', 'BodyPoint', localPlayer.Avatar.Bone_Pelvis).LocalPosition = Vector3(-0.1684, 0, 0)
+    world:CreateInstance('HeadPoint', 'HeadPoint', localPlayer.Avatar.Bone_Head).LocalPosition =
+        Vector3(-0.229, 0.032, 0)
+    world:CreateInstance('BodyPoint', 'BodyPoint', localPlayer.Avatar.Bone_Pelvis).LocalPosition =
+        Vector3(-0.1684, 0, 0)
     world:CreateInstance('LimbPoint', 'LimbPoint', localPlayer.Avatar.Bone_Pelvis).LocalPosition = Vector3(0.391, 0, 0)
 
     self:ModulesInit()
@@ -258,32 +263,40 @@ function PlayerGunMgr:Init()
     if world.S_Event and world.S_Event.PlayerEventCreateOverEvent then
         world.S_Event.PlayerEventCreateOverEvent:Fire(localPlayer)
     else
-        invoke(function()
-            while not world.S_Event or not world.S_Event.PlayerEventCreateOverEvent do
-                wait()
+        invoke(
+            function()
+                while not world.S_Event or not world.S_Event.PlayerEventCreateOverEvent do
+                    wait()
+                end
+                world.S_Event.PlayerEventCreateOverEvent:Fire(localPlayer)
             end
-            world.S_Event.PlayerEventCreateOverEvent:Fire(localPlayer)
-        end)
+        )
     end
-    invoke(function()
-        self:StartUpdate()
-    end)
-    ---玩家死亡时候尝试停止一切操作
-    localPlayer.OnDead:Connect(function()
-        self.canUpdateGun = false
-        if not self.curGun then
-            return
+    invoke(
+        function()
+            self:StartUpdate()
         end
-        ---尝试离开瞄准
-        PlayerGunMgr.curGun:MechanicalAimStop()
-        ---结束拖动屏幕
-        PlayerGunMgr.curGun.m_cameraControl:DragEnd()
-    end)
+    )
+    ---玩家死亡时候尝试停止一切操作
+    localPlayer.OnDead:Connect(
+        function()
+            self.canUpdateGun = false
+            if not self.curGun then
+                return
+            end
+            ---尝试离开瞄准
+            PlayerGunMgr.curGun:MechanicalAimStop()
+            ---结束拖动屏幕
+            PlayerGunMgr.curGun.m_cameraControl:DragEnd()
+        end
+    )
     ---玩家重生后尝试更新枪械
-    localPlayer.OnSpawn:Connect(function()
-        wait(0.2)
-        self.canUpdateGun = true
-    end)
+    localPlayer.OnSpawn:Connect(
+        function()
+            wait(0.2)
+            self.canUpdateGun = true
+        end
+    )
 
     localPlayer.Avatar:SetBlendSubtree(Enum.BodyPart.UpperBody, 4)
     localPlayer.Avatar:SetBlendSubtree(Enum.BodyPart.UpperBody, 5)
@@ -292,7 +305,7 @@ end
 
 ---枪械模块自用上行函数,用于子弹命中的Fire
 function PlayerGunMgr:FireGunDamage(...)
-    local content = { ... }
+    local content = {...}
     table.insert(damageQueue, content)
 end
 
@@ -339,9 +352,11 @@ function PlayerGunMgr:StartUpdate()
     end
 
     self.isRun = true
-    world.OnRenderStepped:Connect(function(_dt)
-        self:FixUpdate(_dt)
-    end)
+    world.OnRenderStepped:Connect(
+        function(_dt)
+            self:FixUpdate(_dt)
+        end
+    )
     local time = Timer.GetTimeMillisecond
     local prevTime, nowTime = time() / 1000, nil -- two timestamps
     while (self.isRun and wait()) do
@@ -367,7 +382,7 @@ function PlayerGunMgr:FixUpdate(_dt)
     if self.curGun and self.curGun.m_isDraw then
         self.curGun:FixUpdate(_dt)
     end
-	CameraControl:FixUpdate(_dt)
+    CameraControl:FixUpdate(_dt)
     waitTime = waitTime - _dt
     if waitTime <= 0 then
         waitTime = 0.1
@@ -375,7 +390,7 @@ function PlayerGunMgr:FixUpdate(_dt)
             world.S_Event.WeaponHitPlayerEvent:Fire(damageQueue)
         end
         damageQueue = {}
-        --[[local isEmpty = true
+    --[[local isEmpty = true
         for k, v in pairs(consumeAmmoQueue) do
             isEmpty = false
         end
@@ -429,16 +444,13 @@ function PlayerGunMgr:PickWeapon(_pickGun)
                         print('丢弃主枪')
                         self:DropWeapon(self.mainGun)
                     elseif self.mainGun and not self.deputyGun then
-                        targetPosition = 2
                         ---丢弃副枪
-
+                        targetPosition = 2
                     else
-                        targetPosition = 1
                         ---丢弃主枪
-
+                        targetPosition = 1
                     end
                 end
-
             else
                 ---收枪状态
                 if self.mainGun and self.deputyGun then
@@ -471,7 +483,6 @@ function PlayerGunMgr:PickWeapon(_pickGun)
                 self:DropWeapon(self.miniGun)
             end
         else
-
         end
         targetPosition = 3
     else
@@ -490,7 +501,8 @@ function PlayerGunMgr:PickWeapon(_pickGun)
         error(usedClass, 'not exist')
     end
     ---@type GunBase
-    local gun = _G[usedClass]:new(self.player, self.player.Avatar.Bone_R_Hand, _pickGun)--, {Origin = GetOrigin, Target = GetTarget})
+    local gun = _G[usedClass]:new(self.player, self.player.Avatar.Bone_R_Hand, _pickGun)
+    --, {Origin = GetOrigin, Target = GetTarget})
     if targetPosition == 1 then
         self.mainGun = gun
         self.mainGun.m_animationControl:SetLayer(4)
@@ -521,20 +533,27 @@ function PlayerGunMgr:PickWeapon(_pickGun)
     gun.bulletLoadStarted:Bind(BulletLoadStarted)
     ---每发子弹上弹时的回调
     gun.bulletLoaded:Bind(BulletLoaded)
-    gun.reloadFinished:Bind(function()
-        --print('上弹完成')
-    end)
+    gun.reloadFinished:Bind(
+        function()
+            --print('上弹完成')
+        end
+    )
     ---拉枪栓的回调
-    gun.pumpStarted:Bind(function()
-        --print('拉枪栓的回调')
-    end)
+    gun.pumpStarted:Bind(
+        function()
+            --print('拉枪栓的回调')
+        end
+    )
     ---拉完枪栓的回调
-    gun.pumped:Bind(function()
-        --print('拉完枪栓的回调')
-    end)
-    gun.aimIn:Bind(function()
-
-    end)
+    gun.pumped:Bind(
+        function()
+            --print('拉完枪栓的回调')
+        end
+    )
+    gun.aimIn:Bind(
+        function()
+        end
+    )
     ---开了一枪后的回调
     gun.fired:Bind(Fired)
     ---放空枪时候的回调
@@ -549,11 +568,13 @@ function PlayerGunMgr:PickWeapon(_pickGun)
     gun.successfullyHitTarget:Bind(SuccessfullyHitTarget)
     ---调用玩家远离一把枪的事件
     world.Players:BroadcastEvent('PlayerFarWeaponEvent', _pickGun)
-    invoke(function()
-        localPlayer.C_Event.OnEquipWeaponEvent:Fire()
-        BottomGUI:UpdateList(gun, targetPosition)
-        BagGUI:EquipWeapon(targetPosition)
-    end)
+    invoke(
+        function()
+            localPlayer.C_Event.OnEquipWeaponEvent:Fire()
+            BottomGUI:UpdateList(gun, targetPosition)
+            BagGUI:EquipWeapon(targetPosition)
+        end
+    )
 end
 
 ---将当前的枪脱下的事件
@@ -636,9 +657,9 @@ function PlayerGunMgr:SwitchWeapon(_targetIndex)
             if self.curGun and self.curGun.m_isDraw then
                 self:TurnGun(self.curGun, targetGun)
             else
-				self.curGun = targetGun
-				self.curGun:DrawGun()
-			end
+                self.curGun = targetGun
+                self.curGun:DrawGun()
+            end
             BagGUI:SwitchWeapon(_targetIndex)
         end
     end
@@ -648,24 +669,24 @@ end
 
 ---换枪，绕行方案,避免渲染
 function PlayerGunMgr:TurnGun(_curGun, _tarGun)
-	local pitch = _curGun.m_cameraControl.m_theta
-	local yaw = _curGun.m_cameraControl.m_phy
-	self.curGun:WithdrawGun()
-	self.curGun = _tarGun
-	_tarGun:DrawGun({theta = pitch, phy = yaw})
+    local pitch = _curGun.m_cameraControl.m_theta
+    local yaw = _curGun.m_cameraControl.m_phy
+    self.curGun:WithdrawGun()
+    self.curGun = _tarGun
+    _tarGun:DrawGun({theta = pitch, phy = yaw})
 end
 
 ---收枪/掏枪逻辑
 function PlayerGunMgr:WithdrawWeapon()
     if not self.curGun then
-		return
-	end
+        return
+    end
     ---当前持有一把武器
-	if(self.curGun.m_isDraw) then
-		self.curGun:WithdrawGun()
-	else
-		self.curGun:DrawGun()
-	end
+    if (self.curGun.m_isDraw) then
+        self.curGun:WithdrawGun()
+    else
+        self.curGun:DrawGun()
+    end
 end
 
 ---玩家被打中的事件  伤害的发起者  伤害来源的枪械  伤害的数值  伤害部位
@@ -709,10 +730,10 @@ end
 ---@param _gunCls GunBase
 function PlayerGunMgr:DropWeapon(_gunCls)
     if _gunCls then
-        _gunCls.gun:SetParentTo(world.Weapons, _gunCls.character.Position, EulerDegree(0,0,0))
+        _gunCls.gun:SetParentTo(world.Weapons, _gunCls.character.Position, EulerDegree(0, 0, 0))
         self:OnUnEquipWeaponEvent(_gunCls)
     elseif self.curGun then
-        self.curGun.gun:SetParentTo(world.Weapons, self.curGun.character.Position, EulerDegree(0,0,0))
+        self.curGun.gun:SetParentTo(world.Weapons, self.curGun.character.Position, EulerDegree(0, 0, 0))
         self:OnUnEquipWeaponEvent(self.curGun)
     end
 end
@@ -784,7 +805,11 @@ function PlayerGunMgr:DropAccessory(_accessoryCls)
     end
     local uuid = _accessoryCls.uuid
     _accessoryCls.weaponAccessory:SetActive(true)
-    _accessoryCls.weaponAccessory:SetParentTo(world.Accessories, localPlayer.Position, _accessoryCls.weaponAccessory.Rotation)
+    _accessoryCls.weaponAccessory:SetParentTo(
+        world.Accessories,
+        localPlayer.Position,
+        _accessoryCls.weaponAccessory.Rotation
+    )
     local equipWeapon = self.hadAccessoryList[uuid].m_equippedWeapon
     if equipWeapon then
         ---配件当前装备在一个枪上,需要先从枪上脱下来
@@ -810,7 +835,7 @@ function PlayerGunMgr:PickAmmo(_ammo)
         local ammoObj = WeaponAmmoBase:new(id, _ammo.Count.Value, localPlayer)
         self.hadAmmoList[id] = ammoObj
     end
-    world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, { [id] = _ammo.Count.Value })
+    world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, {[id] = _ammo.Count.Value})
 end
 
 ---玩家丢弃子弹
@@ -922,30 +947,39 @@ function PlayerGunMgr:WeaponObjActiveChangeEventHandler(_obj, _active, _objType,
                 elseif _obj.MaxDistance <= dis then
                     volume = 0
                 else
-                    volume = _posOrVolume - _posOrVolume * (dis - _obj.MinDistance) / (_obj.MaxDistance - _obj.MinDistance)
+                    volume =
+                        _posOrVolume - _posOrVolume * (dis - _obj.MinDistance) / (_obj.MaxDistance - _obj.MinDistance)
                 end
                 volume = math.floor(volume)
                 --print(volume, _obj.MaxDistance, _obj.MinDistance, dis)
-                NotReplicate(function()
-                    --_obj:SetActive(_active)
-                    _obj.Volume = volume
-                    _obj:Play()
-                end)
+                NotReplicate(
+                    function()
+                        --_obj:SetActive(_active)
+                        _obj.Volume = volume
+                        _obj:Play()
+                    end
+                )
             else
-                NotReplicate(function()
-                    --_obj:SetActive(false)
-                    _obj:Stop()
-                end)
+                NotReplicate(
+                    function()
+                        --_obj:SetActive(false)
+                        _obj:Stop()
+                    end
+                )
             end
         else
             local pos = _active and _posOrVolume or Vector3.One * 10000
-            NotReplicate(function()
-                _obj.Position = pos
-            end)
+            NotReplicate(
+                function()
+                    _obj.Position = pos
+                end
+            )
             wait()
-            NotReplicate(function()
-                _obj:SetActive(true)
-            end)
+            NotReplicate(
+                function()
+                    _obj:SetActive(true)
+                end
+            )
         end
     end
 end

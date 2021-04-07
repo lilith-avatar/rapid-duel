@@ -20,8 +20,12 @@ function GunAnimation:initialize(_gun)
     self.layer = 4
     for i, v in pairs(self.config) do
         local nameList = StringSplit(v.AnimationName, ':', false)
-        local weight, transitionDuration, interrupt, loop, scale
-            = v.Weight, v.TransitionDuration, v.CoverPlay, v.IsLoop, v.Speed
+        local weight, transitionDuration, interrupt, loop, scale =
+            v.Weight,
+            v.TransitionDuration,
+            v.CoverPlay,
+            v.IsLoop,
+            v.Speed
         local function PlayerAnimation()
             if #nameList == 0 then
                 return
@@ -34,7 +38,6 @@ function GunAnimation:initialize(_gun)
             elseif i ~= 'fired' then
                 self:PlayAnimation(name, self.layer, weight, transitionDuration, interrupt, loop, scale)
             end
-
         end
         if self.gun[i] then
             self.gun[i]:Bind(PlayerAnimation)
@@ -65,7 +68,12 @@ function GunAnimation:Update(_dt)
     end
     ---是否靠近一个东西导致不可开枪检测
     if self.bone_R_UpperArm and self.gun.config_banShoot then
-        local raycastResults = Physics:RaycastAll(self.bone_R_UpperArm.Position, self.bone_R_UpperArm.Position + self.player.Forward * self.shoulderRayMinDistance, false)
+        local raycastResults =
+            Physics:RaycastAll(
+            self.bone_R_UpperArm.Position,
+            self.bone_R_UpperArm.Position + self.player.Forward * self.shoulderRayMinDistance,
+            false
+        )
         local state = false
         for k, v in pairs(raycastResults.HitObjectAll) do
             if v.Block and not ParentPlayer(v) and v.CollisionGroup ~= 10 then
@@ -76,7 +84,12 @@ function GunAnimation:Update(_dt)
         self.noShootingState = state
     end
     if self.bone_L_UpperArm and self.gun.config_banShoot then
-        local raycastResults = Physics:RaycastAll(self.bone_L_UpperArm.Position, self.bone_L_UpperArm.Position + self.player.Forward * self.shoulderRayMinDistance, false)
+        local raycastResults =
+            Physics:RaycastAll(
+            self.bone_L_UpperArm.Position,
+            self.bone_L_UpperArm.Position + self.player.Forward * self.shoulderRayMinDistance,
+            false
+        )
         local state = false
         for k, v in pairs(raycastResults.HitObjectAll) do
             if v.Block and not ParentPlayer(v) and v.CollisionGroup ~= 10 then
@@ -89,13 +102,12 @@ function GunAnimation:Update(_dt)
 end
 
 function GunAnimation:FixUpdate(_dt)
-
 end
 
 function GunAnimation:PlayAnimation(_name, _layer, _weight, _transitionDuration, _interrupt, _loop, _scale)
     if self.player then
         self.player.Avatar:PlayAnimation(_name, _layer, _weight, _transitionDuration, _interrupt, _loop, _scale)
-        --[[wait()
+    --[[wait()
         if(self.player) then
             self.player.Avatar:PlayAnimation(_name, _layer, _weight, _transitionDuration, _interrupt, _loop, _scale)
         end]]

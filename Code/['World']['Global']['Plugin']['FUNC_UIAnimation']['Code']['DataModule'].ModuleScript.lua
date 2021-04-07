@@ -3,7 +3,7 @@
 --- @copyright Lilith Games, Avatar Team
 --- @author Xinwu Zhang
 --- @see https://github.com/lilith-avatar/avatar-ava/wiki/Plugins#func_uianimation
-local DataModule = { Data = {} }
+local DataModule = {Data = {}}
 
 --初始化函数,读取动画表
 function DataModule:Init()
@@ -53,7 +53,6 @@ function DataModule:Init()
             PathStr = tonumber(PathStr)
         end
 
-
         --判断初始帧,并执行初始帧逻辑
         if InfoTable[i].IsInit == true then
             --记录初始帧
@@ -75,10 +74,10 @@ function DataModule:Init()
             if InfoTable[i].Angle ~= 0 then
                 NowData.Init.Angle = InfoTable[i].Angle
             end
-            if InfoTable[i].Offset  ~= Vector2(0, 0) then
+            if InfoTable[i].Offset ~= Vector2(0, 0) then
                 NowData.Init.Offset = InfoTable[i].Offset
             end
-            if InfoTable[i].Alpha  ~= 0 then
+            if InfoTable[i].Alpha ~= 0 then
                 NowData.Init.Alpha = InfoTable[i].Alpha
             end
         else
@@ -131,7 +130,7 @@ function DataModule:Init()
             }
             table.insert(self.Data[AnimationName][PathStr].KeyFrame, OneFrame)
         end
-        :: Continue ::
+        ::Continue::
     end
 end
 
@@ -169,12 +168,13 @@ function DataModule:Calculate(_dataName)
                     if temp.Alpha then
                         local n = v.KeyFrame[NowKeyFrame].Frame
                         local Count = v.KeyFrame[NextKeyFrame].Frame - v.KeyFrame[NowKeyFrame].Frame
-                        local PerFrame = DataModule:Interpolation(
-                                v.KeyFrame[NowKeyFrame].Alpha,
-                                v.KeyFrame[NowKeyFrame].Type,
-                                v.KeyFrame[NextKeyFrame].Alpha,
-                                v.KeyFrame[NextKeyFrame].Type,
-                                Count
+                        local PerFrame =
+                            DataModule:Interpolation(
+                            v.KeyFrame[NowKeyFrame].Alpha,
+                            v.KeyFrame[NowKeyFrame].Type,
+                            v.KeyFrame[NextKeyFrame].Alpha,
+                            v.KeyFrame[NextKeyFrame].Type,
+                            Count
                         )
                         for i = n + 1, n + Count do
                             if v.PerFrame[i] == nil then
@@ -203,12 +203,13 @@ function DataModule:Calculate(_dataName)
                     if temp.Offset then
                         local n = v.KeyFrame[NowKeyFrame].Frame
                         local Count = v.KeyFrame[NextKeyFrame].Frame - v.KeyFrame[NowKeyFrame].Frame
-                        local PerFrame = DataModule:Interpolation(
-                                v.KeyFrame[NowKeyFrame].Offset,
-                                v.KeyFrame[NowKeyFrame].Type,
-                                v.KeyFrame[NextKeyFrame].Offset,
-                                v.KeyFrame[NextKeyFrame].Type,
-                                Count
+                        local PerFrame =
+                            DataModule:Interpolation(
+                            v.KeyFrame[NowKeyFrame].Offset,
+                            v.KeyFrame[NowKeyFrame].Type,
+                            v.KeyFrame[NextKeyFrame].Offset,
+                            v.KeyFrame[NextKeyFrame].Type,
+                            Count
                         )
                         for i = n + 1, n + Count do
                             if v.PerFrame[i] == nil then
@@ -237,12 +238,13 @@ function DataModule:Calculate(_dataName)
                     if temp.Size then
                         local n = v.KeyFrame[NowKeyFrame].Frame
                         local Count = v.KeyFrame[NextKeyFrame].Frame - v.KeyFrame[NowKeyFrame].Frame
-                        local PerFrame = DataModule:Interpolation(
-                                v.KeyFrame[NowKeyFrame].Size,
-                                v.KeyFrame[NowKeyFrame].Type,
-                                v.KeyFrame[NextKeyFrame].Size,
-                                v.KeyFrame[NextKeyFrame].Type,
-                                Count
+                        local PerFrame =
+                            DataModule:Interpolation(
+                            v.KeyFrame[NowKeyFrame].Size,
+                            v.KeyFrame[NowKeyFrame].Type,
+                            v.KeyFrame[NextKeyFrame].Size,
+                            v.KeyFrame[NextKeyFrame].Type,
+                            Count
                         )
                         for i = n + 1, n + Count do
                             if v.PerFrame[i] == nil then
@@ -271,12 +273,13 @@ function DataModule:Calculate(_dataName)
                     if temp.AnchorsX then
                         local n = v.KeyFrame[NowKeyFrame].Frame
                         local Count = v.KeyFrame[NextKeyFrame].Frame - v.KeyFrame[NowKeyFrame].Frame
-                        local PerFrame = DataModule:Interpolation(
-                                v.KeyFrame[NowKeyFrame].AnchorsX,
-                                v.KeyFrame[NowKeyFrame].Type,
-                                v.KeyFrame[NextKeyFrame].AnchorsX,
-                                v.KeyFrame[NextKeyFrame].Type,
-                                Count
+                        local PerFrame =
+                            DataModule:Interpolation(
+                            v.KeyFrame[NowKeyFrame].AnchorsX,
+                            v.KeyFrame[NowKeyFrame].Type,
+                            v.KeyFrame[NextKeyFrame].AnchorsX,
+                            v.KeyFrame[NextKeyFrame].Type,
+                            Count
                         )
                         for i = n + 1, n + Count do
                             if v.PerFrame[i] == nil then
@@ -305,12 +308,13 @@ function DataModule:Calculate(_dataName)
                     if temp.AnchorsY then
                         local n = v.KeyFrame[NowKeyFrame].Frame
                         local Count = v.KeyFrame[NextKeyFrame].Frame - v.KeyFrame[NowKeyFrame].Frame
-                        local PerFrame = DataModule:Interpolation(
-                                v.KeyFrame[NowKeyFrame].AnchorsY,
-                                v.KeyFrame[NowKeyFrame].Type,
-                                v.KeyFrame[NextKeyFrame].AnchorsY,
-                                v.KeyFrame[NextKeyFrame].Type,
-                                Count
+                        local PerFrame =
+                            DataModule:Interpolation(
+                            v.KeyFrame[NowKeyFrame].AnchorsY,
+                            v.KeyFrame[NowKeyFrame].Type,
+                            v.KeyFrame[NextKeyFrame].AnchorsY,
+                            v.KeyFrame[NextKeyFrame].Type,
+                            Count
                         )
                         for i = n + 1, n + Count do
                             if v.PerFrame[i] == nil then
@@ -339,12 +343,13 @@ function DataModule:Calculate(_dataName)
                     if temp.Angle then
                         local n = v.KeyFrame[NowKeyFrame].Frame
                         local Count = v.KeyFrame[NextKeyFrame].Frame - v.KeyFrame[NowKeyFrame].Frame
-                        local PerFrame = DataModule:Interpolation(
-                                v.KeyFrame[NowKeyFrame].Angle,
-                                v.KeyFrame[NowKeyFrame].Type,
-                                v.KeyFrame[NextKeyFrame].Angle,
-                                v.KeyFrame[NextKeyFrame].Type,
-                                Count
+                        local PerFrame =
+                            DataModule:Interpolation(
+                            v.KeyFrame[NowKeyFrame].Angle,
+                            v.KeyFrame[NowKeyFrame].Type,
+                            v.KeyFrame[NextKeyFrame].Angle,
+                            v.KeyFrame[NextKeyFrame].Type,
+                            Count
                         )
                         for i = n + 1, n + Count do
                             if v.PerFrame[i] == nil then

@@ -39,9 +39,11 @@ function ShareUI:Init()
     self.restoreHpMax = 100
     self.pos1_A, self.pos2_A, self.pos1_B, self.pos2_B = Vector3.Zero, Vector3.Zero, Vector3.Zero, Vector3.Zero
 
-    world.OnPlayerRemoved:Connect(function(_player)
-        self:PlayerRemove(_player)
-    end)
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            self:PlayerRemove(_player)
+        end
+    )
 end
 
 --- Update函数
@@ -59,7 +61,7 @@ function ShareUI:Update(dt, tt)
             self.enemyHpShowTimeList[i] = 0
             self.teamIconList[i]:SetActive(false)
         end
-        :: Continue ::
+        ::Continue::
     end
 end
 
@@ -127,7 +129,7 @@ end
 ---游戏时间更改事件
 function ShareUI:GameTimeChangeEventHandler(_time)
     if not self.enable then
-        --return
+    --return
     end
     if not self.maxTime then
         return
@@ -216,17 +218,20 @@ function ShareUI:OwnDeath(_killer, _weaponId, _hitPart)
     ReviveUI:Show(time, _killer, _weaponId, _hitPart)
     DeathmatchModeUI:Hide()
     self.root.Background:SetActive(false)
-    invoke(function()
-        if self.enable then
-            localPlayer.Position = self:RandPos()
-            self.root.Background:SetActive(true)
-            DeathmatchModeUI:Show()
-            wait()
-            if localPlayer.Health <= 0 then
-                localPlayer:Reborn()
+    invoke(
+        function()
+            if self.enable then
+                localPlayer.Position = self:RandPos()
+                self.root.Background:SetActive(true)
+                DeathmatchModeUI:Show()
+                wait()
+                if localPlayer.Health <= 0 then
+                    localPlayer:Reborn()
+                end
             end
-        end
-    end, time)
+        end,
+        time
+    )
 end
 
 ---在己方的出生区域内随机一个点
@@ -252,9 +257,10 @@ function ShareUI:RestoreLife()
         return
     end
     localPlayer.Health = localPlayer.Health + self.restoreHp
-    localPlayer.Health = localPlayer.Health > self.restoreHpMax * 0.01 * localPlayer.MaxHealth and
-            self.restoreHpMax * 0.01 * localPlayer.MaxHealth or
-            localPlayer.Health
+    localPlayer.Health =
+        localPlayer.Health > self.restoreHpMax * 0.01 * localPlayer.MaxHealth and
+        self.restoreHpMax * 0.01 * localPlayer.MaxHealth or
+        localPlayer.Health
 end
 
 ---创建队友和敌人头上的图标
@@ -335,11 +341,11 @@ function ShareUI:CreateHeadIcon(_player)
         end
         _player.OnHealthChange:Connect(OnHealthChange)
         ui.OnDestroyed:Connect(
-                function()
-                    if _player.OnHealthChange then
-                        _player.OnHealthChange:Disconnect(OnHealthChange)
-                    end
+            function()
+                if _player.OnHealthChange then
+                    _player.OnHealthChange:Disconnect(OnHealthChange)
                 end
+            end
         )
     else
         ---敌方玩家血条只有在被自己打中后才消失,为红色
@@ -356,11 +362,11 @@ function ShareUI:CreateHeadIcon(_player)
         end
         _player.OnHealthChange:Connect(OnHealthChange)
         ui.OnDestroyed:Connect(
-                function()
-                    if _player.OnHealthChange then
-                        _player.OnHealthChange:Disconnect(OnHealthChange)
-                    end
+            function()
+                if _player.OnHealthChange then
+                    _player.OnHealthChange:Disconnect(OnHealthChange)
                 end
+            end
         )
         self.enemyHpShowTimeList[_player] = hitShowTime
     end

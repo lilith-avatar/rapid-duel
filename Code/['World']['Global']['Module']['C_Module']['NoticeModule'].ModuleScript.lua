@@ -41,7 +41,6 @@ function Notice:Update(_dt)
             self.showCDList[i] = nil
         end
     end
-
 end
 
 ---消息事件监听
@@ -67,7 +66,7 @@ function Notice:ScoreChange(_score)
         end
     end
     ui.ScoreMsg.Content.Text = '+ ' .. tostring(_score)
-    NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'ScoreMsg', false, { ui.ScoreMsg })
+    NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'ScoreMsg', false, {ui.ScoreMsg})
     ui:SetActive(true)
 end
 

@@ -84,7 +84,7 @@ function GunMagazine:Consume()
     local function OverrideConsume()
         if self.m_leftAmmo > 0 then
             self.m_leftAmmo = self.m_leftAmmo - 1
-            world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, { [self.matchAmmo] = -1 })
+            world.S_Event.PlayerPickAmmoEvent:Fire(localPlayer, {[self.matchAmmo] = -1})
             return true
         else
             return false

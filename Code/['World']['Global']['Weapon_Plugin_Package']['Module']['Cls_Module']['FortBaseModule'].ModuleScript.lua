@@ -29,16 +29,18 @@ function FortBase:initialize(_fortId, _fortObj, _owner, _gun)
 end
 
 function FortBase:StartUpdate()
-    invoke(function()
-        while true do
-            local dt = wait()
-            if self and self.m_waitFireTime then
-                self:Update(dt)
-            else
-                break
+    invoke(
+        function()
+            while true do
+                local dt = wait()
+                if self and self.m_waitFireTime then
+                    self:Update(dt)
+                else
+                    break
+                end
             end
         end
-    end)
+    )
 end
 
 function FortBase:Update(_dt)
@@ -61,10 +63,14 @@ function FortBase:Fire()
         end
         if canBeAttack then
             local dir = info.Player.Position - self.fort.Origin.Position
-            local laser = CreateLineBetween2Points(info.Player.Avatar.Bone_Pelvis.Position, self.fort.Origin.Position, 'Laser')
-            invoke(function()
-                laser:Destroy()
-            end, 0.1)
+            local laser =
+                CreateLineBetween2Points(info.Player.Avatar.Bone_Pelvis.Position, self.fort.Origin.Position, 'Laser')
+            invoke(
+                function()
+                    laser:Destroy()
+                end,
+                0.1
+            )
             self.fort:FaceDirection(Vector3(dir.X, 0, dir.Z), Vector3.Up)
             self:Damage(info.Player)
         end
@@ -78,19 +84,22 @@ function FortBase:GetTarget()
         local dis = (v.Position - self.fort.Position).Magnitude
         ---测试用,暂时可以攻击主人
         if dis < self.distance and v.PlayerType.Value ~= ownerTeam then
-            local info = { Player = v, Distance = dis }
+            local info = {Player = v, Distance = dis}
             table.insert(playersInRange, info)
         end
     end
-    table.sort(playersInRange, function(a, b)
-        return a.Distance < b.Distance
-    end)
+    table.sort(
+        playersInRange,
+        function(a, b)
+            return a.Distance < b.Distance
+        end
+    )
     return playersInRange
 end
 
 function FortBase:Damage(_player)
     if self.gun and self.gun.successfullyHit then
-        self.gun.successfullyHit:Trigger( {Player = _player} )
+        self.gun.successfullyHit:Trigger({Player = _player})
     end
     PlayerGunMgr:FireGunDamage(self.owner, _player, self.id, self.damage, HitPartEnum.None)
 end

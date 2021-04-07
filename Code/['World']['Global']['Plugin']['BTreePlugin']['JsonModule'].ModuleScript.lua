@@ -663,10 +663,10 @@ local function unicode_codepoint_as_utf8(codepoint)
         -- See table 3.7, page 93, in http://www.unicode.org/versions/Unicode5.2.0/ch03.pdf#G28070
         --
         if
-        (highpart == 0xE0 and midpart < 0xA0) or (highpart == 0xED and midpart > 0x9F) or
+            (highpart == 0xE0 and midpart < 0xA0) or (highpart == 0xED and midpart > 0x9F) or
                 (highpart == 0xF0 and midpart < 0x90) or
                 (highpart == 0xF4 and midpart > 0x8F)
-        then
+         then
             return '?'
         else
             return string.char(highpart, midpart, lowpart)
@@ -766,11 +766,11 @@ local function grok_number(self, text, start, options)
     -- way or the other to trip stringification, but I'll be lazy about it until someone asks.
     --
     if
-    (options.decodeIntegerStringificationLength and
+        (options.decodeIntegerStringificationLength and
             (integer_part:len() >= options.decodeIntegerStringificationLength or exponent_part:len() > 0)) or
             (options.decodeDecimalStringificationLength and
-                    (decimal_part:len() >= options.decodeDecimalStringificationLength or exponent_part:len() > 0))
-    then
+                (decimal_part:len() >= options.decodeDecimalStringificationLength or exponent_part:len() > 0))
+     then
         return full_number_text, i -- this returns the exact string representation seen in the original JSON
     end
 
@@ -818,9 +818,9 @@ local function grok_string(self, text, start, options)
             i = i + 2
         else
             local hex =
-            text:match(
-                    '^\\u([0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF])',
-                    i
+                text:match(
+                '^\\u([0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF])',
+                i
             )
             if hex then
                 i = i + 6 -- bypass what we just read
@@ -831,7 +831,7 @@ local function grok_string(self, text, start, options)
                 if codepoint >= 0xD800 and codepoint <= 0xDBFF then
                     -- it's a hi surrogate... see whether we have a following low
                     local lo_surrogate =
-                    text:match('^\\u([dD][cdefCDEF][0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF])', i)
+                        text:match('^\\u([dD][cdefCDEF][0123456789aAbBcCdDeEfF][0123456789aAbBcCdDeEfF])', i)
                     if lo_surrogate then
                         i = i + 6 -- bypass the low surrogate we just read
                         codepoint = 0x2400 + (codepoint - 0xD800) * 0x400 + tonumber(lo_surrogate, 16)
@@ -1107,14 +1107,14 @@ local function backslash_replacement_function(c)
 end
 
 local chars_to_be_escaped_in_JSON_string =
-'[' ..
-        '"' .. -- class sub-pattern to match a double quote
+    '[' ..
+    '"' .. -- class sub-pattern to match a double quote
         '%\\' .. -- class sub-pattern to match a backslash
-        '%z' .. -- class sub-pattern to match a null
-        '\001' ..
-        '-' ..
-        '\031' .. -- class sub-pattern to match control characters
-        ']'
+            '%z' .. -- class sub-pattern to match a null
+                '\001' ..
+                    '-' ..
+                        '\031' .. -- class sub-pattern to match control characters
+                            ']'
 
 local LINE_SEPARATOR_as_utf8 = unicode_codepoint_as_utf8(0x2028)
 local PARAGRAPH_SEPARATOR_as_utf8 = unicode_codepoint_as_utf8(0x2029)
@@ -1209,9 +1209,9 @@ local function object_or_array(self, T, etc)
                 map[string_key] = T[number_key]
             else
                 self:onEncodeError(
-                        'conflict converting table with mixed-type keys into a JSON object: key ' ..
-                                number_key .. ' exists both as a string and a number.',
-                        etc
+                    'conflict converting table with mixed-type keys into a JSON object: key ' ..
+                        number_key .. ' exists both as a string and a number.',
+                    etc
                 )
             end
         end
@@ -1321,7 +1321,7 @@ function encode_value(self, value, parents, etc, options, indent, for_key)
                     result_value = '[ ' .. table.concat(ITEMS, ', ') .. ' ]'
                 else
                     result_value =
-                    '[\n' .. key_indent .. table.concat(ITEMS, ',\n' .. key_indent) .. '\n' .. indent .. ']'
+                        '[\n' .. key_indent .. table.concat(ITEMS, ',\n' .. key_indent) .. '\n' .. indent .. ']'
                 end
             else
                 result_value = '[' .. table.concat(ITEMS, ',') .. ']'
@@ -1344,7 +1344,7 @@ function encode_value(self, value, parents, etc, options, indent, for_key)
                 end
                 local key_indent = indent .. tostring(options.indent or '')
                 local subtable_indent =
-                key_indent .. string.rep(' ', max_key_length) .. (options.align_keys and '  ' or '')
+                    key_indent .. string.rep(' ', max_key_length) .. (options.align_keys and '  ' or '')
                 local FORMAT = '%s%' .. string.format('%d', max_key_length) .. 's: %s'
 
                 local COMBINED_PARTS = {}

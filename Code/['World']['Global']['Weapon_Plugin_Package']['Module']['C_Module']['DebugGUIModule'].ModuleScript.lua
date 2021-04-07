@@ -32,7 +32,6 @@ function DebugGUI:Init()
     self:InitListeners()
     ---self:DeclareValue()
     ---self:BindBtn()
-
 end
 
 --- 初始化DebugGUI自己的监听事件
@@ -64,9 +63,11 @@ function DebugGUI:DeclareValue()
     self.weaponData_dataList = {}
     self.weaponConfigData_dataList = {}
     self.globalConfigData_dataList = {}
-    world.OnRenderStepped:Connect(function(dt)
-        self.root.F2.Text = dt
-    end)
+    world.OnRenderStepped:Connect(
+        function(dt)
+            self.root.F2.Text = dt
+        end
+    )
 end
 
 --- 绑定事件函数
@@ -76,19 +77,25 @@ end
 
 --- 绑定事件函数
 function DebugGUI:BindBtn2()
-    self.showMainPnlBtn.OnClick:Connect(function()
-        self:ShowMainPnl()
-    end)
-    self.closeMainPnlBtn.OnClick:Connect(function()
-        self:HideMainPnl()
-    end)
-    self.changeWeaponBtn.OnClick:Connect(function()
-        if self.root.Functions.WeaponInfoPnl.ActiveSelf then
-            self:HideChangeWeaponDataPnl()
-        else
-            self:ShowChangeWeaponDataPnl()
+    self.showMainPnlBtn.OnClick:Connect(
+        function()
+            self:ShowMainPnl()
         end
-    end)
+    )
+    self.closeMainPnlBtn.OnClick:Connect(
+        function()
+            self:HideMainPnl()
+        end
+    )
+    self.changeWeaponBtn.OnClick:Connect(
+        function()
+            if self.root.Functions.WeaponInfoPnl.ActiveSelf then
+                self:HideChangeWeaponDataPnl()
+            else
+                self:ShowChangeWeaponDataPnl()
+            end
+        end
+    )
 end
 
 function DebugGUI:ShowMainPnl()
@@ -108,7 +115,15 @@ function DebugGUI:ShowChangeWeaponDataPnl()
     print('展示枪械的可热更新的配置数据')
     for i, v in pairs(GunConfig.GlobalConfig) do
         if type(v) == 'string' or type(v) == 'number' or type(v) == 'boolean' then
-            local obj = self:CreateOneData(i, v, nil, num * (height - originOffset_Y) + originOffset_Y, self.root.Functions.GlobalConfigPnl.DataPnl, true)
+            local obj =
+                self:CreateOneData(
+                i,
+                v,
+                nil,
+                num * (height - originOffset_Y) + originOffset_Y,
+                self.root.Functions.GlobalConfigPnl.DataPnl,
+                true
+            )
             self.globalConfigData_dataList[i] = obj
             num = num - 1
         end
@@ -119,15 +134,35 @@ function DebugGUI:ShowChangeWeaponDataPnl()
     end
     num = 0
     for i, v in pairs(PlayerGunMgr.curGun.m_recoil) do
-        if type(i) == 'string' and i:sub(1, 7) == 'config_' and (type(v) == 'number' or type(v) == 'string' or type(v) == 'boolean') then
-            local obj = self:CreateOneData(i, v, 'm_recoil', num * (height - originOffset_Y) + originOffset_Y, self.root.Functions.WeaponInfoPnl.DataPnl)
+        if
+            type(i) == 'string' and i:sub(1, 7) == 'config_' and
+                (type(v) == 'number' or type(v) == 'string' or type(v) == 'boolean')
+         then
+            local obj =
+                self:CreateOneData(
+                i,
+                v,
+                'm_recoil',
+                num * (height - originOffset_Y) + originOffset_Y,
+                self.root.Functions.WeaponInfoPnl.DataPnl
+            )
             self.weaponData_dataList[i] = obj
             num = num - 1
         end
     end
     for i, v in pairs(PlayerGunMgr.curGun.m_cameraControl) do
-        if type(i) == 'string' and i:sub(1, 7) == 'config_' and (type(v) == 'number' or type(v) == 'string' or type(v) == 'boolean') then
-            local obj = self:CreateOneData(i, v, 'm_recoil', num * (height - originOffset_Y) + originOffset_Y, self.root.Functions.WeaponInfoPnl.DataPnl)
+        if
+            type(i) == 'string' and i:sub(1, 7) == 'config_' and
+                (type(v) == 'number' or type(v) == 'string' or type(v) == 'boolean')
+         then
+            local obj =
+                self:CreateOneData(
+                i,
+                v,
+                'm_recoil',
+                num * (height - originOffset_Y) + originOffset_Y,
+                self.root.Functions.WeaponInfoPnl.DataPnl
+            )
             self.weaponData_dataList[i] = obj
             num = num - 1
         end
@@ -135,8 +170,18 @@ function DebugGUI:ShowChangeWeaponDataPnl()
     self.root.Functions.WeaponInfoPnl.DataPnl.ScrollRange = math.abs(num * height + originOffset_Y) + 500
     num = 0
     for i, v in pairs(PlayerGunMgr.curGun) do
-        if type(i) == 'string' and i:sub(1, 7) == 'config_' and (type(v) == 'number' or type(v) == 'string' or type(v) == 'boolean') then
-            local obj = self:CreateOneData(i, v, nil, num * (height - originOffset_Y) + originOffset_Y, self.root.Functions.WeaponConfigPnl.DataPnl)
+        if
+            type(i) == 'string' and i:sub(1, 7) == 'config_' and
+                (type(v) == 'number' or type(v) == 'string' or type(v) == 'boolean')
+         then
+            local obj =
+                self:CreateOneData(
+                i,
+                v,
+                nil,
+                num * (height - originOffset_Y) + originOffset_Y,
+                self.root.Functions.WeaponConfigPnl.DataPnl
+            )
             self.weaponConfigData_dataList[i] = obj
             num = num - 1
         end
@@ -154,7 +199,7 @@ function DebugGUI:CreateOneData(_key, _originData, _sub, _offsetY, _parent, _isG
     local obj
     if _parent == self.root.Functions.WeaponInfoPnl.DataPnl then
         obj = self.weaponData_dataList[_key]
-    elseif  _parent == self.root.Functions.WeaponConfigPnl.DataPnl then
+    elseif _parent == self.root.Functions.WeaponConfigPnl.DataPnl then
         obj = self.weaponConfigData_dataList[_key]
     end
     if _isGlobal then
@@ -165,7 +210,7 @@ function DebugGUI:CreateOneData(_key, _originData, _sub, _offsetY, _parent, _isG
         obj.Size = Vector2(0, height)
         obj.Offset = Vector2(0, _offsetY)
     end
-    if _key:sub(1 ,7) == 'config_' then
+    if _key:sub(1, 7) == 'config_' then
         obj.TitleTxt.Text = _key:sub(8, #_key)
     else
         obj.TitleTxt.Text = _key
@@ -178,29 +223,31 @@ function DebugGUI:CreateOneData(_key, _originData, _sub, _offsetY, _parent, _isG
         obj.OriginData.Text = tostring(_originData)
     end
     obj.TargetData.Text = obj.OriginData.Text
-    obj.ChangeBtn.OnClick:Connect(function()
-        local newData
-        if type(_originData) == 'number' then
-            newData = tonumber(obj.TargetData.Text)
-        elseif type(_originData) == 'string' then
-            newData = tostring(obj.TargetData.Text)
-        elseif type(_originData) == 'boolean' then
-            newData = Str2Boolean(obj.TargetData.Text)
-        end
-        if _isGlobal then
-            GunConfig.GlobalConfig[_key] = newData
-            obj.OriginData.Text = tostring(newData)
-            return obj
-        end
-        if PlayerGunMgr.curGun and PlayerGunMgr.curGun.gun_Id then
-            obj.OriginData.Text = tostring(newData)
-            if _sub then
-                PlayerGunMgr.curGun[_sub][_key] = newData
-            else
-                PlayerGunMgr.curGun[_key] = newData
+    obj.ChangeBtn.OnClick:Connect(
+        function()
+            local newData
+            if type(_originData) == 'number' then
+                newData = tonumber(obj.TargetData.Text)
+            elseif type(_originData) == 'string' then
+                newData = tostring(obj.TargetData.Text)
+            elseif type(_originData) == 'boolean' then
+                newData = Str2Boolean(obj.TargetData.Text)
+            end
+            if _isGlobal then
+                GunConfig.GlobalConfig[_key] = newData
+                obj.OriginData.Text = tostring(newData)
+                return obj
+            end
+            if PlayerGunMgr.curGun and PlayerGunMgr.curGun.gun_Id then
+                obj.OriginData.Text = tostring(newData)
+                if _sub then
+                    PlayerGunMgr.curGun[_sub][_key] = newData
+                else
+                    PlayerGunMgr.curGun[_key] = newData
+                end
             end
         end
-    end)
+    )
     return obj
 end
 

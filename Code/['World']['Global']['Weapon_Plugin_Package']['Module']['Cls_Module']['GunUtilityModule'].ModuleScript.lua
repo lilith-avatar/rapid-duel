@@ -116,13 +116,13 @@ function GunUtility:InitGunConfig(_gun)
     _gun.damageAttenuation = {}
     for k, v in pairs(StringSplit(config.DamageAttenuation, '|')) do
         local c = StringSplit(v, ';', true)
-        table.insert(_gun.damageAttenuation, { Distance = c[1], Attenuation = c[2] })
+        table.insert(_gun.damageAttenuation, {Distance = c[1], Attenuation = c[2]})
     end
     ---报站伤害衰减,真实子弹爆炸后范围伤害衰减
     _gun.explosionDamageAttenuation = {}
     for k, v in pairs(StringSplit(config.ExplosionDamageAttenuation, '|')) do
         local c = StringSplit(v, ';', true)
-        table.insert(_gun.explosionDamageAttenuation, { Distance = c[1], Attenuation = c[2] })
+        table.insert(_gun.explosionDamageAttenuation, {Distance = c[1], Attenuation = c[2]})
     end
     ---枪械装备在角色上,角色的动作状态
     _gun.characterAnimationMode = config.CharacterAnimationMode
@@ -219,7 +219,9 @@ function GunUtility:InitGunAccessoryConfig(_gunAccessory)
         _gunAccessory.sightImage = {}
         for k, v in pairs(StringSplit(config.SightImage, '|')) do
             local sightImageConfig = StringSplit(v, ':', false)
-            _gunAccessory.sightImage[tonumber(sightImageConfig[1])] = { table.unpack(sightImageConfig, 2, #sightImageConfig) }
+            _gunAccessory.sightImage[tonumber(sightImageConfig[1])] = {
+                table.unpack(sightImageConfig, 2, #sightImageConfig)
+            }
         end
     end
     ---配件在附近列表中的优先级
@@ -228,22 +230,34 @@ function GunUtility:InitGunAccessoryConfig(_gunAccessory)
     _gunAccessory.isSilencer = config.IsSilencer
     _gunAccessory.des = config.Des
 
-    _gunAccessory.aimFovRate = config.AimFovRate--瞄准的FOV,枪械自身的属性
-    _gunAccessory.minErrorRate = config.MinErrorRate--
-    _gunAccessory.maxErrorRate = config.MaxErrorRate--
-    _gunAccessory.gunRecoverRate = config.GunRecoverRate--
-    _gunAccessory.verticalJumpAngleRate = config.VerticalJumpAngleRate--
-    _gunAccessory.horizontalJumpRangeRate = config.HorizontalJumpRangeRate--
-    _gunAccessory.selfSpinRangeRate = config.SelfSpinRangeRate--
-    _gunAccessory.jumpFovRate = config.JumpFovRate--
-    _gunAccessory.bulletSpeedRate = config.BulletSpeedRate--子弹速度,枪械自身的属性
-    _gunAccessory.magazineLoadTimeRate = config.MagazineLoadTimeRate--装弹速度,枪械弹夹的属性
-    _gunAccessory.maxAmmoRate = {}--弹夹子弹上限,枪械弹夹的属性
+    _gunAccessory.aimFovRate = config.AimFovRate
+    --瞄准的FOV,枪械自身的属性
+    _gunAccessory.minErrorRate = config.MinErrorRate
+    --
+    _gunAccessory.maxErrorRate = config.MaxErrorRate
+    --
+    _gunAccessory.gunRecoverRate = config.GunRecoverRate
+    --
+    _gunAccessory.verticalJumpAngleRate = config.VerticalJumpAngleRate
+    --
+    _gunAccessory.horizontalJumpRangeRate = config.HorizontalJumpRangeRate
+    --
+    _gunAccessory.selfSpinRangeRate = config.SelfSpinRangeRate
+    --
+    _gunAccessory.jumpFovRate = config.JumpFovRate
+    --
+    _gunAccessory.bulletSpeedRate = config.BulletSpeedRate
+    --子弹速度,枪械自身的属性
+    _gunAccessory.magazineLoadTimeRate = config.MagazineLoadTimeRate
+    --装弹速度,枪械弹夹的属性
+    _gunAccessory.maxAmmoRate = {}
+    --弹夹子弹上限,枪械弹夹的属性
     for k, v in pairs(StringSplit(config.MaxAmmoRate, '|')) do
         local maxAmmoConfig = StringSplit(v, ':', true)
         _gunAccessory.maxAmmoRate[maxAmmoConfig[1]] = maxAmmoConfig[2]
     end
-    _gunAccessory.aimTimeRate = config.AimTimeRate--开镜速度,枪械自身的属性
+    _gunAccessory.aimTimeRate = config.AimTimeRate
+    --开镜速度,枪械自身的属性
     _gunAccessory.pickSound = config.PickSound
 end
 
@@ -251,50 +265,57 @@ end
 ---@param _gun GunBase
 function GunUtility:CreateGunCacheObjects(_gun, _objNameList)
     local cacheConfig = GunConfig.GunCacheConfig[_gun.gun_Id]
-    cacheConfig = cacheConfig or { FireEffect = '10;1', HitEffect = '10;1', BulletHole = '10;1', BulletShell = '10;1', BulletName = '5;1' }
+    cacheConfig =
+        cacheConfig or
+        {FireEffect = '10;1', HitEffect = '10;1', BulletHole = '10;1', BulletShell = '10;1', BulletName = '5;1'}
     for i, v in pairs(cacheConfig) do
         local info = StringSplit(v, ';', true)
         if #info == 2 then
-            cacheConfig[i] = { CacheNum = info[1], RecycleTime = info[2] }
+            cacheConfig[i] = {CacheNum = info[1], RecycleTime = info[2]}
         end
     end
     local objNameInfoList = {}
     for i, v in pairs(_objNameList) do
         _gun.m_cacheList_beingUsed[v] = {}
         _gun.m_cacheList_canBeUsed[v] = {}
-        table.insert(objNameInfoList, {
-            Name = v,
-            CacheNum = cacheConfig[i].CacheNum,
-            RecycleTime = cacheConfig[i].RecycleTime
-        })
+        table.insert(
+            objNameInfoList,
+            {
+                Name = v,
+                CacheNum = cacheConfig[i].CacheNum,
+                RecycleTime = cacheConfig[i].RecycleTime
+            }
+        )
     end
-    invoke(function()
-        local num = 0
-        for k, v in pairs(objNameInfoList) do
-            local cacheNum = v.CacheNum < 1 and 1 or v.CacheNum
-            for i = 1, cacheNum do
-                local cacheObj = world:CreateInstance(v.Name, v.Name .. '_Cache', _gun.m_cache_folder)
-                if cacheObj then
-                    cacheObj:SetActive(false)
-                    local recycleTimeValue = world:CreateObject('FloatValueObject', 'RecycleTime', cacheObj)
-                    recycleTimeValue.Value = v.RecycleTime
-                    world.S_Event.WeaponObjCreatedEvent:Fire(_gun.character, cacheObj)
-                    if _gun.m_cacheList_canBeUsed[v.Name][i] then
-                        table.insert(_gun.m_cacheList_canBeUsed[v.Name], cacheObj)
-                    else
-                        _gun.m_cacheList_canBeUsed[v.Name][i] = cacheObj
+    invoke(
+        function()
+            local num = 0
+            for k, v in pairs(objNameInfoList) do
+                local cacheNum = v.CacheNum < 1 and 1 or v.CacheNum
+                for i = 1, cacheNum do
+                    local cacheObj = world:CreateInstance(v.Name, v.Name .. '_Cache', _gun.m_cache_folder)
+                    if cacheObj then
+                        cacheObj:SetActive(false)
+                        local recycleTimeValue = world:CreateObject('FloatValueObject', 'RecycleTime', cacheObj)
+                        recycleTimeValue.Value = v.RecycleTime
+                        world.S_Event.WeaponObjCreatedEvent:Fire(_gun.character, cacheObj)
+                        if _gun.m_cacheList_canBeUsed[v.Name][i] then
+                            table.insert(_gun.m_cacheList_canBeUsed[v.Name], cacheObj)
+                        else
+                            _gun.m_cacheList_canBeUsed[v.Name][i] = cacheObj
+                        end
                     end
-                end
-                num = num + 1
-                if num % 3 == 0 then
-                    wait()
-                end
-                if not _gun.character then
-                    return
+                    num = num + 1
+                    if num % 3 == 0 then
+                        wait()
+                    end
+                    if not _gun.character then
+                        return
+                    end
                 end
             end
         end
-    end)
+    )
 end
 
 ---使用枪械的缓存对象,缓存对象在世界下,所有玩家都可看到
@@ -336,9 +357,12 @@ function GunUtility:UseCacheObject(_gun, _objName, _autoRecycle, _attributeList,
     ---若时间大于零则指定时间后回收,否则需要自行进行回收操作
     local recycleTime = beUsedObj.RecycleTime.Value
     if recycleTime > 0 and _autoRecycle then
-        invoke(function()
-            self:Recycle(_gun, _objName, beUsedObj)
-        end, recycleTime)
+        invoke(
+            function()
+                self:Recycle(_gun, _objName, beUsedObj)
+            end,
+            recycleTime
+        )
     end
     return beUsedObj
 end
@@ -389,20 +413,22 @@ function GunUtility:DestroyCacheObject(_gun)
     for k, v in pairs(m_cacheList_canBeUsed) do
         destroyObj[k] = MergeTables(m_cacheList_canBeUsed[k], m_cacheList_beingUsed[k])
     end
-    invoke(function()
-        local num = 0
-        for k, v in pairs(destroyObj) do
-            for k1, v1 in pairs(v) do
-                num = num + 1
-                if num % 5 == 0 then
-                    wait()
-                end
-                if not v1:IsNull() then
-                    v1:Destroy()
+    invoke(
+        function()
+            local num = 0
+            for k, v in pairs(destroyObj) do
+                for k1, v1 in pairs(v) do
+                    num = num + 1
+                    if num % 5 == 0 then
+                        wait()
+                    end
+                    if not v1:IsNull() then
+                        v1:Destroy()
+                    end
                 end
             end
         end
-    end)
+    )
 end
 
 ---判断一个武器是否可以装备一个配件
@@ -507,7 +533,7 @@ function GunUtility:GetEnemyByRange(_self, _isHitSelf, _isHitFriend, _dis, _angl
             end
         end
         table.insert(resPlayers, v)
-        :: Continue ::
+        ::Continue::
     end
     if world.FortFolder then
         for i, v in pairs(world.FortFolder:GetChildren()) do
@@ -535,7 +561,7 @@ function GunUtility:GetEnemyByRange(_self, _isHitSelf, _isHitFriend, _dis, _angl
                 end
             end
             table.insert(resForts, v)
-            :: Continue ::
+            ::Continue::
         end
     end
     return resPlayers, resForts

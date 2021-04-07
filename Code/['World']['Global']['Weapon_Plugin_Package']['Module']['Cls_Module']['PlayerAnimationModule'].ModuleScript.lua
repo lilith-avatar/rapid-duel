@@ -29,7 +29,12 @@ function PlayerAnimation:Update(_dt)
     end
     ---是否靠近一个东西导致不可开枪检测
     if self.bone_R_UpperArm then
-        local raycastResults = Physics:RaycastAll(self.bone_R_UpperArm.Position, self.bone_R_UpperArm.Position + self.player.Forward * self.shoulderRayMinDistance, false)
+        local raycastResults =
+            Physics:RaycastAll(
+            self.bone_R_UpperArm.Position,
+            self.bone_R_UpperArm.Position + self.player.Forward * self.shoulderRayMinDistance,
+            false
+        )
         local state = false
         for k, v in pairs(raycastResults.HitObjectAll) do
             if v.Block and not ParentPlayer(v) and v.CollisionGroup ~= 10 then
@@ -42,7 +47,6 @@ function PlayerAnimation:Update(_dt)
 end
 
 function PlayerAnimation:FixUpdate(_dt)
-
 end
 
 ---装备武器的动作
@@ -71,7 +75,6 @@ function PlayerAnimation:PumpStopped()
         local speed = self.pumpStopped[2] and tonumber(self.pumpStopped[2]) or 1
         self.player.Avatar:PlayAnimation(self.pumpStopped[1], self.animationTree, 1, 0, true, false, speed)
     else
-
     end
 end
 
@@ -86,7 +89,6 @@ function PlayerAnimation:Fired()
     else
         self.player:Attack(1, 1)
     end
-
 end
 
 ---空仓动作
@@ -95,7 +97,6 @@ function PlayerAnimation:EmptyFire()
         local speed = self.emptyFire[2] and tonumber(self.emptyFire[2]) or 1
         self.player.Avatar:PlayAnimation(self.emptyFire[1], self.animationTree, 1, 0, true, false, speed)
     else
-
     end
 end
 
@@ -105,7 +106,6 @@ function PlayerAnimation:PumpStarted()
         local speed = self.pumpStarted[2] and tonumber(self.pumpStarted[2]) or 1
         self.player.Avatar:PlayAnimation(self.pumpStarted[1], self.animationTree, 1, 0, true, false, speed)
     else
-
     end
 end
 ---开火后
@@ -114,7 +114,6 @@ function PlayerAnimation:FireStopped()
         local speed = self.fireStopped[2] and tonumber(self.fireStopped[2]) or 1
         self.player.Avatar:PlayAnimation(self.fireStopped[1], self.animationTree, 1, 0, true, false, speed)
     else
-
     end
 end
 

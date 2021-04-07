@@ -15,9 +15,9 @@ _G.LinkConnects = function(_eventFolder, _module, _this)
             local handler = _module[ent.Name .. 'Handler']
             if handler ~= nil then
                 ent:Connect(
-                        function(...)
-                            handler(_this, ...)
-                        end
+                    function(...)
+                        handler(_this, ...)
+                    end
                 )
                 total = total + 1
             end
@@ -29,52 +29,52 @@ local preLoad = {
     {
         name = 'Sound', ---音效播放
         csv = 'Sound',
-        ids = { 'GunId', 'GunEvent' }
+        ids = {'GunId', 'GunEvent'}
     },
     {
         name = 'GunConfig',
         csv = 'GunConfigTable',
-        ids = { 'Id' }
+        ids = {'Id'}
     },
     {
         name = 'MagazineConfig',
         csv = 'MagazineTable',
-        ids = { 'Id' }
+        ids = {'Id'}
     },
     {
         name = 'GunRecoilConfig',
         csv = 'GunRecoilTable',
-        ids = { 'Id' }
+        ids = {'Id'}
     },
     {
         name = 'AmmoConfig',
         csv = 'AmmoTable',
-        ids = { 'Id' }
+        ids = {'Id'}
     },
     {
         name = 'GunAnimationConfig',
         csv = 'GunAnimationTable',
-        ids = { 'GunId', 'GunEvent' }
+        ids = {'GunId', 'GunEvent'}
     },
     {
         name = 'WeaponAccessoryConfig',
         csv = 'WeaponAccessoryTable',
-        ids = { 'Id' }
+        ids = {'Id'}
     },
     {
         name = 'SpawnConfig',
         csv = 'SpawnTable',
-        ids = { 'Id' }
+        ids = {'Id'}
     },
-	{
+    {
         name = 'AssistAim',
         csv = 'AssistAim',
-        ids = { 'Id' }
+        ids = {'Id'}
     },
     {
         name = 'GunCacheConfig',
         csv = 'GunCacheConfig',
-        ids = { 'GunId' }
+        ids = {'GunId'}
     }
 }
 ---字符串切割函数
@@ -115,15 +115,15 @@ end
 ---输出三倍标准差为1 的分布在（-1， 1）之间的正态分布
 ---@param _isSeeded是否具有最新的随机种子
 function _G.GaussRandom(_isSeeded)
-    if(not _isSeeded) then
+    if (not _isSeeded) then
         math.randomseed(Timer.GetTime() * 10000)
     end
     local u = math.random()
     local v = math.random()
-    local z = math.sqrt(-2 * math.log(u)) * math.cos( 2 * math.pi * v)
+    local z = math.sqrt(-2 * math.log(u)) * math.cos(2 * math.pi * v)
     z = (z + 3) / 6
     z = 2 * z - 1
-    if(math.abs(z) > 1) then
+    if (math.abs(z) > 1) then
         return GaussRandom(true)
     end
     return z
@@ -131,36 +131,38 @@ end
 
 ---窗函数，在小于A时保持原值，在大于A时逐渐趋近于1
 function _G.Asymptote(x, A)
-	A = A or 0.4
-	if(A <= 0 or A >= 1) then
-		error('A should be in good range')
-	end
-	if(x < 0) then 
-		error('x should be positive')
-	end
-	if(x <= A) then
-		return x
-	end
-	return 1 + (3 * A * A - 2 * A) / x + (A * A - 2 * A * A * A) / x / x
+    A = A or 0.4
+    if (A <= 0 or A >= 1) then
+        error('A should be in good range')
+    end
+    if (x < 0) then
+        error('x should be positive')
+    end
+    if (x <= A) then
+        return x
+    end
+    return 1 + (3 * A * A - 2 * A) / x + (A * A - 2 * A * A * A) / x / x
 end
 
 ---双边可用的窗函数(普通窗函数的奇延拓)
 function _G.AsymtoteBi(x, A)
-	A = A or 0.4
-	if(A <= 0 or A >= 1) then
-		error('A should be in good range')
-	end
-	if(x >= 0) then
-		return Asymptote(x, A)
-	end
-	return -Asymptote(-x, A)
+    A = A or 0.4
+    if (A <= 0 or A >= 1) then
+        error('A should be in good range')
+    end
+    if (x >= 0) then
+        return Asymptote(x, A)
+    end
+    return -Asymptote(-x, A)
 end
 
 ---输入一个方向和一个最大扩散角，
 ---输出以该方向为中心轴，角度为半顶角的圆锥的底面上的一个点（高斯分布）
 function _G.RandomRotate(_dir, _difAngle)
-    local axis1 = Vector3.Cross(_dir, Vector3(1,1,1)).Normalized---由于中心对称，第一根轴随意取
-    local axis2 = Vector3.Cross(_dir, axis1)---现在有 _dir = axis1 × axis2
+    local axis1 = Vector3.Cross(_dir, Vector3(1, 1, 1)).Normalized
+    ---由于中心对称，第一根轴随意取
+    local axis2 = Vector3.Cross(_dir, axis1)
+    ---现在有 _dir = axis1 × axis2
     return (_dir:Rotate(axis1, _difAngle * GaussRandom(true))):Rotate(axis2, _difAngle * GaussRandom(true))
 end
 
@@ -173,10 +175,10 @@ function _G.ParentPlayer(_obj)
     if checkStaticSpace(_obj) then
         return
     end
-	if _obj.ClassName == 'PlayerInstance' then
-		return _obj
-	end
-	return _obj:FindNearestAncestorOfType('PlayerInstance')
+    if _obj.ClassName == 'PlayerInstance' then
+        return _obj
+    end
+    return _obj:FindNearestAncestorOfType('PlayerInstance')
 end
 
 function _G.ClearTable(_table, _notDestroyKey)
@@ -198,42 +200,42 @@ function _G.ClearTable(_table, _notDestroyKey)
 end
 
 function _G.BlendColor(_color1, _color2)
-	local blender = function(_x, _y)
-		return _x * _y / 255
-	end
-	return Color(
-		blender(_color1.r,_color2.r),
-		blender(_color1.g,_color2.g),
-		blender(_color1.b,_color2.b),
-		blender(_color1.a,_color2.a)
-	)
+    local blender = function(_x, _y)
+        return _x * _y / 255
+    end
+    return Color(
+        blender(_color1.r, _color2.r),
+        blender(_color1.g, _color2.g),
+        blender(_color1.b, _color2.b),
+        blender(_color1.a, _color2.a)
+    )
 end
 
 ---用于加速滑动
 function _G.AccelerateScalar(x, _linearRange, _maxScale)
-	if(_maxScale <= 1 or _linearRange <= 0) then
-		error('最大比例必须大于1, 线性范围必须大于0')
-	end
-	if(x < 0) then
-		error('使用双边的函数以支持负值')
-	end
-	if(x <= _linearRange) then
-		return 1
-	elseif(x >= _maxScale * _linearRange) then
-		return _maxScale
-	else
-		return 1 / _linearRange * x
-	end
+    if (_maxScale <= 1 or _linearRange <= 0) then
+        error('最大比例必须大于1, 线性范围必须大于0')
+    end
+    if (x < 0) then
+        error('使用双边的函数以支持负值')
+    end
+    if (x <= _linearRange) then
+        return 1
+    elseif (x >= _maxScale * _linearRange) then
+        return _maxScale
+    else
+        return 1 / _linearRange * x
+    end
 end
 
 ---支持负值的加速滑动
 function _G.BiAccelerateScalar(x, _linearRange, _maxScale)
-	local sign = x >= 0 and 1 or -1
-	return AccelerateScalar(sign * x, _linearRange, _maxScale)
+    local sign = x >= 0 and 1 or -1
+    return AccelerateScalar(sign * x, _linearRange, _maxScale)
 end
 
 function _G.MergeTables(...)
-    local tabs = { ... }
+    local tabs = {...}
     if not tabs then
         return {}
     end
@@ -287,17 +289,17 @@ end
 --- @param _strength number 抖动幅度
 --- @param _time number 持续时间
 function _G.CameraShake(_strength, _time)
-	CameraControl:CameraShake(_strength, _time)
+    CameraControl:CameraShake(_strength, _time)
 end
 
 ---用的tween的函数
 function _G.Shake(_strength)
-	return _strength * (math.random() - 0.5)
+    return _strength * (math.random() - 0.5)
 end
 
 --- 保留n位小数
 function _G.keepDecimal(num, n)
-    if type(num) ~= "number" then
+    if type(num) ~= 'number' then
         return num
     end
     n = n or 2
@@ -326,7 +328,7 @@ end
 
 local function GetCsvInfo(_csv, ...)
     local rawTable = _csv:GetRows()
-    local ids = { ... }
+    local ids = {...}
     if #ids < 1 or (#ids == 1 and ids[1] == 'Type') then
         return rawTable
     end
@@ -365,35 +367,51 @@ local function GetGlobalCsvInfo()
     local tmpList = PluginRoot.Csv.GlobalConfig:GetRows()
     local result = {}
     for i, v in pairs(tmpList) do
-        if v.Key == "" or v.Type == "" then
+        if v.Key == '' or v.Type == '' then
             goto Continue
         end
-        if v.Type == "Int" then
+        if v.Type == 'Int' then
             result[v.Key] = tonumber(v.Value)
-        elseif v.Type == "Boolean" then
-            if v.Value == "TRUE" then
+        elseif v.Type == 'Boolean' then
+            if v.Value == 'TRUE' then
                 result[v.Key] = true
-            elseif v.Value == "FALSE" then
+            elseif v.Value == 'FALSE' then
                 result[v.Key] = false
             else
-                print("请检查全局配置表中键为", v.Key, "的配置项")
+                print('请检查全局配置表中键为', v.Key, '的配置项')
             end
-        elseif v.Type == "Float" then
+        elseif v.Type == 'Float' then
             result[v.Key] = tonumber(v.Value)
-        elseif v.Type == "String" then
+        elseif v.Type == 'String' then
             result[v.Key] = v.Value
-        elseif v.Type == "Vector2" then
+        elseif v.Type == 'Vector2' then
             result[v.Key] = Vector2(tonumber(StringSplit(v.Value, ',')[1]), tonumber(StringSplit(v.Value, ',')[2]))
-        elseif v.Type == "Vector3" then
-            result[v.Key] = Vector3(tonumber(StringSplit(v.Value, ',')[1]), tonumber(StringSplit(v.Value, ',')[2]), tonumber(StringSplit(v.Value, ',')[3]))
-        elseif v.Type == "Euler" then
-            result[v.Key] = EulerDegree(tonumber(StringSplit(v.Value, ',')[1]), tonumber(StringSplit(v.Value, ',')[2]), tonumber(StringSplit(v.Value, ',')[3]))
-        elseif v.Type == "Color" then
-            result[v.Key] = Color(tonumber(StringSplit(v.Value, ',')[1]), tonumber(StringSplit(v.Value, ',')[2]), tonumber(StringSplit(v.Value, ',')[3]), tonumber(StringSplit(v.Value, ',')[4]))
+        elseif v.Type == 'Vector3' then
+            result[v.Key] =
+                Vector3(
+                tonumber(StringSplit(v.Value, ',')[1]),
+                tonumber(StringSplit(v.Value, ',')[2]),
+                tonumber(StringSplit(v.Value, ',')[3])
+            )
+        elseif v.Type == 'Euler' then
+            result[v.Key] =
+                EulerDegree(
+                tonumber(StringSplit(v.Value, ',')[1]),
+                tonumber(StringSplit(v.Value, ',')[2]),
+                tonumber(StringSplit(v.Value, ',')[3])
+            )
+        elseif v.Type == 'Color' then
+            result[v.Key] =
+                Color(
+                tonumber(StringSplit(v.Value, ',')[1]),
+                tonumber(StringSplit(v.Value, ',')[2]),
+                tonumber(StringSplit(v.Value, ',')[3]),
+                tonumber(StringSplit(v.Value, ',')[4])
+            )
         else
-            print("请检查全局配置表中键为", v.Key, "的配置项")
+            print('请检查全局配置表中键为', v.Key, '的配置项')
         end
-        :: Continue ::
+        ::Continue::
     end
     return result
 end
@@ -421,7 +439,7 @@ _G.GunModeEnum = {
     ThrownWeapon = 7, ---投掷武器
     RocketLauncher = 8, ---火箭筒
     Other = 9, ---其他武器
-	TrailingGun = 10 --追踪武器
+    TrailingGun = 10 --追踪武器
 }
 
 ---枪械击中玩家的部位枚举
@@ -430,7 +448,7 @@ _G.HitPartEnum = {
     Head = 1, ---命中头部
     Body = 2, ---命中躯干
     Limb = 3, ---命中四肢
-    Fort = 4, ---命中炮台
+    Fort = 4 ---命中炮台
 }
 
 ---枪械开火模式
@@ -438,37 +456,37 @@ _G.FireModeEnum = {
     Auto = 1, ---全自动
     Rapidly_1 = 2, ---连发模式1
     Rapidly_2 = 3, ---连发模式2
-    Single = 4, ---单发
+    Single = 4 ---单发
 }
 
 ---枪械的散射函数
 _G.DiffuseFunctionEnum = {
     Linear = 1, ---线性函数
     Sqrt = 2, ---0.5次方
-    Square = 3, ---2次方
+    Square = 3 ---2次方
 }
 
 ---枪械可被装备的位置
 _G.CanBeEquipPositionEnum = {
-    MainOrDeputy = 1,       ---主枪或者副枪
-    Mini = 2,               ---手枪
-    Prop = 3,              ---道具
+    MainOrDeputy = 1, ---主枪或者副枪
+    Mini = 2, ---手枪
+    Prop = 3 ---道具
 }
 
 ---枪械配件类型
 _G.WeaponAccessoryTypeEnum = {
-    Muzzle = 1,             ---枪口
-    Grip = 2,               ---握把
-    Magazine = 3,           ---弹夹
-    Butt = 4,               ---枪托
-    Sight = 5,              ---瞄准镜
+    Muzzle = 1, ---枪口
+    Grip = 2, ---握把
+    Magazine = 3, ---弹夹
+    Butt = 4, ---枪托
+    Sight = 5 ---瞄准镜
 }
 
 ---刷新的对象的类型
 _G.UnitTypeEnum = {
     Weapon = 1,
     Accessory = 2,
-    Ammo = 3,
+    Ammo = 3
 }
 
 ---激活的对象类型
@@ -482,25 +500,25 @@ _G.ObjectTypeEnum = {
 
 ---图片资源大小
 _G.ImgSize = {
-	Img_Crosshair_1x_RPG = Vector2(230, 230),
-	Img_Notch_Wide = Vector2(8001, 3126) / 5,
-	Img_Scope_4x = Vector2(880, 840),
-	Img_Scope_De = Vector2(2000, 1870),
-	Img_Notch_Narrow = Vector2(5559, 3125) / 5,
-	Img_Scope_1x = Vector2(1546 / 1.1, 1460),
-	Img_RedDot = Vector2(550, 550),
-	Img_Panel_4x = Vector2(450, 450),
-	Img_Crosshair_2x = Vector2(560, 560),
-	Img_Crosshair_4x = Vector2(560, 560),
-	Img_Crosshair_4x_ak = Vector2(560, 560),
-	Img_Crosshair_3x = Vector2(560, 560),
-	Img_Crosshair_6x = Vector2(560, 560),
-	Img_Crosshair_8x = Vector2(560, 560),
-	Img_Crosshair_15x = Vector2(560, 560),
-	Img_Transparent = Vector2(560, 560),
-	Img_Transparent2 = Vector2(560, 560) / 1.5,
-	Img_Holograph = Vector2(550, 550),
-	Img_Holograph_Red = Vector2(550, 550)
+    Img_Crosshair_1x_RPG = Vector2(230, 230),
+    Img_Notch_Wide = Vector2(8001, 3126) / 5,
+    Img_Scope_4x = Vector2(880, 840),
+    Img_Scope_De = Vector2(2000, 1870),
+    Img_Notch_Narrow = Vector2(5559, 3125) / 5,
+    Img_Scope_1x = Vector2(1546 / 1.1, 1460),
+    Img_RedDot = Vector2(550, 550),
+    Img_Panel_4x = Vector2(450, 450),
+    Img_Crosshair_2x = Vector2(560, 560),
+    Img_Crosshair_4x = Vector2(560, 560),
+    Img_Crosshair_4x_ak = Vector2(560, 560),
+    Img_Crosshair_3x = Vector2(560, 560),
+    Img_Crosshair_6x = Vector2(560, 560),
+    Img_Crosshair_8x = Vector2(560, 560),
+    Img_Crosshair_15x = Vector2(560, 560),
+    Img_Transparent = Vector2(560, 560),
+    Img_Transparent2 = Vector2(560, 560) / 1.5,
+    Img_Holograph = Vector2(550, 550),
+    Img_Holograph_Red = Vector2(550, 550)
 }
 
 ---玩家当前动作模式
@@ -510,5 +528,5 @@ _G.PlayerActionModeEnum = {
     AimRun = 3, ---开镜移动
     CrouchRun = 4, ---下蹲正常跑
     QuicklyCrouchRun = 5, ---下蹲快跑
-    AimCrouchRun = 6, ---开镜蹲移动
+    AimCrouchRun = 6 ---开镜蹲移动
 }

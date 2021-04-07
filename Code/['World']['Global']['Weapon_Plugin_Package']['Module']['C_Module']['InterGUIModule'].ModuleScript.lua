@@ -4,7 +4,7 @@
 local InterGUI, this = {}, nil
 local _SAY_ = 0.81
 
-local accName = { 'muzzle', 'grip', 'magazine', 'butt', 'sight' }
+local accName = {'muzzle', 'grip', 'magazine', 'butt', 'sight'}
 local function Sort(_item1, _item2)
     if _item1.IsMarked and not _item2.IsMarked then
         return true
@@ -196,7 +196,6 @@ end
 ---@param dt number delta time 每帧时间
 ---@param tt number total time 总时间
 function InterGUI:Update(dt, tt)
-
 end
 
 ---玩家靠近一把枪的事件
@@ -216,11 +215,13 @@ function InterGUI:PlayerNearWeaponEventHandler(_gun)
         UI = ui,
         Order = order,
         IsMarked = false,
-        GunId = id,
+        GunId = id
     }
-    ui.PickBtn.OnClick:Connect(function()
-        self:PickWeaponBtnClick(_gun)
-    end)
+    ui.PickBtn.OnClick:Connect(
+        function()
+            self:PickWeaponBtnClick(_gun)
+        end
+    )
     ui.ItemName.Text = _gun.Name
     ui.CountTxt.Text = ''
     self:RefreshWeaponList()
@@ -253,16 +254,19 @@ function InterGUI:PlayerNearWeaponAccessoryEventHandler(_gunAccessory)
     local id = _gunAccessory.ID.Value
     local order = GunConfig.WeaponAccessoryConfig[id].Order
     local ui = UseNearByUI()
-    ui.ItemIcon.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. GunConfig.WeaponAccessoryConfig[id].Icon)
+    ui.ItemIcon.Texture =
+        ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. GunConfig.WeaponAccessoryConfig[id].Icon)
     self.weaponUiList[_gunAccessory] = {
         UI = ui,
         Order = order,
         IsMarked = false,
-        AccId = id,
+        AccId = id
     }
-    ui.PickBtn.OnClick:Connect(function()
-        self:PickWeaponAccessoryBtnClick(_gunAccessory)
-    end)
+    ui.PickBtn.OnClick:Connect(
+        function()
+            self:PickWeaponAccessoryBtnClick(_gunAccessory)
+        end
+    )
     ui.ItemName.Text = GunConfig.WeaponAccessoryConfig[_gunAccessory.ID.Value].Name
     ui.CountTxt.Text = ''
     self:RefreshWeaponList()
@@ -299,11 +303,13 @@ function InterGUI:PlayerNearAmmoEventHandler(_ammo)
         UI = ui,
         Order = order,
         IsMarked = false,
-        AmmoId = id,
+        AmmoId = id
     }
-    ui.PickBtn.OnClick:Connect(function()
-        self:PickAmmoBtnClick(_ammo)
-    end)
+    ui.PickBtn.OnClick:Connect(
+        function()
+            self:PickAmmoBtnClick(_ammo)
+        end
+    )
     ui.ItemName.Text = GunConfig.AmmoConfig[_ammo.ID.Value].Name
     ui.CountTxt.Text = _ammo.Count.Value
     self:RefreshWeaponList()

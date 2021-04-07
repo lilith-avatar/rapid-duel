@@ -40,9 +40,12 @@ function ChooseOccUI:Init()
     for i, v in pairs(Config.Occupation) do
         table.insert(occConfig, v)
     end
-    table.sort(occConfig, function(a, b)
-        return a.Order > b.Order
-    end)
+    table.sort(
+        occConfig,
+        function(a, b)
+            return a.Order > b.Order
+        end
+    )
     for i, v in pairs(occConfig) do
         local btn = ButtonBase:new('ChooseOccBtn', UIBase.AniTypeEnum.Scale, self.occPnl.BtnsPnl)
         local occId = v.Id
@@ -53,10 +56,12 @@ function ChooseOccUI:Init()
         btn:BindHandler('OnClick', self.ShowOccInfo, occId)
         btn:SetSound('OnClick', 116)
         self.chooseBtnList[occId] = btn
-        invoke(function()
-            wait()
-            btn:CallFunction('ToTop')
-        end)
+        invoke(
+            function()
+                wait()
+                btn:CallFunction('ToTop')
+            end
+        )
         curNum = curNum + 1
     end
 

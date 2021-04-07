@@ -21,12 +21,16 @@ function DeathmatchMode:Init()
     self.continuousKillNum = {}
     self.pos1_A, self.pos2_A, self.pos1_B, self.pos2_B = Vector3.Zero, Vector3.Zero, Vector3.Zero, Vector3.Zero
 
-    world.OnPlayerAdded:Connect(function(_player)
-        self:PlayerAdd(_player)
-    end)
-    world.OnPlayerRemoved:Connect(function(_player)
-        --self:PlayerRemove(_player)
-    end)
+    world.OnPlayerAdded:Connect(
+        function(_player)
+            self:PlayerAdd(_player)
+        end
+    )
+    world.OnPlayerRemoved:Connect(
+        function(_player)
+            --self:PlayerRemove(_player)
+        end
+    )
 end
 
 --- Update函数
@@ -35,7 +39,10 @@ function DeathmatchMode:Update(dt, tt)
     if not self.enable then
         return
     end
-    if GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady then
+    if
+        GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnGame and
+            GameFlowMgr.gameFms.current ~= Const.GameStateEnum.OnReady
+     then
         return
     end
     ---更新游戏时间
@@ -112,7 +119,6 @@ end
 
 ---开战前的准备阶段结束后调用
 function DeathmatchMode:Ready2Start()
-
 end
 
 ---玩家加入游戏

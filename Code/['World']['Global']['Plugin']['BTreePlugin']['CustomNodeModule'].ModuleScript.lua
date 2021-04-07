@@ -9,7 +9,7 @@ function CustomNode:Init()
     end
 
     function statusCheck:tick(tick)
-        return tick.target:StatusCheck(B3,self)
+        return tick.target:StatusCheck(B3, self)
     end
 
     local heroAction = B3.Class('HeroAction', B3.Action)
@@ -21,8 +21,8 @@ function CustomNode:Init()
     end
 
     function heroAction:tick(tick)
-		--print(type(tick))
-        return tick.target:HeroAction(B3,self)
+        --print(type(tick))
+        return tick.target:HeroAction(B3, self)
     end
 end
 

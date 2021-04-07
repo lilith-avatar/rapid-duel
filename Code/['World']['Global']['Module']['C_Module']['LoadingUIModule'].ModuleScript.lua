@@ -4,11 +4,11 @@
 local LoadingUI = ModuleUtil.New('LoadingUI', ClientBase)
 
 local StateEnum = {
-    None = -1,          ---未激活状态
-    Choosing = 1,       ---随机选择亮起中
-    Success = 2,        ---选择结束,目标闪亮
-    Show = 3,           ---目标展示状态
-    Loading = 4,        ---展示加载界面
+    None = -1, ---未激活状态
+    Choosing = 1, ---随机选择亮起中
+    Success = 2, ---选择结束,目标闪亮
+    Show = 3, ---目标展示状态
+    Loading = 4 ---展示加载界面
 }
 local lightUpTime = 0.12
 local flashingTime = 0.1
@@ -49,7 +49,6 @@ end
 --- Update函数
 --- @param dt number delta time 每帧时间
 function LoadingUI:Update(dt, tt)
-
 end
 
 function LoadingUI:FixUpdate(_dt)
@@ -71,7 +70,6 @@ function LoadingUI:FixUpdate(_dt)
             self.m_curLightUpIndex = self.m_curLightUpIndex + 1
             self.m_lightUpTime = lightUpTime
         end
-
     elseif self.m_state == StateEnum.Success then
         ---选择结束,目标模式闪烁
         self.m_flashingTime = self.m_flashingTime - _dt
@@ -96,7 +94,6 @@ function LoadingUI:FixUpdate(_dt)
         end
     elseif self.m_state == StateEnum.Show then
         ---闪烁结束,展示目标模式
-
     elseif self.m_state == StateEnum.Loading then
         ---闪烁结束,展示目标模式
         self.m_loadingShowTime = self.m_loadingShowTime - _dt
@@ -141,7 +138,8 @@ function LoadingUI:Show(_callBack)
     for i, v in pairs(sceneShow) do
         if self.m_imageList[i] then
             self.m_imageList[i].ModeTxt.Text = Config.Scenes[v.SceneId].Name
-            self.m_imageList[i].ImgMode.Texture =  ResourceManager.GetTexture('UI/Picture/' .. Config.Scenes[v.SceneId].Image)
+            self.m_imageList[i].ImgMode.Texture =
+                ResourceManager.GetTexture('UI/Picture/' .. Config.Scenes[v.SceneId].Image)
         end
     end
 
@@ -154,7 +152,7 @@ function LoadingUI:Show(_callBack)
     end
     self.loadingRoot.TxtName.Text = Config.Scenes[self.m_sceneId].Name
     self.loadingRoot.TxtIntro.Text = Config.Scenes[self.m_sceneId].Des
-    self.loadingRoot.ImgMode.Texture =  ResourceManager.GetTexture('UI/Picture/' .. Config.Scenes[self.m_sceneId].Image)
+    self.loadingRoot.ImgMode.Texture = ResourceManager.GetTexture('UI/Picture/' .. Config.Scenes[self.m_sceneId].Image)
     self.m_callBack = _callBack.CallBack
     self.m_callBackParams = _callBack.Params
     self.m_callBackSelf = _callBack.Self

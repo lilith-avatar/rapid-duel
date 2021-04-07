@@ -22,7 +22,7 @@ function PlayerControl:Init()
     --- 摄像机看向自己
     self.camera = world.CurrentCamera
     self.mode = Camera.CameraMode
-    if(self.camera.CameraMode ~= 4) then
+    if (self.camera.CameraMode ~= 4) then
         self.camera.LookAt = self.player
     end
 
@@ -32,15 +32,17 @@ function PlayerControl:Init()
     self.moveLeftAxis = 0
     self.moveRightAxis = 0
 
-    self.player.OnHealthChange:Connect(function(oldHealth, newHealth)
-        self:HealthCheck(oldHealth, newHealth)
-    end)
+    self.player.OnHealthChange:Connect(
+        function(oldHealth, newHealth)
+            self:HealthCheck(oldHealth, newHealth)
+        end
+    )
 end
 
 --- 移动方向是否遵循摄像机方向
 function PlayerControl:IsFreeMode()
-    return (mode == Enum.CameraMode.Social and camera.Distance >= 0) or mode == Enum.CameraMode.Orbital
-            or mode == Enum.CameraMode.Custom
+    return (mode == Enum.CameraMode.Social and camera.Distance >= 0) or mode == Enum.CameraMode.Orbital or
+        mode == Enum.CameraMode.Custom
 end
 
 ---获取按键盘时的移动方向最终取值
@@ -60,7 +62,9 @@ function PlayerControl:GetMoveDir()
     self.forwardDir.y = 0
     self.rightDir = Vector3(0, 1, 0):Cross(self.forwardDir)
     self:GetKeyValue()
-    self.finalDir = self.forwardDir * (self.moveForwardAxis + self.moveBackAxis) - self.rightDir * (self.moveLeftAxis + self.moveRightAxis)
+    self.finalDir =
+        self.forwardDir * (self.moveForwardAxis + self.moveBackAxis) -
+        self.rightDir * (self.moveLeftAxis + self.moveRightAxis)
 end
 
 --- 移动逻辑
@@ -82,7 +86,6 @@ end
 --- Update函数
 --- @param _dt number delta time 每帧时间
 function PlayerControl:Update(_dt, _tt)
-
 end
 
 --- FixUpdate函数
@@ -105,7 +108,3 @@ function PlayerControl:HealthCheck(oldHealth, newHealth)
 end
 
 return PlayerControl
-
-
-
-

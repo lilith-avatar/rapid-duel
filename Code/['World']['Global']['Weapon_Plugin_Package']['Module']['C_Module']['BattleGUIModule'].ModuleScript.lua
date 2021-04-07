@@ -3,7 +3,7 @@
 ---@author RopzTao
 local BattleGUI, this = {}, nil
 
-local OffPos = { 0, 60, 120, 180 }
+local OffPos = {0, 60, 120, 180}
 local tt, players, dis, realDis, warning, downTime, reloadAni = 0, {}, 0, 0, false, 0, false
 local selfColor, enemyColor = Color(71, 81, 224, 180), Color(255, 0, 0, 150)
 
@@ -38,9 +38,12 @@ function BattleGUI:Init()
     ---绕行编辑器BUG
     self:DetourEditorBug()
 
-    local co = coroutine.create(function()
-        BattleGUI:ManualUpd()
-    end)
+    local co =
+        coroutine.create(
+        function()
+            BattleGUI:ManualUpd()
+        end
+    )
     coroutine.resume(co)
 end
 
@@ -118,7 +121,6 @@ function BattleGUI:DeclareInitData()
     ---资源读取
     self.btnAimRes = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Aim')
     self.btnAimRes2 = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Aim2')
-
 end
 
 function BattleGUI:PartNodeMgr()
@@ -138,7 +140,7 @@ function BattleGUI:PartNodeMgr()
         self.ImgFireLeft,
         self.BtnReload.m_ui,
         self.ImgFire,
-        self.BtnAim.m_ui,
+        self.BtnAim.m_ui
         ---self.FigRight,
     }
     ---禁用开枪部分
@@ -148,13 +150,17 @@ end
 ---按键事件绑定
 function BattleGUI:KeyBinding()
     ---滑动屏幕
-    self.FigRight.OnTouched:Connect(function(_touchInfo)
-        self.RightFingerTouch(_touchInfo)
-    end)
+    self.FigRight.OnTouched:Connect(
+        function(_touchInfo)
+            self.RightFingerTouch(_touchInfo)
+        end
+    )
 
-    self.FigRight.OnPanEnd:Connect(function()
-        self.swipeStarted = false
-    end)
+    self.FigRight.OnPanEnd:Connect(
+        function()
+            self.swipeStarted = false
+        end
+    )
 
     ---跳事件处理函数绑定
     self.BtnJump:BindHandler('OnClick', self.PlayerJumpClick)
@@ -167,38 +173,47 @@ function BattleGUI:KeyBinding()
     self.BtnDrop.OnClick:Connect(function()
         BagGUI:Show()
     end)]]
-
     ---快跑
-    self.BtnRunHes.OnEnter:Connect(function()
-        self.BtnRunHes.Size = Vector2(self.FigLeft.FinalSize.x, 500)
-        self:ReadyToRun()
-        self.BtnRunHes2:SetActive(true)
-        self.ImgRunHes.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Run2')
-    end)
+    self.BtnRunHes.OnEnter:Connect(
+        function()
+            self.BtnRunHes.Size = Vector2(self.FigLeft.FinalSize.x, 500)
+            self:ReadyToRun()
+            self.BtnRunHes2:SetActive(true)
+            self.ImgRunHes.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Run2')
+        end
+    )
 
-    self.BtnRunHes.OnLeave:Connect(function()
-        self.BtnRunHes2:SetActive(false)
-        self.BtnRunHes.Size = Vector2(120, 120)
-        PlayerBehavior:PlayerBehaviorChanged('isQuickly')
-        self.ImgRunHes.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Run')
-    end)
+    self.BtnRunHes.OnLeave:Connect(
+        function()
+            self.BtnRunHes2:SetActive(false)
+            self.BtnRunHes.Size = Vector2(120, 120)
+            PlayerBehavior:PlayerBehaviorChanged('isQuickly')
+            self.ImgRunHes.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Run')
+        end
+    )
 
-    self.BtnRunHes2.OnLeave:Connect(function()
-        self:ReadyToRun()
-    end)
+    self.BtnRunHes2.OnLeave:Connect(
+        function()
+            self:ReadyToRun()
+        end
+    )
 
     ---解除快跑
-    self.SimHandle.OnEnter:Connect(function()
-        self.ImgRunHes.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Run')
-        PlayerBehavior:PlayerBehaviorChanged('isQuickly')
-    end)
-
-    self.IsAimOrNot.OnValueChanged:Connect(function()
-        if localPlayer.Health <= 0 then
-            return
+    self.SimHandle.OnEnter:Connect(
+        function()
+            self.ImgRunHes.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Run')
+            PlayerBehavior:PlayerBehaviorChanged('isQuickly')
         end
-        PlayerBehavior:PlayerBehaviorChanged('isAim')
-    end)
+    )
+
+    self.IsAimOrNot.OnValueChanged:Connect(
+        function()
+            if localPlayer.Health <= 0 then
+                return
+            end
+            PlayerBehavior:PlayerBehaviorChanged('isAim')
+        end
+    )
 end
 
 function BattleGUI:DetourEditorBug()
@@ -237,20 +252,24 @@ function BattleGUI:FixInit()
     ---开火后滑动屏幕
     self.BtnFire:BindHandler('OnTouched', self.RightFingerTouch)
 
-    self.player.OnHealthChange:Connect(function()
-        if PlayerGunMgr.curGun == nil then return end
-        if self.player.Health <= 0 then
-            self.using = false
-            ---如果玩家死后还是开镜
-            if PlayerGunMgr.curGun.m_isZoomIn then
-                PlayerGunMgr.curGun:MechanicalAimStop()
-                PlayerBehavior:PlayerBehaviorChanged('isAim')
+    self.player.OnHealthChange:Connect(
+        function()
+            if PlayerGunMgr.curGun == nil then
+                return
             end
-            if self.rightDown then
-                self:OnUpCon()
+            if self.player.Health <= 0 then
+                self.using = false
+                ---如果玩家死后还是开镜
+                if PlayerGunMgr.curGun.m_isZoomIn then
+                    PlayerGunMgr.curGun:MechanicalAimStop()
+                    PlayerBehavior:PlayerBehaviorChanged('isAim')
+                end
+                if self.rightDown then
+                    self:OnUpCon()
+                end
             end
         end
-    end)
+    )
 end
 
 function BattleGUI:OnUpCon()
@@ -272,9 +291,12 @@ function BattleGUI:OnUpCon()
             self:FireModeCheck()
         end
         ---调用开火之后立刻调用其他函数，函数和开火之间的时序可能会有1-2帧的误差
-        invoke(function()
-            PlayerGunMgr.curGun:MechanicalAimStop()
-        end, 0.1)
+        invoke(
+            function()
+                PlayerGunMgr.curGun:MechanicalAimStop()
+            end,
+            0.1
+        )
         self.rightAimFire = false
     end
 end
@@ -313,7 +335,9 @@ end
 
 ---拾起一把枪并装备
 function BattleGUI:OnEquipWeaponEventHandler()
-    if PlayerGunMgr.curGun == nil then return end
+    if PlayerGunMgr.curGun == nil then
+        return
+    end
     self.firstPickGun = self.firstPickGun + 1
     if self.firstPickGun == 1 then
         self:FixInit()
@@ -329,7 +353,9 @@ function BattleGUI:OnUnEquipWeaponEvent()
 end
 
 function BattleGUI:WithDrawOrNot()
-    if PlayerGunMgr.curGun == nil then return end
+    if PlayerGunMgr.curGun == nil then
+        return
+    end
     self.using = false
     if PlayerGunMgr.curGun.m_isDraw then
         self:SwitchNode(true, self.battleNodeTab)
@@ -373,12 +399,24 @@ end
 function BattleGUI:JumpResourceChange()
     if (self.player.IsOnGround or self.player.State == Enum.CharacterState.Seated) and not isDead then
         if self.player:IsCrouch() then
-            self.CrouchBtn:SetValue('Texture', ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Squat'))
+            self.CrouchBtn:SetValue(
+                'Texture',
+                ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Squat')
+            )
         else
-            self.BtnJump:SetValue('Texture', ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Jump2'))
-            invoke(function()
-                self.BtnJump:SetValue('Texture', ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Jump'))
-            end, 0.6)
+            self.BtnJump:SetValue(
+                'Texture',
+                ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Jump2')
+            )
+            invoke(
+                function()
+                    self.BtnJump:SetValue(
+                        'Texture',
+                        ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Jump')
+                    )
+                end,
+                0.6
+            )
         end
     end
 end
@@ -386,9 +424,15 @@ end
 ---蹲下资源替换
 function BattleGUI:CrouchResourceChange()
     if not self.player:IsCrouch() then
-        self.CrouchBtn:SetValue('Texture', ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Squat2'))
+        self.CrouchBtn:SetValue(
+            'Texture',
+            ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Squat2')
+        )
     else
-        self.CrouchBtn:SetValue('Texture', ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Squat'))
+        self.CrouchBtn:SetValue(
+            'Texture',
+            ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Player_Squat')
+        )
     end
 end
 
@@ -475,7 +519,9 @@ end
 ---左边按钮按下事件
 function BattleGUI.BtnFireLeftDown()
     local self = BattleGUI
-    if PlayerGunMgr.curGun == nil then return end
+    if PlayerGunMgr.curGun == nil then
+        return
+    end
     if localPlayer.Health <= 0 then
         return
     end
@@ -486,7 +532,9 @@ end
 ---左边按钮抬起
 function BattleGUI.BtnFireLeftUp()
     local self = BattleGUI
-    if PlayerGunMgr.curGun == nil then return end
+    if PlayerGunMgr.curGun == nil then
+        return
+    end
     self.using = false
     self.FireLeftCdImage:SetActive(false)
     PlayerGunMgr.curGun:TryPump()
@@ -495,7 +543,9 @@ end
 ---右边开火按钮按下
 function BattleGUI.BtnFireRightDown()
     local self = BattleGUI
-    if PlayerGunMgr.curGun == nil then return end
+    if PlayerGunMgr.curGun == nil then
+        return
+    end
     if localPlayer.Health <= 0 then
         return
     end
@@ -515,7 +565,9 @@ end
 ---右边开火按钮抬起
 function BattleGUI.BtnFireRightUp()
     local self = BattleGUI
-    if PlayerGunMgr.curGun == nil then return end
+    if PlayerGunMgr.curGun == nil then
+        return
+    end
     self:OnUpCon()
 end
 
@@ -527,9 +579,11 @@ function BattleGUI.BtnReloadClick(_player)
     end
     if PlayerGunMgr.curGun then
         PlayerGunMgr.curGun:LoadMagazine()
-        if PlayerGunMgr.curGun.m_isDraw and not PlayerGunMgr.curGun.m_isPumping
-                and PlayerGunMgr.curGun.m_magazine.m_canLoad
-                and not PlayerGunMgr.curGun.m_onReload then
+        if
+            PlayerGunMgr.curGun.m_isDraw and not PlayerGunMgr.curGun.m_isPumping and
+                PlayerGunMgr.curGun.m_magazine.m_canLoad and
+                not PlayerGunMgr.curGun.m_onReload
+         then
             self.ReloadCdImage.FillAmount = 1
             self.ReloadPrs:SetValue('FillAmount', 0)
             self.ReloadCdImage:SetActive(true)
@@ -569,10 +623,10 @@ function BattleGUI.RightFingerTouch(_touchInfo)
         self.simVer = scalar * self.simVer
 
         ---统一相机操作
-        CameraControl.deltaPhy = CameraControl.deltaPhy
-                + 0.7 * rate * self.simHor / self.AimTouchSize.x * self:GetSensitivity()
-        CameraControl.deltaTheta = CameraControl.deltaTheta
-                + 0.7 * rate * self.simVer / self.AimTouchSize.x * self:GetSensitivity()
+        CameraControl.deltaPhy =
+            CameraControl.deltaPhy + 0.7 * rate * self.simHor / self.AimTouchSize.x * self:GetSensitivity()
+        CameraControl.deltaTheta =
+            CameraControl.deltaTheta + 0.7 * rate * self.simVer / self.AimTouchSize.x * self:GetSensitivity()
     end
 end
 
@@ -620,8 +674,10 @@ end
 
 ---Update函数
 function BattleGUI:Update(dt)
-    if self.player.PlayerState.Value == Const.PlayerStateEnum.OnGame
-    or self.player.PlayerState.Value == Const.PlayerStateEnum.OnHall_NoMatching then
+    if
+        self.player.PlayerState.Value == Const.PlayerStateEnum.OnGame or
+            self.player.PlayerState.Value == Const.PlayerStateEnum.OnHall_NoMatching
+     then
         tt = tt + dt
         if tt > 1 then
             self:CalDistance()
@@ -680,23 +736,28 @@ end
 ---击杀玩家反馈
 function BattleGUI:KillEffect(_killed, _hitPart)
     if _hitPart == 1 then
-        self.InfoKill.KillEffect.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Kill_Death2')
+        self.InfoKill.KillEffect.Texture =
+            ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Kill_Death2')
     else
-        self.InfoKill.KillEffect.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Kill_Death')
+        self.InfoKill.KillEffect.Texture =
+            ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Kill_Death')
     end
     self.InfoKill.KillTxt.Text = 'KILL   ' .. splitString(_killed.Name, Config.GlobalConfig.NameLengthShow)
     self.killInfoNum = self.killInfoNum + 1
     self.InfoKill:SetActive(true)
-    NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'Weapon_Kill', false, { self.InfoKill.KillEffect })
-    invoke(function()
-        if self.killInfoNum == 1 then
-            self.InfoKill:SetActive(false)
-            self.killInfoNum = 0
-        else
-            self.killInfoNum = self.killInfoNum - 1
-            return
-        end
-    end, 1)
+    NetUtil.Fire_C('StartAnimationEvent', localPlayer, 'Weapon_Kill', false, {self.InfoKill.KillEffect})
+    invoke(
+        function()
+            if self.killInfoNum == 1 then
+                self.InfoKill:SetActive(false)
+                self.killInfoNum = 0
+            else
+                self.killInfoNum = self.killInfoNum - 1
+                return
+            end
+        end,
+        1
+    )
 end
 
 ---击杀信息面板
@@ -704,8 +765,10 @@ end
 local killInfoNum, stillShowUI = 1, nil
 function BattleGUI:SlidingKillInfo(_killer, _killed, _weaponId, _hitPart)
     self.SlidingKill:SetActive(true)
-    killInfoNum = killInfoNum + 1 
-    if killInfoNum >= 5 then killInfoNum = 1 end
+    killInfoNum = killInfoNum + 1
+    if killInfoNum >= 5 then
+        killInfoNum = 1
+    end
     stillShowUI = self.SlidingKill:GetChildren()
 
     local function ShowKillInfo(_type)
@@ -719,7 +782,10 @@ function BattleGUI:SlidingKillInfo(_killer, _killed, _weaponId, _hitPart)
             stillShowUI[killInfoNum].Killer.Color = enemyColor
             stillShowUI[killInfoNum].Killed.Color = selfColor
         end
-        stillShowUI[killInfoNum].GunType.Texture = ResourceManager.GetTexture('WeaponPackage/UI/BattleGUI/Icon_Fight_Info_' .. GunConfig.GunConfig[_weaponId].Name .. _type)
+        stillShowUI[killInfoNum].GunType.Texture =
+            ResourceManager.GetTexture(
+            'WeaponPackage/UI/BattleGUI/Icon_Fight_Info_' .. GunConfig.GunConfig[_weaponId].Name .. _type
+        )
 
         if _type == '' then
             stillShowUI[killInfoNum].GunType.Color = Color(255, 0, 0, 255)
@@ -841,11 +907,13 @@ function BattleGUI:ShowBeHitAngle(_angle)
     if Tweener then
         Tweener:Complete()
     end
-    Tweener = Tween:TweenProperty(self.HitRange, { Color = Color(255, 0, 0, 0) }, 2, 1)
+    Tweener = Tween:TweenProperty(self.HitRange, {Color = Color(255, 0, 0, 0)}, 2, 1)
     Tweener:Play()
-    Tweener.OnComplete:Connect(function()
-        self.HitRange:SetActive(false)
-    end)
+    Tweener.OnComplete:Connect(
+        function()
+            self.HitRange:SetActive(false)
+        end
+    )
 end
 
 function BattleGUI:WhetherReadyToRun(dt)
@@ -855,8 +923,7 @@ function BattleGUI:WhetherReadyToRun(dt)
         ---self.ImgRunHes:SetActive(false)
     end
     ---进入冲刺状态
-    if PlayerBehavior.state == 2
-            or PlayerBehavior.state == 5 then
+    if PlayerBehavior.state == 2 or PlayerBehavior.state == 5 then
         self.autoRun = true
         self.BattleJoy:SetActive(false)
         self.SimHandleSure:SetActive(true)
@@ -960,11 +1027,13 @@ function BattleGUI:ShowAngle(_angle, _node)
     if Tweener then
         Tweener:Complete()
     end
-    Tweener = Tween:TweenProperty(_node, { Color = Color(255, 255, 255, 0) }, 2, 1)
+    Tweener = Tween:TweenProperty(_node, {Color = Color(255, 255, 255, 0)}, 2, 1)
     Tweener:Play()
-    Tweener.OnComplete:Connect(function()
-        _node:SetActive(false)
-    end)
+    Tweener.OnComplete:Connect(
+        function()
+            _node:SetActive(false)
+        end
+    )
 end
 
 return BattleGUI

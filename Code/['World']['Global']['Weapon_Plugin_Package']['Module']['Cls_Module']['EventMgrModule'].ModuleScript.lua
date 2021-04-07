@@ -13,7 +13,10 @@ end
 ---事件绑定
 function EventMgr:Bind(_receiver)
     if _receiver then
-        assert(type(_receiver) == "function", "attempt to bind "..type(_receiver).." into receivers(require 'function')")
+        assert(
+            type(_receiver) == 'function',
+            'attempt to bind ' .. type(_receiver) .. " into receivers(require 'function')"
+        )
         table.insert(self.receivers, _receiver)
     end
 end
@@ -21,9 +24,11 @@ end
 function EventMgr:Trigger(...)
     local param = table.pack(...)
     for _, _receiver in ipairs(self.receivers) do
-        invoke(function()
-            _receiver(self.sender, table.unpack(param))
-        end)
+        invoke(
+            function()
+                _receiver(self.sender, table.unpack(param))
+            end
+        )
     end
 end
 

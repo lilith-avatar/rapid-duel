@@ -4,7 +4,14 @@
 local HallInteractObj = ModuleUtil.New('HallInteractObj', ClientBase)
 
 function HallInteractObj:Init()
-    self.objs = world:CreateInstance('HallObjs','HallObjs', localPlayer.Local.Independent, Vector3(0, -300, 0), EulerDegree(0, 0, 0))
+    self.objs =
+        world:CreateInstance(
+        'HallObjs',
+        'HallObjs',
+        localPlayer.Local.Independent,
+        Vector3(0, -300, 0),
+        EulerDegree(0, 0, 0)
+    )
     self:ReadObjs()
     --配置可交互物参数
     self.rangeAc = Config.Hall[1003].TargetAc
@@ -41,7 +48,14 @@ function HallInteractObj:ReadObjs()
     for _, v in pairs(self.objs:GetChildren()) do
         local type = string.split(v.Name, '_')
         if type[2] == 'Sphere' then
-            self.ranges[tonumber(type[3])] = {obj = v, nowDir = -1, velocity = 0, health = 100, isChangeDir = false, state = false}
+            self.ranges[tonumber(type[3])] = {
+                obj = v,
+                nowDir = -1,
+                velocity = 0,
+                health = 100,
+                isChangeDir = false,
+                state = false
+            }
         elseif type[2] == 'Rubber' then
             self.rubbers[tonumber(type[3])] = false
         elseif type[2] == 'RubberNew' then
@@ -116,11 +130,18 @@ function HallInteractObj:ResetObjs()
     self.isRun = false
     ---销毁原物体
     self.objs:Destroy()
-    self.objs = world:CreateInstance('HallObjs','HallObjs', localPlayer.Local.Independent, Vector3(0, -300, 0), EulerDegree(0, 0, 0))
+    self.objs =
+        world:CreateInstance(
+        'HallObjs',
+        'HallObjs',
+        localPlayer.Local.Independent,
+        Vector3(0, -300, 0),
+        EulerDegree(0, 0, 0)
+    )
 end
 
 function HallInteractObj:HitTargetCallback(_infoList)
-    local type = string.split(_infoList.HitObject.Name, "_")
+    local type = string.split(_infoList.HitObject.Name, '_')
     if type[2] == 'Light' then
         if _infoList.HitObject.PointLight.Enabled then
             _infoList.HitObject.PointLight.Enabled = false
@@ -138,47 +159,82 @@ function HallInteractObj:HitTargetCallback(_infoList)
         if self.ranges[tonumber(type[3])].health < 0 then
             self.ranges[tonumber(type[3])].state = true
             self.ranges[tonumber(type[3])].obj.IsStatic = true
-            local RangeTweener = Tween:TweenProperty(self.ranges[tonumber(type[3])].obj, {Rotation = self.targetDownAngle}, self.targetDownTime, Enum.EaseCurve.Linear)
+            local RangeTweener =
+                Tween:TweenProperty(
+                self.ranges[tonumber(type[3])].obj,
+                {Rotation = self.targetDownAngle},
+                self.targetDownTime,
+                Enum.EaseCurve.Linear
+            )
             RangeTweener:Play()
-            invoke(function()
-                RangeTweener:Reverse()
-                RangeTweener.OnComplete:Connect(function()
-                    RangeTweener:Destroy()
-                    self.ranges[tonumber(type[3])].velocity = 0
-                    self.ranges[tonumber(type[3])].health = 100
-                    self.ranges[tonumber(type[3])].state = false
-                    self.ranges[tonumber(type[3])].obj.IsStatic = false
-                end)
-            end, self.targetStayTime)
+            invoke(
+                function()
+                    RangeTweener:Reverse()
+                    RangeTweener.OnComplete:Connect(
+                        function()
+                            RangeTweener:Destroy()
+                            self.ranges[tonumber(type[3])].velocity = 0
+                            self.ranges[tonumber(type[3])].health = 100
+                            self.ranges[tonumber(type[3])].state = false
+                            self.ranges[tonumber(type[3])].obj.IsStatic = false
+                        end
+                    )
+                end,
+                self.targetStayTime
+            )
         end
     elseif type[2] == 'Rubber' and not self.rubbers[tonumber(type[3])] then
         self.rubbers[tonumber(type[3])] = true
-        local RubberScale = Tween:TweenProperty(_infoList.HitObject, {Stretch = self.rubberScale}, self.rubberScaleTime, Enum.EaseCurve.SinInOut)
-        local RubberShake = Tween:ShakeProperty(_infoList.HitObject, {'Rotation'}, self.rubberShakeTime, self.rubberShakeStrength)
+        local RubberScale =
+            Tween:TweenProperty(
+            _infoList.HitObject,
+            {Stretch = self.rubberScale},
+            self.rubberScaleTime,
+            Enum.EaseCurve.SinInOut
+        )
+        local RubberShake =
+            Tween:ShakeProperty(_infoList.HitObject, {'Rotation'}, self.rubberShakeTime, self.rubberShakeStrength)
         RubberShake:Play()
         RubberScale:Play()
-        invoke(function()
-            RubberScale:Reverse()
-            RubberScale.OnComplete:Connect(function()
-                RubberScale:Destroy()
-                RubberShake:Destroy()
-                self.rubbers[tonumber(type[3])] = false
-            end)
-        end, self.rubberShakeTime + 0.2)
+        invoke(
+            function()
+                RubberScale:Reverse()
+                RubberScale.OnComplete:Connect(
+                    function()
+                        RubberScale:Destroy()
+                        RubberShake:Destroy()
+                        self.rubbers[tonumber(type[3])] = false
+                    end
+                )
+            end,
+            self.rubberShakeTime + 0.2
+        )
     elseif type[2] == 'RubberNew' and not self.rubbersNew[tonumber(type[3])] then
         self.rubbersNew[tonumber(type[3])] = true
-        local RubberNewScale = Tween:TweenProperty(_infoList.HitObject, {Stretch = self.rubberNewScale}, self.rubberNewScaleTime, Enum.EaseCurve.SinInOut)
-        local RubberNewShake = Tween:ShakeProperty(_infoList.HitObject, {'Rotation'}, self.rubberNewShakeTime, self.rubberNewShakeStrength)
+        local RubberNewScale =
+            Tween:TweenProperty(
+            _infoList.HitObject,
+            {Stretch = self.rubberNewScale},
+            self.rubberNewScaleTime,
+            Enum.EaseCurve.SinInOut
+        )
+        local RubberNewShake =
+            Tween:ShakeProperty(_infoList.HitObject, {'Rotation'}, self.rubberNewShakeTime, self.rubberNewShakeStrength)
         RubberNewShake:Play()
         RubberNewScale:Play()
-        invoke(function()
-            RubberNewScale:Reverse()
-            RubberNewScale.OnComplete:Connect(function()
-                RubberNewScale:Destroy()
-                RubberNewShake:Destroy()
-                self.rubbersNew[tonumber(type[3])] = false
-            end)
-        end, self.rubberNewShakeTime + 0.2)
+        invoke(
+            function()
+                RubberNewScale:Reverse()
+                RubberNewScale.OnComplete:Connect(
+                    function()
+                        RubberNewScale:Destroy()
+                        RubberNewShake:Destroy()
+                        self.rubbersNew[tonumber(type[3])] = false
+                    end
+                )
+            end,
+            self.rubberNewShakeTime + 0.2
+        )
     end
 end
 

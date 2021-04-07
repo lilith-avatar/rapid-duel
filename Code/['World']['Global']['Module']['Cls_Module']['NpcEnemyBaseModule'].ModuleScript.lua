@@ -32,21 +32,36 @@ local function RandomCreateCloth(_self)
 
     --根据性别换装
     if numGender == 1 then
+        --性别
         _self.cloths.Gender = numGender
-        _self.cloths.Clothes = Config.Clothes_Male['Clothes'][numClothes].Des--衣服
-        _self.cloths.Trousers = Config.Clothes_Male['Trousers'][numTrousers].Des--裤子
-        _self.cloths.Hair = Config.Clothes_Male['Hair'][numHair].Des--头发
-        _self.cloths.Hands = Config.Clothes_Male['Hands'][numHands].Des--手
-        _self.cloths.Shoes = Config.Clothes_Male['Shoes'][numShoes].Des--鞋子
-        _self.cloths.Face = Config.Clothes_Male['Face'][numFace].Des--面部
-        _self.cloths.SkinColor = Config.Clothes_Male['SkinColor'][numSkinColor].Des--皮肤颜色
-        _self.cloths.HeadAccessory = Config.Clothes_Male['HeadAccessory'][numHeadAccessory].Des--头部装饰
-        _self.cloths.LegsAccessory = Config.Clothes_Male['LegAccessory'][numLegAccessory].Des--腿部装饰
-        _self.cloths.HandsAccessory = Config.Clothes_Male['HandsAccessory'][numHandsAccessory].Des--手部装饰
-        _self.cloths.BodyAccessory = Config.Clothes_Male['BodyAccessory'][numBodyAccessory].Des--身体装饰
-        _self.cloths.WaistAccessory = Config.Clothes_Male['WaistAccessory'][numWaistAccessory].Des--腰部装饰
-        _self.cloths.NeckAccessory = Config.Clothes_Male['NeckAccessory'][numNeckAccessory].Des--脖子装饰
-        _self.cloths.FaceAccessory = Config.Clothes_Male['FaceAccessory'][numFaceAccessory].Des--面部装饰
+        --衣服
+        _self.cloths.Clothes = Config.Clothes_Male['Clothes'][numClothes].Des
+        --裤子
+        _self.cloths.Trousers = Config.Clothes_Male['Trousers'][numTrousers].Des
+        --头发
+        _self.cloths.Hair = Config.Clothes_Male['Hair'][numHair].Des
+        --手
+        _self.cloths.Hands = Config.Clothes_Male['Hands'][numHands].Des
+        --鞋子
+        _self.cloths.Shoes = Config.Clothes_Male['Shoes'][numShoes].Des
+        --面部
+        _self.cloths.Face = Config.Clothes_Male['Face'][numFace].Des
+        --皮肤颜色
+        _self.cloths.SkinColor = Config.Clothes_Male['SkinColor'][numSkinColor].Des
+        --头部装饰
+        _self.cloths.HeadAccessory = Config.Clothes_Male['HeadAccessory'][numHeadAccessory].Des
+        --腿部装饰
+        _self.cloths.LegsAccessory = Config.Clothes_Male['LegAccessory'][numLegAccessory].Des
+        --手部装饰
+        _self.cloths.HandsAccessory = Config.Clothes_Male['HandsAccessory'][numHandsAccessory].Des
+        --身体装饰
+        _self.cloths.BodyAccessory = Config.Clothes_Male['BodyAccessory'][numBodyAccessory].Des
+        --腰部装饰
+        _self.cloths.WaistAccessory = Config.Clothes_Male['WaistAccessory'][numWaistAccessory].Des
+        --脖子装饰
+        _self.cloths.NeckAccessory = Config.Clothes_Male['NeckAccessory'][numNeckAccessory].Des
+        --面部装饰
+        _self.cloths.FaceAccessory = Config.Clothes_Male['FaceAccessory'][numFaceAccessory].Des
     else
         -- 女
         _self.cloths.Gender = numGender
@@ -100,7 +115,7 @@ end
 ---npc接受的事件
 local eventList = {
     'PlayerBeHitEvent',
-    'PlayerScoreAddEvent',
+    'PlayerScoreAddEvent'
 }
 
 ---创建NPC接受的事件对象
@@ -135,7 +150,7 @@ end
 --- 初始化
 function NpcEnemyBase:initialize(_team, _bornArea, _parent, _sceneId)
     self.config = RandomInfo()
-    self.cloths ={}
+    self.cloths = {}
     self.uuid = UUID()
     self.isUpdating = false
     self.bornPos1 = _bornArea[1]
@@ -210,22 +225,26 @@ function NpcEnemyBase:initialize(_team, _bornArea, _parent, _sceneId)
     RandomCreateCloth(self)
     CreateEvent(self)
     ---{ { v, 1001, damage, HitPartEnum.Body } }
-    self.model.C_Event.PlayerBeHitEvent:Connect(function(_msg)
-        for i, v in pairs(_msg) do
-            local origin = v[1]
-            local weaponId = v[2]
-            local damage = v[3]
-            local hitPart = v[4]
-            self:BeAttack(origin, damage, weaponId, hitPart)
+    self.model.C_Event.PlayerBeHitEvent:Connect(
+        function(_msg)
+            for i, v in pairs(_msg) do
+                local origin = v[1]
+                local weaponId = v[2]
+                local damage = v[3]
+                local hitPart = v[4]
+                self:BeAttack(origin, damage, weaponId, hitPart)
+            end
         end
-    end)
+    )
     ---给NPC死亡动画添加事件
     self.deadAniEvent = self.model.Avatar:AddAnimationEvent('Dead', 1)
-    self.deadAniEvent:Connect(function()
-        if self.model then
-            self.model.Avatar:PlayAnimation('DeadKeep', 3, 1, 0, true, true, 1)
+    self.deadAniEvent:Connect(
+        function()
+            if self.model then
+                self.model.Avatar:PlayAnimation('DeadKeep', 3, 1, 0, true, true, 1)
+            end
         end
-    end)
+    )
 
     --print('出生区域', self.bornPos1, self.bornPos2, self.model)
 end
@@ -251,7 +270,6 @@ function NpcEnemyBase:Update(dt, tt)
         ---当前不在出生区域内
         self:LeaveBornArea()
     end
-
 
     self.m_gunIns:Update(dt, tt)
 end
@@ -289,12 +307,14 @@ function NpcEnemyBase:BeAttack(_origin, _damage, _weaponId, _hitPart)
         ---伤害发起者已经死亡则不响应此次伤害
         return
     end
-    self.model:MoveTowards(Vector2(_origin.Position.X - self.model.Position.X, _origin.Position.Z - self.model.Position.Z))
+    self.model:MoveTowards(
+        Vector2(_origin.Position.X - self.model.Position.X, _origin.Position.Z - self.model.Position.Z)
+    )
     self.model.Health = self.model.Health - _damage
     if self.model.Health <= 0 then
         ---死亡
         NetUtil.Broadcast('PlayerDieEvent', _origin, self.model, _weaponId, _hitPart)
-        world.S_Event:BroadcastEvent('PlayerDieEvent',  _origin, self.model, _weaponId, _hitPart)
+        world.S_Event:BroadcastEvent('PlayerDieEvent', _origin, self.model, _weaponId, _hitPart)
         self:Die()
     end
 end
@@ -305,7 +325,10 @@ end
 function NpcEnemyBase:PerceiveEnemy(_hasView, _dis)
     local playersInRange = {}
     for i, v in pairs(FindAllPlayers()) do
-        if _dis >= (v.Position - self.model.Position).Magnitude and v.PlayerType and v.PlayerType.Value ~= self.model.PlayerType.Value then
+        if
+            _dis >= (v.Position - self.model.Position).Magnitude and v.PlayerType and
+                v.PlayerType.Value ~= self.model.PlayerType.Value
+         then
             ---在范围内
             if v.Health > 0 then
                 if not _hasView then
@@ -431,11 +454,14 @@ function NpcEnemyBase:Die()
     self.model.CharacterWidth = 0.1
     --self.headPoint:SetActive(false)
     --self.bodyPoint:SetActive(false)
-    invoke(function()
-        if self.model then
-            self:Born()
-        end
-    end, time)
+    invoke(
+        function()
+            if self.model then
+                self:Born()
+            end
+        end,
+        time
+    )
 end
 
 ---NPC的寻路方法,开始寻路时候调用,寻路中调用会直接返回
@@ -547,16 +573,22 @@ function NpcEnemyBase:Born()
     local y = Random_X2Y(self.bornPos1.y, self.bornPos2.y)
     local z = Random_X2Y(self.bornPos1.z, self.bornPos2.z)
     ---print('NPC出生', self.model.Name, x, y, z, self.model.PlayerType.Value)
-    invoke(function()
-        if self.model and not self.model:IsNull() then
-            self.model.Position = Vector3(x, y, z) + Vector3.Up * 2
-        end
-    end, 0.5)
-    invoke(function()
-        if self.model and not self.model:IsNull() then
-            self:Start()
-        end
-    end, self.updateDelay)
+    invoke(
+        function()
+            if self.model and not self.model:IsNull() then
+                self.model.Position = Vector3(x, y, z) + Vector3.Up * 2
+            end
+        end,
+        0.5
+    )
+    invoke(
+        function()
+            if self.model and not self.model:IsNull() then
+                self:Start()
+            end
+        end,
+        self.updateDelay
+    )
     self:EnterBornArea()
     self.model.Position = Vector3(x, y, z) + Vector3.Up * 2
     self.m_preTargetPoint = nil

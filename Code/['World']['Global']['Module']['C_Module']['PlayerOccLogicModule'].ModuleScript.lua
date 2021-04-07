@@ -8,9 +8,11 @@ function PlayerOccLogic:Init()
     self.speedScale = localPlayer.SpeedScale
     ---重生时间
     self.rebornTime = 3
-    localPlayer.OnSpawn:Connect(function()
-        self:Reborn()
-    end)
+    localPlayer.OnSpawn:Connect(
+        function()
+            self:Reborn()
+        end
+    )
     ---当前角色是否无敌
     self.invincible = false
     self.invincibleCover = world:CreateInstance('InvincibleCover', 'InvincibleCover', localPlayer)
@@ -22,7 +24,6 @@ end
 --- Update
 --- @param dt number delta time
 function PlayerOccLogic:Update(dt, tt)
-
 end
 
 function PlayerOccLogic:ChangeOccEventHandler(_occ)
@@ -144,7 +145,10 @@ end
 
 ---无敌状态设定
 function PlayerOccLogic:Invincible(_bool)
-    if localPlayer.PlayerState.Value == Const.PlayerStateEnum.OnGame or localPlayer.PlayerState.Value == Const.PlayerStateEnum.OnOver then
+    if
+        localPlayer.PlayerState.Value == Const.PlayerStateEnum.OnGame or
+            localPlayer.PlayerState.Value == Const.PlayerStateEnum.OnOver
+     then
         self.invincibleCover:SetActive(_bool)
         self.invincible = _bool
     end
