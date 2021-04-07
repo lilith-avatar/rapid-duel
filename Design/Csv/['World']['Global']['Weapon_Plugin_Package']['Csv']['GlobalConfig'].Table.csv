@@ -1,0 +1,25 @@
+Type,String,String,String,String
+,Key,Type,Value,Des
+1,CameraOriginOffset,Vector3,"0.3,0.3,0",相机的初始偏移
+2,Sensitivity,Float,3,鼠标灵敏度
+3,CameraDistance,Float,2.5,相机到球心的距离
+4,CameraAimOffset,Vector3,"0,-0.2,0",机瞄球心位置
+5,CameraAimDistance,Float,-0.5,机瞄到球心的距离
+6,Distance,Float,1.5,物品可拾取的范围
+7,ShoulderRayMinDistance,Float,1,肩部射线与碰撞物的最小距离
+8,EnableAssistAim,Boolean,TRUE,默认是否开启辅助瞄准
+9,AssistAimDis,Float,2,默认辅助瞄准判定距离
+10,DotAnchorMax,Float,0.5,准心偏离的最大比例
+11,JumpSpeed,Float,6,玩家默认的起跳速度
+12,AimRunSpeed,Float,2.8,玩家开镜后的移动速度
+13,RunSpeed,Float,5.5,玩家正常跑动的速度
+14,QuicklyRunSpeed,Float,6.5,玩家快跑的速度
+15,CrouchRunSpeed,Float,2.8,玩家蹲的移动速度
+16,QuicklyCrouchRunSpeed,Float,3.5,玩家蹲下快跑的移动速度
+17,AimCrouchRunSpeed,Float,2.3,开镜蹲下移动速度
+18,SensParam,Float,1.3,灵敏度系数
+19,InertialParam,Float,3,人物加速度系数
+20,HearingRange,Float,9,能够听到声音的范围
+21,VelocityRange,Float,5,能够听到声音的速度的模的下限
+22,QualityConfig,String,"|1,2,5|1,2,3,4,5","不同画质状态下本地显示的东西,value:1-弹孔 2-开火特效 3-命中特效 4-弹壳 5-音效,key:1-最低画质显示的内容 2-中画质显示的内容 3-高画质显示的内容"
+23,EnableHitCallBack,Boolean,TRUE,是否启用命中反馈(极限优化)
