@@ -1,4 +1,6 @@
----@module BakeNavMesh
+--- @module BakeNavMesh 寻路mesh
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local NavMeshCreate = {}
 --local navMeshValue = NavMeshValue or world:CreateObject('StringValueObject', 'NavMeshValue', world.Global)
 local astar = require(world.Global.Plugin.AStar.AStarModule)
