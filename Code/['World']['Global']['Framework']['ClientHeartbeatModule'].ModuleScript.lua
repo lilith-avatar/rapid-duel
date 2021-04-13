@@ -1,4 +1,4 @@
---- 游戏心跳
+--- 游戏客户端心跳
 --- @module ClientHeartbeat Heartbeat, Client-side
 --- @copyright Lilith Games, Avatar Team
 --- @author Yuancheng Zhang

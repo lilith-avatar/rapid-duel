@@ -1,4 +1,5 @@
---- @module QualityBalance 均衡画面质量的逻辑
+--- 均衡画面质量的逻辑
+--- @module QualityBalance
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
 local QualityBalance = {}
