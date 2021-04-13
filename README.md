@@ -10,7 +10,7 @@
 * 顾问：夏慧，张小金，曹东野，杨林，张远程
 * PM：张达凌，张宇
 
-## 游戏视频
+## 游戏视频（点击播放）
 [![A1002_Rapid Duel_750×750](https://user-images.githubusercontent.com/64057282/114544458-3943d280-9c8d-11eb-8693-2ad7074ea55b.jpg)](https://user-images.githubusercontent.com/64057282/114544711-93dd2e80-9c8d-11eb-8bc9-cf8850c358cf.mp4)
 
 ## 游戏内截图
