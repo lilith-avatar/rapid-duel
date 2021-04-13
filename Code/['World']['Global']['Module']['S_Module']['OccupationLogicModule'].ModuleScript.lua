@@ -1,7 +1,7 @@
 --- @module OccupationLogic 服务端更改职业的逻辑
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local OccupationLogic = ModuleUtil.New('OccupationLogic', ServerBase)
+local OccupationLogic, this = ModuleUtil.New('OccupationLogic', ServerBase)
 
 function OccupationLogic:Init()
     --- key - player  value - occ

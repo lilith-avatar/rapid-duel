@@ -1,7 +1,7 @@
 --- @module DeathmatchMode 死斗模式数据管理模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local DeathmatchMode = ModuleUtil.New('DeathmatchMode', ServerBase)
+local DeathmatchMode, this = ModuleUtil.New('DeathmatchMode', ServerBase)
 
 --- 初始化
 function DeathmatchMode:Init()

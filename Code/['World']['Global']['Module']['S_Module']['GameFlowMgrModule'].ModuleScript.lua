@@ -1,7 +1,7 @@
 --- @module GameFlowMgr 游戏流程控制单例
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local GameFlowMgr = ModuleUtil.New('GameFlowMgr', ServerBase)
+local GameFlowMgr, this = ModuleUtil.New('GameFlowMgr', ServerBase)
 
 --- 初始化
 function GameFlowMgr:Init()

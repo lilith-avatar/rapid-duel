@@ -1,7 +1,7 @@
 --- @module ScoreMgr 游戏中玩家的积分和连杀的管理模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local ScoreMgr = ModuleUtil.New('ScoreMgr', ServerBase)
+local ScoreMgr, this = ModuleUtil.New('ScoreMgr', ServerBase)
 
 --- 初始化
 function ScoreMgr:Init()

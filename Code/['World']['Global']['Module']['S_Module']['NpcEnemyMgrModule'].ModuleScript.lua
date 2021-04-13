@@ -1,7 +1,7 @@
 --- @module NpcEnemyMgr 服务端敌人NPC管理模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local NpcEnemyMgr = ModuleUtil.New('NpcEnemyMgr', ServerBase)
+local NpcEnemyMgr, this = ModuleUtil.New('NpcEnemyMgr', ServerBase)
 
 --- 初始化
 function NpcEnemyMgr:Init()

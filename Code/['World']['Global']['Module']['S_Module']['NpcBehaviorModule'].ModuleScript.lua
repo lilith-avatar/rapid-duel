@@ -1,4 +1,4 @@
---- @module NpcBehavior
+--- @module NpcBehavior NPC行为树
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
 local NpcBehavior = ModuleUtil.New('NpcBehavior', ServerBase)

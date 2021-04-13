@@ -1,7 +1,7 @@
 --- @module OccupyMode 占点玩法控制模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local OccupyMode = ModuleUtil.New('OccupyMode', ServerBase)
+local OccupyMode, this = ModuleUtil.New('OccupyMode', ServerBase)
 
 local progressStart, progressEnd = 0, 4
 

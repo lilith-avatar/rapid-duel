@@ -1,7 +1,7 @@
 --- @module BombMode 爆破模式服务器控制脚本,此模式下A阵营为进攻方,B阵营为防守方
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local BombMode = ModuleUtil.New('BombMode', ServerBase)
+local BombMode, this = ModuleUtil.New('BombMode', ServerBase)
 
 ---点上的炸弹基类
 local BombBase = class('BombBase')

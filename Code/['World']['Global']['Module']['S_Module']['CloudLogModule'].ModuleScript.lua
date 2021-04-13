@@ -1,7 +1,7 @@
 ---@module CloudLog
 ---@copyright Lilith Games, Avatar Team
 ---@author RopzTao
-local CloudLog = ModuleUtil.New('CloudLog', ServerBase)
+local CloudLog, this = ModuleUtil.New('CloudLog', ServerBase)
 local curSceneId = nil
 
 ---初始化函数

@@ -1,7 +1,7 @@
 --- @module NavMesh 服务端导航网格生成工具,会在玩法开始时候生成对应场景的导航网格
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local NavMesh = ModuleUtil.New('NavMesh', ServerBase)
+local NavMesh, this = ModuleUtil.New('NavMesh', ServerBase)
 
 --- 初始化
 function NavMesh:Init()

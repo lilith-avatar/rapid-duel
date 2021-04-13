@@ -2,7 +2,8 @@
 --- @module Config Config Load - Server Side
 --- @copyright Lilith Games, Avatar Team
 --- @author Yuancheng Zhang
-local GunCsv = ModuleUtil.New('GunCsv', ServerBase)
+local GunCsv, this = ModuleUtil.New('GunCsv', ServerBase)
+
 local gunConfig = {
     {
         name = 'GunConfig',
