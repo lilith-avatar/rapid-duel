@@ -1,3 +1,5 @@
+
+
 # Rapid Duel - Just Shoot!!!
 
 ![A1002_Rapid Duel_720P(1)](https://user-images.githubusercontent.com/64057282/114544449-3648e200-9c8d-11eb-83df-1e76383a9413.jpg)
@@ -10,6 +12,13 @@
 
 ## 游戏封面
 ![A1002_Rapid Duel_750×750(1)](https://user-images.githubusercontent.com/64057282/114544458-3943d280-9c8d-11eb-8693-2ad7074ea55b.jpg)
+
+## 游戏视频
+<video controls="controls">
+  <source type="video/mp4" src="https://user-images.githubusercontent.com/64057282/114544711-93dd2e80-9c8d-11eb-8bc9-cf8850c358cf.mp4"></source>
+  <p>Your browser does not support the video element.</p>
+</video>
+
 
 ## 游戏内截图
 ![RapidDuel游戏截图5(1)](https://user-images.githubusercontent.com/64057282/114544435-321cc480-9c8d-11eb-9de0-076b57248812.jpg)
