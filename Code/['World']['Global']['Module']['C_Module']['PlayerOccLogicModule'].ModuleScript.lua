@@ -1,7 +1,7 @@
 --- @module PlayerOccLogic
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local PlayerOccLogic = ModuleUtil.New('PlayerOccLogic', ClientBase)
+local PlayerOccLogic, this = ModuleUtil.New('PlayerOccLogic', ClientBase)
 
 function PlayerOccLogic:Init()
     ---@type FloatValueObject

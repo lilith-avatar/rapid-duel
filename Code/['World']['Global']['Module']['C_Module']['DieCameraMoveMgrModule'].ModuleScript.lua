@@ -2,7 +2,7 @@
 --- @module  DieCameraMoveMgr
 --- @copyright Lilith Games, Avatar Team
 --- @author Mane
-local DieCameraMoveMgr = ModuleUtil.New('DieCameraMoveMgr', ClientBase)
+local DieCameraMoveMgr, this = ModuleUtil.New('DieCameraMoveMgr', ClientBase)
 
 function DieCameraMoveMgr:Init()
     print('DieCameraMoveMgr:Init')

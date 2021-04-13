@@ -1,7 +1,7 @@
 --- @module HitWordUI 伤害飘字模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local HitWordUI = ModuleUtil.New('HitWordUI', ClientBase)
+local HitWordUI, this = ModuleUtil.New('HitWordUI', ClientBase)
 
 local headColor = Color(255, 0, 0, 255)
 local otherColor = Color(227, 213, 125, 255)

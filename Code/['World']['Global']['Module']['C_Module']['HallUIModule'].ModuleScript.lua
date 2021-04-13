@@ -2,7 +2,7 @@
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
 
-local HallUI = ModuleUtil.New('HallUI', ClientBase)
+local HallUI, this = ModuleUtil.New('HallUI', ClientBase)
 
 local startIcon = 'Btn_Hall_Game_Start'
 local cancelIcon = 'Btn_Hall_Game_Cancel'

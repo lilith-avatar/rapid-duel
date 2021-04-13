@@ -1,7 +1,7 @@
 --- @module PlayerControl 玩家PC上的移动控制逻辑
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local PlayerControl = ModuleUtil.New('PlayerControl', ClientBase)
+local PlayerControl, this = ModuleUtil.New('PlayerControl', ClientBase)
 
 --- PC端交互按键
 local FORWARD_KEY = Enum.KeyCode.W

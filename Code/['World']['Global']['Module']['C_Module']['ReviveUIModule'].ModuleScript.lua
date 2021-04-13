@@ -1,7 +1,7 @@
 --- @module ReviveUI 死亡后等待复活的界面
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local ReviveUI = ModuleUtil.New('ReviveUI', ClientBase)
+local ReviveUI, this = ModuleUtil.New('ReviveUI', ClientBase)
 
 --- 初始化
 function ReviveUI:Init()

@@ -1,5 +1,7 @@
----@module Notice 界面上的提示信息控制模块
-local Notice = ModuleUtil.New('Notice', ClientBase)
+--- @module Notice 界面上的提示信息控制模块
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma, An Dai, RopzTao
+local Notice, this = ModuleUtil.New('Notice', ClientBase)
 
 ---初始化
 function Notice:Init()

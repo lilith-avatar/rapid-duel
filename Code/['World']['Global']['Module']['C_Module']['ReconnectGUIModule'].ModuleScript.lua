@@ -1,7 +1,7 @@
 --- @module ReconnectGUI 客户端离线后的重连UI
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local ReconnectGUI = ModuleUtil.New('ReconnectGUI', ClientBase)
+local ReconnectGUI, this = ModuleUtil.New('ReconnectGUI', ClientBase)
 
 ---重连的加载省略号变化时间
 local pointTime = 0.5

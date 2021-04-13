@@ -1,8 +1,9 @@
 ---@module CamMgr 游戏中的运镜控制
 ---@copyright Lilith Games, Avatar Team
 ---@author RopzTao
-local CamMgr = ModuleUtil.New('GameOverUI', ClientBase)
+local CamMgr, this = ModuleUtil.New('GameOverUI', ClientBase)
 local T1 = Vector3(0, 21, 0)
+
 ---初始化函数
 function CamMgr:Init()
     self.animationOverCallbackParams = {}

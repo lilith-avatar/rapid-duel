@@ -1,7 +1,7 @@
 --- @module ChooseOccUI 选择枪械的UI控制
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local ChooseOccUI = ModuleUtil.New('ChooseOccUI', ClientBase)
+local ChooseOccUI, this = ModuleUtil.New('ChooseOccUI', ClientBase)
 
 local defaultId = 1001
 local showPnlBtnRotateSpeed = 5

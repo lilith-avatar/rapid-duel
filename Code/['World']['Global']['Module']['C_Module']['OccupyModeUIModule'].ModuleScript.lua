@@ -1,7 +1,7 @@
 --- @module OccupyModeUI 占点模式的UI控制模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local OccupyModeUI = ModuleUtil.New('OccupyModeUI', ClientBase)
+local OccupyModeUI, this = ModuleUtil.New('OccupyModeUI', ClientBase)
 
 local progressStart, progressEnd = 0, 4
 local selfColor = Color(71, 81, 224, 180)

@@ -1,7 +1,7 @@
 --- @module LoadingUI 进入游戏前的loading界面的控制
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local LoadingUI = ModuleUtil.New('LoadingUI', ClientBase)
+local LoadingUI, this = ModuleUtil.New('LoadingUI', ClientBase)
 
 local StateEnum = {
     None = -1, ---未激活状态

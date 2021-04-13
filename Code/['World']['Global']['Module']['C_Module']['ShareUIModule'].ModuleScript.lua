@@ -2,7 +2,7 @@
 --- @module ShareUI 每个游戏模式都会用的ui控制模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local ShareUI = ModuleUtil.New('ShareUI', ClientBase)
+local ShareUI, this = ModuleUtil.New('ShareUI', ClientBase)
 
 local selfColor = Color(71, 81, 224, 180)
 local enemyColor = Color(255, 0, 0, 150)

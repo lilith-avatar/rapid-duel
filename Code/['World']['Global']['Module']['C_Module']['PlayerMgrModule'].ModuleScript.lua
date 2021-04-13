@@ -1,8 +1,7 @@
---- 游戏客户端主逻辑
---- @module PlayerMgr
+--- @module PlayerMgr 游戏客户端主逻辑
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local PlayerMgr = ModuleUtil.New('PlayerMgr', ClientBase)
+local PlayerMgr, this = ModuleUtil.New('PlayerMgr', ClientBase)
 
 --- 初始化
 function PlayerMgr:Init()

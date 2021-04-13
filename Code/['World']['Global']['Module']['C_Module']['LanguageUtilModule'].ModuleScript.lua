@@ -1,5 +1,4 @@
----  语言包模块：根据游戏内语言设置返回对应的+
---- @module  LanguageUtil, Client-side
+--- @module  LanguageUtil, Client-side, 语言包模块：根据游戏内语言设置返回对应的+
 --- @copyright Lilith Games, Avatar Team
 --- @author Xiexy, Yuancheng Zhang
 local LanguageUtil, this = ModuleUtil.New('LanguageUtil', ClientBase)

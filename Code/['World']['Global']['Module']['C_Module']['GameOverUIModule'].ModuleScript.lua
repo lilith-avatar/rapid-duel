@@ -1,7 +1,7 @@
 --- @module GameOverUI 游戏结束的UI控制
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local GameOverUI = ModuleUtil.New('GameOverUI', ClientBase)
+local GameOverUI, this = ModuleUtil.New('GameOverUI', ClientBase)
 
 local StateEnum = {
     None = -1, ---未展示

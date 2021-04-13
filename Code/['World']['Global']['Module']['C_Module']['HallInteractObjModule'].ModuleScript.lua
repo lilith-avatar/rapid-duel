@@ -1,8 +1,9 @@
 --- @module HallInteractObj
 --- @copyright Lilith Games, Avatar Team
 --- @author Yuchen Wang
-local HallInteractObj = ModuleUtil.New('HallInteractObj', ClientBase)
+local HallInteractObj, this = ModuleUtil.New('HallInteractObj', ClientBase)
 
+--- 初始化
 function HallInteractObj:Init()
     self.objs =
         world:CreateInstance(

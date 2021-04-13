@@ -1,7 +1,7 @@
 --- @module IndicatorUI 界面飘字UI
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local IndicatorUI = ModuleUtil.New('IndicatorUI', ClientBase)
+local IndicatorUI, this = ModuleUtil.New('IndicatorUI', ClientBase)
 
 --- 初始化
 function IndicatorUI:Init()

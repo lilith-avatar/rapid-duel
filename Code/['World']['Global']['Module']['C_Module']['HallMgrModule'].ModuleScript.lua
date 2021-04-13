@@ -1,7 +1,7 @@
 --- @module HallMgr
 --- @copyright Lilith Games, Avatar Team
 --- @author Yuchen Wang
-local HallMgr = ModuleUtil.New('HallMgr', ClientBase)
+local HallMgr, this = ModuleUtil.New('HallMgr', ClientBase)
 
 ---范围检测的高度限制
 local RANGE_HIGH = 10

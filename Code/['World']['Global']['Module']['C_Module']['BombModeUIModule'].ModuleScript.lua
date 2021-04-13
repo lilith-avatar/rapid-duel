@@ -1,7 +1,7 @@
 --- @module BombModeUI 爆破模式客户端控制脚本
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local BombModeUI = ModuleUtil.New('BombModeUI', ClientBase)
+local BombModeUI, this = ModuleUtil.New('BombModeUI', ClientBase)
 
 local pairsByKeys = pairsByKeys
 ---炸弹未放置的颜色

@@ -1,7 +1,7 @@
 --- @module DeathmatchModeUI 死斗模式玩家端控制模块
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
-local DeathmatchModeUI = ModuleUtil.New('DeathmatchModeUI', ClientBase)
+local DeathmatchModeUI, this = ModuleUtil.New('DeathmatchModeUI', ClientBase)
 
 --- 初始化
 function DeathmatchModeUI:Init()
@@ -57,7 +57,6 @@ function DeathmatchModeUI:ConfigInit(_sceneId)
 end
 
 function DeathmatchModeUI:Reset()
-    
 end
 
 function DeathmatchModeUI:GameOverEventHandler(_info)
