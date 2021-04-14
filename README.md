@@ -4,39 +4,58 @@
 [![](https://img.shields.io/badge/-api%20plugin-9cf)](https://github.com/lilith-avatar/davinci-api-wrap)
 [![](https://img.shields.io/github/v/release/lilith-avatar/rapid-duel)](https://github.com/lilith-avatar/rapid-duel/releases)
 [![](https://img.shields.io/badge/smap-download-success)](https://github.com/lilith-avatar/rapid-duel/raw/main/Smap/Rapid_Duel.smap)
-* 中文译名：闪电决斗
-* 游戏类型：枪战TPS
-* 关键词：射击、爽快、对战
+
+:cn: 中文译名：闪电决斗
+
+:gun: 游戏类型：枪战TPS
+
+:key: 关键词：射击、爽快、对战
 
 ![A1002_Rapid Duel_720P](https://user-images.githubusercontent.com/64057282/114544449-3648e200-9c8d-11eb-83df-1e76383a9413.jpg)
 
-## 游戏介绍：                                                                        
-* 闪电决斗是一款第三人称视角的射击游戏，致力于给玩家打造最纯粹的射击对战体验。                                                                
-* 在游戏中玩家将被分为两方阵营，击杀人数率先到达指定目标的一方阵营将获得最终的游戏胜利，同时玩家需要选择不同的武器以应对不同的场景和敌人。
-* 核心体验在Rapid Duel中包括但不限于：                                                                
-  * 爆头操作的强力反馈
-  * 连续压枪的难度
-  * 不同枪的使用区别认识
-  * 对关卡内博弈关系清晰的认知和使用                                                        
+## 游戏介绍：
+:dart: 闪电决斗是一款第三人称视角的射击游戏，致力于给玩家打造最纯粹的射击对战体验。
+
+:vs: 在游戏中玩家将被分为两方阵营，击杀人数率先到达指定目标的一方阵营将获得最终的游戏胜利，同时玩家需要选择不同的武器以应对不同的场景和敌人。
+
+:white_check_mark: 核心体验在Rapid Duel中包括但不限于：
+
+* 爆头操作的强力反馈
+* 连续压枪的难度
+* 不同枪的使用区别认识
+* 对关卡内博弈关系清晰的认知和使用                                                        
 
 ## PC端操作说明
-* 移动：`W键`，`A键`，`S键`，`D键`
-* 跳跃：`Space空格键`
-* 下蹲：`C键`
-* 射击：鼠标`滚轮`点击
-* 开镜：鼠标`右键`
-* 鼠标解锁：`Alt键`
+
+:round_pushpin: 移动：`W键`，`A键`，`S键`，`D键`
+
+:star: 跳跃：`Space空格键`
+
+:see_no_evil: 下蹲：`C键`
+
+:boom: 射击：鼠标`滚轮`点击
+
+:mag: 开镜：鼠标`右键`
+
+:unlock: 鼠标解锁：`Alt键`
 
 ## 项目人员
-* 开发人员：马尚，张达凌，牟磊，杨茜晨，陶季传，戴安，王宇晨
-* 美术人员：毕志元，吴寒冰，范茵，闫虎
-* 顾问：夏慧，张小金，曹东野，杨林，张远程
-* PM：张达凌，张宇
+
+:computer: 开发人员：马尚，张达凌，牟磊，杨茜晨，陶季传，戴安，王宇晨
+
+:art: 美术人员：毕志元，吴寒冰，范茵，闫虎
+
+:hearts: 顾问：夏慧，张小金，曹东野，杨林，张远程
+
+:bar_chart: PM：张达凌，张宇
 
 ## 项目信息
-* 开发工具：达芬奇计划编辑器
-* 编辑器版本：`Version:0.9.0.48110`
-* 开发语言：`Lua 5.3`
+
+:hammer: 开发工具：达芬奇计划编辑器
+
+:computer: 编辑器版本：`Version:0.9.0.48110`
+
+:1234: 开发语言：`Lua 5.3`
 
 ## 游戏视频
 
