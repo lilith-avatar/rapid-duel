@@ -1,14 +1,14 @@
----@module BagGUI 武器背包相关功能,背包的道具只显示配件和子弹
----@copyright Lilith Games, Avatar Team
----@author Sharif Ma
+--- @module BagGUI 武器背包相关功能,背包的道具只显示配件和子弹
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local BagGUI, this = {}, nil
 
 local mainGunPos = Vector2(0.295, 0.77)
 local deputyGunPos = Vector2(0.295, 0.455)
 local miniGunPos = Vector2(0.4, 0.18)
-local deputyGunArea = { AnchorsX = Vector2(0.45, 0.73), AnchorsY = Vector2(0.35, 0.57) }
-local mainGunArea = { AnchorsX = Vector2(0.45, 0.73), AnchorsY = Vector2(0.6, 0.82) }
-local miniGunArea = { AnchorsX = Vector2(0.55, 0.74), AnchorsY = Vector2(0.18, 0.34)}
+local deputyGunArea = {AnchorsX = Vector2(0.45, 0.73), AnchorsY = Vector2(0.35, 0.57)}
+local mainGunArea = {AnchorsX = Vector2(0.45, 0.73), AnchorsY = Vector2(0.6, 0.82)}
+local miniGunArea = {AnchorsX = Vector2(0.55, 0.74), AnchorsY = Vector2(0.18, 0.34)}
 local selectTime = 0.1
 local locationName = {'MuzzleAcc', 'GripAcc', 'MagazineAcc', 'ButtAcc', 'SightAcc'}
 
@@ -93,7 +93,11 @@ local function UpdateDragItemUI(_dt)
     local anchorsYRate = mouseY / finalSizeY
     ui.AnchorsX = Vector2(anchorsXRate, anchorsXRate)
     ui.AnchorsY = Vector2(anchorsYRate, anchorsYRate)
-    if anchorsXRate > deputyGunArea.AnchorsX.X and anchorsXRate < deputyGunArea.AnchorsX.Y and anchorsYRate > deputyGunArea.AnchorsY.X and anchorsYRate < deputyGunArea.AnchorsY.Y then
+    if
+        anchorsXRate > deputyGunArea.AnchorsX.X and anchorsXRate < deputyGunArea.AnchorsX.Y and
+            anchorsYRate > deputyGunArea.AnchorsY.X and
+            anchorsYRate < deputyGunArea.AnchorsY.Y
+     then
         ---在副枪区域内
         if BagGUI.deputyGunUI then
             BagGUI.deputyGunUI.BorderColor = Color(255, 255, 255, 20)
@@ -103,7 +107,11 @@ local function UpdateDragItemUI(_dt)
             BagGUI.deputyGunUI.BorderColor = Color(255, 255, 255, 0)
         end
     end
-    if anchorsXRate > mainGunArea.AnchorsX.X and anchorsXRate < mainGunArea.AnchorsX.Y and anchorsYRate > mainGunArea.AnchorsY.X and anchorsYRate < mainGunArea.AnchorsY.Y then
+    if
+        anchorsXRate > mainGunArea.AnchorsX.X and anchorsXRate < mainGunArea.AnchorsX.Y and
+            anchorsYRate > mainGunArea.AnchorsY.X and
+            anchorsYRate < mainGunArea.AnchorsY.Y
+     then
         ---在主枪区域内
         if BagGUI.mainGunUI then
             BagGUI.mainGunUI.BorderColor = Color(255, 255, 255, 20)
@@ -124,7 +132,7 @@ local function HighLightLocation(_accId, _active)
     if not key then
         return
     end
-    if PlayerGunMgr.mainGun and GunBase.static.utility:CheckAcc2Weapon(_accId, PlayerGunMgr.mainGun.gun_Id)then
+    if PlayerGunMgr.mainGun and GunBase.static.utility:CheckAcc2Weapon(_accId, PlayerGunMgr.mainGun.gun_Id) then
         ---主武器存在并且可以装备这个配件
         BagGUI.mainGunUI[key].HighLight:SetActive(_active)
     end
@@ -157,55 +165,74 @@ local function AddUI(_table)
             icon = GunConfig.AmmoConfig[k].Icon
             ui.ItemIcon.Image = ResourceManager.GetTexture('WeaponPackage/UI/EquipmentGUI/' .. icon)
         end
-        ui.ItemButton.OnClick:Connect(function()
-            ---BagGUI:ItemClick(k)
-        end)
-        ui.ItemButton.OnDown:Connect(function()
-            BagGUI:ItemClick(k)
-            BagGUI.root.ItemShadow.ItemIcon.Image = ResourceManager.GetTexture('WeaponPackage/UI/EquipmentGUI/' .. icon)
-            BagGUI.root.ItemShadow.NumTxt.Text = ui.NumTxt.Text
-            local accId = -1
-            if type(k) == 'string' then
-                accId = PlayerGunMgr.hadAccessoryList[k].id
+        ui.ItemButton.OnClick:Connect(
+            function()
+                ---BagGUI:ItemClick(k)
             end
-            HighLightLocation(accId, true)
-            world.OnRenderStepped:Connect(UpdateDragItemUI)
-        end)
-        ui.ItemButton.OnUp:Connect(function()
-            world.OnRenderStepped:Disconnect(UpdateDragItemUI)
-            local accId = -1
-            if type(k) == 'string' then
-                accId = PlayerGunMgr.hadAccessoryList[k].id
-            end
-            HighLightLocation(accId, false)
-            BagGUI.root.ItemShadow.DownTime.Value = 0
-            BagGUI.root.ItemShadow:SetActive(false)
-            local mousePos = Input.GetMouseScreenPos()
-            local anchorsXRate = mousePos.X / BagGUI.root.Size.X
-            local anchorsYRate = mousePos.Y / BagGUI.root.Size.Y
-            if anchorsXRate < 0.45 then
-                BagGUI:DropBtnClick()
-            end
-            if anchorsXRate > deputyGunArea.AnchorsX.X and anchorsXRate < deputyGunArea.AnchorsX.Y and anchorsYRate > deputyGunArea.AnchorsY.X and anchorsYRate < deputyGunArea.AnchorsY.Y then
-                ---在副枪区域内
-                if BagGUI.deputyGunUI then
-                    BagGUI.deputyGunUI.BorderColor = Color(255, 255, 255, 0)
-                    PlayerGunMgr:TryEquipAccessoryToWeapon(PlayerGunMgr.hadAccessoryList[k], PlayerGunMgr.deputyGun)
+        )
+        ui.ItemButton.OnDown:Connect(
+            function()
+                BagGUI:ItemClick(k)
+                BagGUI.root.ItemShadow.ItemIcon.Image =
+                    ResourceManager.GetTexture('WeaponPackage/UI/EquipmentGUI/' .. icon)
+                BagGUI.root.ItemShadow.NumTxt.Text = ui.NumTxt.Text
+                local accId = -1
+                if type(k) == 'string' then
+                    accId = PlayerGunMgr.hadAccessoryList[k].id
                 end
-            elseif anchorsXRate > mainGunArea.AnchorsX.X and anchorsXRate < mainGunArea.AnchorsX.Y and anchorsYRate > mainGunArea.AnchorsY.X and anchorsYRate < mainGunArea.AnchorsY.Y then
-                ---在主枪区域内
-                if BagGUI.mainGunUI then
-                    BagGUI.mainGunUI.BorderColor = Color(255, 255, 255, 0)
-                    PlayerGunMgr:TryEquipAccessoryToWeapon(PlayerGunMgr.hadAccessoryList[k], PlayerGunMgr.mainGun)
+                HighLightLocation(accId, true)
+                world.OnRenderStepped:Connect(UpdateDragItemUI)
+            end
+        )
+        ui.ItemButton.OnUp:Connect(
+            function()
+                world.OnRenderStepped:Disconnect(UpdateDragItemUI)
+                local accId = -1
+                if type(k) == 'string' then
+                    accId = PlayerGunMgr.hadAccessoryList[k].id
                 end
-            elseif anchorsXRate > miniGunArea.AnchorsX.X and anchorsXRate < miniGunArea.AnchorsX.Y and anchorsYRate > miniGunArea.AnchorsY.X and anchorsYRate < miniGunArea.AnchorsY.Y then
-                ---在手枪区域内
-                if BagGUI.miniGunUI then
-                    BagGUI.miniGunUI.BorderColor = Color(255, 255, 255, 0)
-                    PlayerGunMgr:TryEquipAccessoryToWeapon(PlayerGunMgr.hadAccessoryList[k], PlayerGunMgr.miniGunUI)
+                HighLightLocation(accId, false)
+                BagGUI.root.ItemShadow.DownTime.Value = 0
+                BagGUI.root.ItemShadow:SetActive(false)
+                local mousePos = Input.GetMouseScreenPos()
+                local anchorsXRate = mousePos.X / BagGUI.root.Size.X
+                local anchorsYRate = mousePos.Y / BagGUI.root.Size.Y
+                if anchorsXRate < 0.45 then
+                    BagGUI:DropBtnClick()
+                end
+                if
+                    anchorsXRate > deputyGunArea.AnchorsX.X and anchorsXRate < deputyGunArea.AnchorsX.Y and
+                        anchorsYRate > deputyGunArea.AnchorsY.X and
+                        anchorsYRate < deputyGunArea.AnchorsY.Y
+                 then
+                    ---在副枪区域内
+                    if BagGUI.deputyGunUI then
+                        BagGUI.deputyGunUI.BorderColor = Color(255, 255, 255, 0)
+                        PlayerGunMgr:TryEquipAccessoryToWeapon(PlayerGunMgr.hadAccessoryList[k], PlayerGunMgr.deputyGun)
+                    end
+                elseif
+                    anchorsXRate > mainGunArea.AnchorsX.X and anchorsXRate < mainGunArea.AnchorsX.Y and
+                        anchorsYRate > mainGunArea.AnchorsY.X and
+                        anchorsYRate < mainGunArea.AnchorsY.Y
+                 then
+                    ---在主枪区域内
+                    if BagGUI.mainGunUI then
+                        BagGUI.mainGunUI.BorderColor = Color(255, 255, 255, 0)
+                        PlayerGunMgr:TryEquipAccessoryToWeapon(PlayerGunMgr.hadAccessoryList[k], PlayerGunMgr.mainGun)
+                    end
+                elseif
+                    anchorsXRate > miniGunArea.AnchorsX.X and anchorsXRate < miniGunArea.AnchorsX.Y and
+                        anchorsYRate > miniGunArea.AnchorsY.X and
+                        anchorsYRate < miniGunArea.AnchorsY.Y
+                 then
+                    ---在手枪区域内
+                    if BagGUI.miniGunUI then
+                        BagGUI.miniGunUI.BorderColor = Color(255, 255, 255, 0)
+                        PlayerGunMgr:TryEquipAccessoryToWeapon(PlayerGunMgr.hadAccessoryList[k], PlayerGunMgr.miniGunUI)
+                    end
                 end
             end
-        end)
+        )
         BagGUI.currentUIList[k] = ui
         needUpdate = true
     end
@@ -253,28 +280,42 @@ function BagGUI:Init()
     self.deputyGunUI = nil
     self.miniGunUI = nil
 
-    self.closeArea.OnClick:Connect(function()
-        self:CloseBtnClick()
-    end)
-    self.closeBtn.OnClick:Connect(function()
-        self:CloseBtnClick()
-    end)
-    self.dropBtn.OnClick:Connect(function()
-        self:DropBtnClick()
-    end)
-    self.useBtn.OnClick:Connect(function()
-        self:UseBtnClick()
-    end)
+    self.closeArea.OnClick:Connect(
+        function()
+            self:CloseBtnClick()
+        end
+    )
+    self.closeBtn.OnClick:Connect(
+        function()
+            self:CloseBtnClick()
+        end
+    )
+    self.dropBtn.OnClick:Connect(
+        function()
+            self:DropBtnClick()
+        end
+    )
+    self.useBtn.OnClick:Connect(
+        function()
+            self:UseBtnClick()
+        end
+    )
 
-    self.figureTouch.OnPanBegin:Connect(function(_pos)
-        self.figurePos = _pos
-    end)
-    self.figureTouch.OnPanStay:Connect(function(_pos)
-        self.figurePos = _pos
-    end)
-    self.figureTouch.OnPanEnd:Connect(function(_pos)
-        self.figurePos = _pos
-    end)
+    self.figureTouch.OnPanBegin:Connect(
+        function(_pos)
+            self.figurePos = _pos
+        end
+    )
+    self.figureTouch.OnPanStay:Connect(
+        function(_pos)
+            self.figurePos = _pos
+        end
+    )
+    self.figureTouch.OnPanEnd:Connect(
+        function(_pos)
+            self.figurePos = _pos
+        end
+    )
 end
 
 function BagGUI:InitListeners()
@@ -361,7 +402,8 @@ function BagGUI:BSDiff()
             moreThanZeroAccList[k] = v
         end
     end
-    local table1_more, table2_more = CompareTwoTable(BagGUI.currentUIList, MergeTables(moreThanZeroAccList, moreThanZeroAmmoList))
+    local table1_more, table2_more =
+        CompareTwoTable(BagGUI.currentUIList, MergeTables(moreThanZeroAccList, moreThanZeroAmmoList))
     DeleteUI(table1_more)
     AddUI(table2_more)
 end
@@ -408,7 +450,8 @@ function BagGUI:EquipWeapon(_targetPosition)
         ui = world:CreateInstance('WeaponMain', 'WeaponMain', self.root.Background)
         self.mainGunUI = ui
         ui.EquippedNameTxt.Text = PlayerGunMgr.mainGun.name
-        ui.EquippedGunBtn.Image = ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. PlayerGunMgr.mainGun.icon)
+        ui.EquippedGunBtn.Image =
+            ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. PlayerGunMgr.mainGun.icon)
         ui.AnchorsX = Vector2(mainGunPos.X, mainGunPos.X)
         ui.AnchorsY = Vector2(mainGunPos.Y, mainGunPos.Y)
         if PlayerGunMgr.curGun == PlayerGunMgr.mainGun then
@@ -419,7 +462,8 @@ function BagGUI:EquipWeapon(_targetPosition)
         ui = world:CreateInstance('WeaponMain', 'WeaponMain', self.root.Background)
         self.deputyGunUI = ui
         ui.EquippedNameTxt.Text = PlayerGunMgr.deputyGun.name
-        ui.EquippedGunBtn.Image = ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. PlayerGunMgr.deputyGun.icon)
+        ui.EquippedGunBtn.Image =
+            ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. PlayerGunMgr.deputyGun.icon)
         ui.AnchorsX = Vector2(deputyGunPos.X, deputyGunPos.X)
         ui.AnchorsY = Vector2(deputyGunPos.Y, deputyGunPos.Y)
         if PlayerGunMgr.curGun == PlayerGunMgr.deputyGun then
@@ -430,7 +474,8 @@ function BagGUI:EquipWeapon(_targetPosition)
         ui = world:CreateInstance('WeaponSec', 'WeaponSec', self.root.Background)
         self.miniGunUI = ui
         ui.EquippedNameTxt.Text = PlayerGunMgr.miniGun.name
-        ui.EquippedGunBtn.Image = ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. PlayerGunMgr.miniGun.icon)
+        ui.EquippedGunBtn.Image =
+            ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. PlayerGunMgr.miniGun.icon)
         ui.AnchorsX = Vector2(miniGunPos.X, miniGunPos.X)
         ui.AnchorsY = Vector2(miniGunPos.Y, miniGunPos.Y)
         if PlayerGunMgr.curGun == PlayerGunMgr.miniGun then
@@ -446,36 +491,48 @@ function BagGUI:EquipWeapon(_targetPosition)
             ui[key]:SetActive(true)
         end
     end
-    ui.EquippedGunBtn.OnDown:Connect(function()
-        world.OnRenderStepped:Connect(UpdateDragUI)
-    end)
-    ui.EquippedGunBtn.OnUp:Connect(function()
-        world.OnRenderStepped:Disconnect(UpdateDragUI)
-        self.root.WeaponShadow:SetActive(false)
-        local mousePos = Input.GetMouseScreenPos()
-        local anchorsXRate = mousePos.X / self.root.Size.X
-        local anchorsYRate = mousePos.Y / self.root.Size.Y
-        if anchorsXRate < 0.45 then
-            ---在丢弃区域内
+    ui.EquippedGunBtn.OnDown:Connect(
+        function()
+            world.OnRenderStepped:Connect(UpdateDragUI)
+        end
+    )
+    ui.EquippedGunBtn.OnUp:Connect(
+        function()
+            world.OnRenderStepped:Disconnect(UpdateDragUI)
+            self.root.WeaponShadow:SetActive(false)
+            local mousePos = Input.GetMouseScreenPos()
+            local anchorsXRate = mousePos.X / self.root.Size.X
+            local anchorsYRate = mousePos.Y / self.root.Size.Y
+            if anchorsXRate < 0.45 then
+                ---在丢弃区域内
+                if ui == self.mainGunUI then
+                    PlayerGunMgr:DropWeapon(PlayerGunMgr.mainGun)
+                elseif ui == self.deputyGunUI then
+                    PlayerGunMgr:DropWeapon(PlayerGunMgr.deputyGun)
+                elseif ui == self.miniGunUI then
+                    PlayerGunMgr:DropWeapon(PlayerGunMgr.miniGun)
+                end
+            end
             if ui == self.mainGunUI then
-                PlayerGunMgr:DropWeapon(PlayerGunMgr.mainGun)
-            elseif ui == self.deputyGunUI then
-                PlayerGunMgr:DropWeapon(PlayerGunMgr.deputyGun)
-            elseif ui == self.miniGunUI then
-                PlayerGunMgr:DropWeapon(PlayerGunMgr.miniGun)
+                if
+                    anchorsXRate > deputyGunArea.AnchorsX.X and anchorsXRate < deputyGunArea.AnchorsX.Y and
+                        anchorsYRate > deputyGunArea.AnchorsY.X and
+                        anchorsYRate < deputyGunArea.AnchorsY.Y
+                 then
+                    self:Main_DeputyWeapon()
+                end
+            end
+            if ui == self.deputyGunUI then
+                if
+                    anchorsXRate > mainGunArea.AnchorsX.X and anchorsXRate < mainGunArea.AnchorsX.Y and
+                        anchorsYRate > mainGunArea.AnchorsY.X and
+                        anchorsYRate < mainGunArea.AnchorsY.Y
+                 then
+                    self:Main_DeputyWeapon()
+                end
             end
         end
-        if ui == self.mainGunUI then
-            if anchorsXRate > deputyGunArea.AnchorsX.X and anchorsXRate < deputyGunArea.AnchorsX.Y and anchorsYRate > deputyGunArea.AnchorsY.X and anchorsYRate < deputyGunArea.AnchorsY.Y then
-                self:Main_DeputyWeapon()
-            end
-        end
-        if ui == self.deputyGunUI then
-            if anchorsXRate > mainGunArea.AnchorsX.X and anchorsXRate < mainGunArea.AnchorsX.Y and anchorsYRate > mainGunArea.AnchorsY.X and anchorsYRate < mainGunArea.AnchorsY.Y then
-                self:Main_DeputyWeapon()
-            end
-        end
-    end)
+    )
 end
 
 ---丢弃一把枪
@@ -528,9 +585,11 @@ function BagGUI:EquipAccessory(_accCls, _weaponCls)
     end
     accUI.Acc:SetActive(true)
     accUI.Acc.Image = ResourceManager.GetTexture('WeaponPackage/UI/BagPackGUI/' .. icon)
-    accUI.Acc.OnClick:Connect(function()
-        PlayerGunMgr:TryUnEquipAccessoryFromWeapon(PlayerGunMgr.hadAccessoryList[accUUID], _weaponCls)
-    end)
+    accUI.Acc.OnClick:Connect(
+        function()
+            PlayerGunMgr:TryUnEquipAccessoryFromWeapon(PlayerGunMgr.hadAccessoryList[accUUID], _weaponCls)
+        end
+    )
 end
 
 ---从一把枪上将配件卸载

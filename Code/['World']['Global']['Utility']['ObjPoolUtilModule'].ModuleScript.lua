@@ -1,5 +1,5 @@
----对象池工具模块
----@module ObjPoolUtil
+--- 对象池工具模块
+--- @module ObjPoolUtil
 --- @copyright Lilith Games, Avatar Team
 --- @author Yen Yuan
 local ObjPoolUtil = class('ObjPoolUtil')

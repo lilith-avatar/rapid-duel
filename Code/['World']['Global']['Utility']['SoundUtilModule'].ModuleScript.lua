@@ -1,7 +1,7 @@
 --- 音效播放模块
----@module SoundUtil
----@copyright Lilith Games, Avatar Team
----@author Sharif Ma
+--- @module SoundUtil
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local SoundUtil = {}
 
 function SoundUtil:Init()
@@ -16,7 +16,7 @@ end
 function SoundUtil:PlaySound(_ID, _SoundSourceObj)
     local Info, _Duration
     local pos = _SoundSourceObj and _SoundSourceObj.Position or nil
-    local targetPlayer = _SoundSourceObj and world:FindPlayers() or { localPlayer }
+    local targetPlayer = _SoundSourceObj and world:FindPlayers() or {localPlayer}
     --_SoundSourceObj = _SoundSourceObj or world.CurrentCamera
     Info = self.Table_Sound[_ID]
     assert(Info, '[SoundUtil] 表中不存在该ID的音效')
@@ -33,10 +33,10 @@ function SoundUtil:PlaySound(_ID, _SoundSourceObj)
     end
     local filePath = 'Audio/' .. Info.FileName
     for i, v in pairs(targetPlayer) do
-        NetUtil.Fire_C('WorldSoundEvent', v, filePath, { Position = pos, Volume = Info.Volume, Loop = Info.IsLoop})
+        NetUtil.Fire_C('WorldSoundEvent', v, filePath, {Position = pos, Volume = Info.Volume, Loop = Info.IsLoop})
     end
 
---[[
+    --[[
     local Audio = world:CreateObject('AudioSource', 'Audio_' .. Info.FileName, _SoundSourceObj)
     Audio.LocalPosition = Vector3.Zero
     Audio.SoundClip = ResourceManager.GetSoundClip('Audio/' .. Info.FileName)
@@ -48,7 +48,6 @@ function SoundUtil:PlaySound(_ID, _SoundSourceObj)
     Audio:Play()
     table.insert(self.SoundPlaying, _ID)
     _Duration = _Duration or 1]]
-
     invoke(
         function()
             for k, v in pairs(self.SoundPlaying) do
@@ -66,7 +65,7 @@ function SoundUtil:StopSound(_ID, _isLocal)
     local Info = self.Table_Sound[_ID]
     assert(Info, '[SoundUtil] 表中不存在该ID的音效')
     local filePath = 'Audio/' .. Info.FileName
-    local targetPlayer = _isLocal and { localPlayer } or world:FindPlayers()
+    local targetPlayer = _isLocal and {localPlayer} or world:FindPlayers()
     for i, v in pairs(targetPlayer) do
         NetUtil.Fire_C('StopSoundEvent', v, filePath)
     end
