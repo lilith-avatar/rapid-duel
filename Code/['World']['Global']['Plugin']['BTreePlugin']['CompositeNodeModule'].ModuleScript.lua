@@ -1,3 +1,6 @@
+--- @module Composite Node 行为树复合节点
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local CompositeNode = {}
 
 function CompositeNode:Init()

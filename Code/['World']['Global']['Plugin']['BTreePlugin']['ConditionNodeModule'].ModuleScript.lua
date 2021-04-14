@@ -1,3 +1,6 @@
+--- @module Condition Node 行为树条件节点
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local ConditionNode = {}
 
 function ConditionNode:Init()

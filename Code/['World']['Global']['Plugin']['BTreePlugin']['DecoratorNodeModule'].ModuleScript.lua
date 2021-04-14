@@ -1,3 +1,6 @@
+--- @module Decorator Node 行为树装饰节点
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local DecoratorNode = {}
 
 function DecoratorNode:Init()

@@ -1,3 +1,7 @@
+--- @module Custom Node 行为树自定义节点
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
+
 local CustomNode = {}
 function CustomNode:Init()
     local statusCheck = B3.Class('StatusCheck', B3.Condition)

@@ -1,3 +1,6 @@
+--- @module B3
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 B3 = {
     VERSION = '0.2.0',
     --Returning status

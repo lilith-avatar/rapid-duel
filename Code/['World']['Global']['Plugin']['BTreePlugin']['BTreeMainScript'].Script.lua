@@ -1,3 +1,6 @@
+--- @script Behavior tree start script 行为树启动脚本
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 _G.JSON = require(Plugin.BTreePlugin.JsonModule)
 _G.B3 = require(Plugin.BTreePlugin.B3Module)
 _G.ActionNode = require(Plugin.BTreePlugin.ActionNodeModule)

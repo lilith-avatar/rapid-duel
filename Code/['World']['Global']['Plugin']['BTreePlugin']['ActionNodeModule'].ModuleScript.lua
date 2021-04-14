@@ -1,3 +1,6 @@
+--- @module Action Node 行为树行动节点
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local ActionNode = {}
 
 function ActionNode:Init()
