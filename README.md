@@ -38,7 +38,10 @@
 * 编辑器版本：`Version:0.9.0.48110`
 * 开发语言：`Lua 5.3`
 
-## 游戏视频（点击图片播放）
+## 游戏视频
+
+[:point_down:点击下方图片播放](https://user-images.githubusercontent.com/64057282/114544711-93dd2e80-9c8d-11eb-8bc9-cf8850c358cf.mp4)
+
 [![A1002_Rapid Duel_750×750](https://user-images.githubusercontent.com/64057282/114544458-3943d280-9c8d-11eb-8693-2ad7074ea55b.jpg)](https://user-images.githubusercontent.com/64057282/114544711-93dd2e80-9c8d-11eb-8bc9-cf8850c358cf.mp4)
 
 ## 游戏内截图
