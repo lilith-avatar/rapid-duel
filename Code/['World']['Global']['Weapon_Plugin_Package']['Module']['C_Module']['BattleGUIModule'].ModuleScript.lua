@@ -1,6 +1,6 @@
----@module BattleGUI
----@copyright Lilith Games, Avatar Team
----@author RopzTao
+--- @module BattleGUI 枪械模块：战斗UI
+--- @copyright Lilith Games, Avatar Team
+--- @author RopzTao
 local BattleGUI, this = {}, nil
 
 local OffPos = {0, 60, 120, 180}

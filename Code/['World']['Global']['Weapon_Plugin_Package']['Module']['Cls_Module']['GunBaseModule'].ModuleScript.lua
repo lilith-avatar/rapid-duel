@@ -1,4 +1,4 @@
----@module GunBase 所有枪支的基类
+---@module GunBase 枪械模块：所有枪支的基类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local GunBase = class('GunBase')

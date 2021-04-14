@@ -1,5 +1,5 @@
---- 枪械模块全局脚本
---- 用于枪械模块自身的属性的初始化
+--- @script 枪械模块全局脚本
+--- @see 用于枪械模块自身的属性的初始化
 
 ---插件的根节点
 _G.PluginRoot = world.Global.Weapon_Plugin_Package

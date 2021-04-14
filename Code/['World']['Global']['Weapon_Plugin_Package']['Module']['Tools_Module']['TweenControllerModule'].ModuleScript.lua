@@ -1,4 +1,4 @@
----@module TweenController --控制某个变量随时间变化的协程类
+---@module TweenController 枪械工具模块：控制某个变量随时间变化的协程类
 ---@copyright Lilith Games, Avatar Team
 ---@author An Dai
 local TweenController = class('TweenController')

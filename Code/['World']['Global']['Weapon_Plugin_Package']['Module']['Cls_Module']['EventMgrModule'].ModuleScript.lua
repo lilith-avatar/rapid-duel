@@ -1,6 +1,6 @@
----@module EventMgr
----@copyright Lilith Games, Avatar Team
----@author Sharif Ma
+--- @module EventMgr 枪械模块：事件管理
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local EventMgr = class('EventMgr')
 
 ---EventMgr类的构造函数

@@ -1,4 +1,4 @@
---- @module DataMgr
+--- @module DataMgr 枪械模块：数据管理
 --- @copyright Lilith Games, Avatar Team
 --- @author RopzTao
 local DataMgr, this =

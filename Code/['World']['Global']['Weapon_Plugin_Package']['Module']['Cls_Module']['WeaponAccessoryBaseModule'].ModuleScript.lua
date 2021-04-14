@@ -1,4 +1,4 @@
----@module WeaponAccessoryBase 枪械配件基类
+---@module WeaponAccessoryBase 枪械模块：枪械配件基类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local WeaponAccessoryBase = class('WeaponAccessoryBase')

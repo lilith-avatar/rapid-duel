@@ -1,6 +1,6 @@
----@module InterGUI
----@copyright Lilith Games, Avatar Team
----@author Sharif Ma
+--- @module InterGUI 枪械模块：内部UI
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local InterGUI, this = {}, nil
 local _SAY_ = 0.81
 

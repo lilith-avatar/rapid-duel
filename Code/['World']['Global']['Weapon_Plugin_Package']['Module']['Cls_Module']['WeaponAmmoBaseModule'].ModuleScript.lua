@@ -1,4 +1,4 @@
----@module WeaponAmmoBase 枪械子弹基类
+---@module WeaponAmmoBase 枪械模块：枪械子弹基类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local WeaponAmmoBase = class('WeaponAmmoBase')

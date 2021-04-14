@@ -1,4 +1,4 @@
----@module GunsCollection 所有的枪械子类的集合
+---@module GunsCollection 枪械模块：所有的枪械子类的集合
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local GunsCollection = {}

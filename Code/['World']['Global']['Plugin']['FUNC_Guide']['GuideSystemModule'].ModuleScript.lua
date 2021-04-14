@@ -1,7 +1,7 @@
----引导系统
----@module GuideSystem
----@copyright Lilith Games, Avatar Team
----@author Sid Zhang, Yuancheng Zhang
+--- 引导系统
+--- @module GuideSystem
+--- @copyright Lilith Games, Avatar Team
+--- @author Sid Zhang, Yuancheng Zhang
 
 local GuideSystem = {}
 

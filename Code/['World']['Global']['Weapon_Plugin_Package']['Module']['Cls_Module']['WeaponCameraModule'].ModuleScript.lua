@@ -1,4 +1,4 @@
----@module WeaponCamera
+---@module WeaponCamera 枪械模块：武器镜头基类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma, An Dai
 local WeaponCamera = class('WeaponCamera')

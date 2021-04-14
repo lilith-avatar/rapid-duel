@@ -1,4 +1,4 @@
----@module GunSound
+---@module GunSound 枪械模块：枪声基类
 ---@copyright Lilith Games, Avatar Team
 ---@author RopzTao
 local GunSound = class('GunSound')

@@ -1,4 +1,4 @@
---- @module CacheDestroyMgr
+--- @module CacheDestroyMgr 枪械模块：缓存管理
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
 local CacheDestroyMgr = {}

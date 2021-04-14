@@ -1,4 +1,4 @@
----@module GunMagazine
+---@module GunMagazine 枪械模块：弹夹基类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local GunMagazine = class('GunMagazine')

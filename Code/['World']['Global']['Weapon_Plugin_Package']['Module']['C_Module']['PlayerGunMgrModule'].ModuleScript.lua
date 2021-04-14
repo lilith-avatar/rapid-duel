@@ -1,6 +1,6 @@
----@module PlayerGunMgr 玩家端的枪械管理模块.处理玩家的输入等
----@copyright Lilith Games, Avatar Team
----@author Sharif Ma
+--- @module PlayerGunMgr 枪械模块：玩家端的枪械管理模块.处理玩家的输入等
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local PlayerGunMgr, this =
     {
         --- @type table 本玩家的数据

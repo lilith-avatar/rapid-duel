@@ -1,4 +1,4 @@
----@module GunUtility 枪械模块自身的工具函数
+---@module GunUtility 枪械模块：枪械模块自身的工具函数
 ---@copyright Lilith Games, Avatar Team
 ---@author RopzTao
 local GunUtility = class('GunUtility')

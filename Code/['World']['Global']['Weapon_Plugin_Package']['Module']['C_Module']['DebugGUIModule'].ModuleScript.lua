@@ -1,4 +1,4 @@
---- @module DebugGUI 开发工具面板
+--- @module DebugGUI 枪械模块：开发工具面板
 --- @copyright Lilith Games, Avatar Team
 --- @author Sharif Ma
 local DebugGUI = {}

@@ -1,4 +1,4 @@
----@module GunRecoil
+---@module GunRecoil 枪械模块：回弹基类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma, An Dai
 local GunRecoil = class('GunRecoil')

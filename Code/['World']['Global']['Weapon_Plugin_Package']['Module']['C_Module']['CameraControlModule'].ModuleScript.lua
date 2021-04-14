@@ -1,6 +1,6 @@
----@module CameraControl
----@copyright Lilith Games, Avatar Team
----@author An Dai
+--- @module CameraControl，枪械模块：相机控制
+--- @copyright Lilith Games, Avatar Team
+--- @author An Dai
 local CameraControl = {}
 
 function CameraControl:Init()

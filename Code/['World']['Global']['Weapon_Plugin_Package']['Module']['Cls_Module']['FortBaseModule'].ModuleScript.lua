@@ -1,4 +1,4 @@
----@module FortBase 炮台控制类
+---@module FortBase 枪械模块：炮台控制类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local FortBase = class('FortBase')

@@ -1,6 +1,6 @@
----@module UnitMgr
----@copyright Lilith Games, Avatar Team
----@author Sharif Ma
+--- @module UnitMgr 枪械模块：单元管理
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma
 local UnitMgr, this = {}, nil
 
 ---模块初始化函数

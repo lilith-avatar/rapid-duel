@@ -1,4 +1,4 @@
----@module WeaponGUI 枪械的瞄准ui管理类
+---@module WeaponGUI 枪械模块：枪械的瞄准ui管理类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma, RopzTao, An Dai
 local WeaponGUI = class('WeaponGUI')

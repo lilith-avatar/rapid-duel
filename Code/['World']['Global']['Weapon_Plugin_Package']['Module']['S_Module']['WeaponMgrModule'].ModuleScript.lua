@@ -1,4 +1,4 @@
----@module WeaponMgr 服务端的枪械管理模块
+---@module WeaponMgr 枪械模块：服务端的枪械管理模块
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local WeaponMgr, this = {}, nil

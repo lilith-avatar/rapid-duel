@@ -1,6 +1,6 @@
----@module PlayerBehavior
----@copyright Lilith Games, Avatar Team
----@author RopzTao
+--- @module PlayerBehavior 枪械模块：玩家行为树
+--- @copyright Lilith Games, Avatar Team
+--- @author RopzTao
 local PlayerBehavior, this =
     {
         playerActionStateFunc = {} ---状态触发表

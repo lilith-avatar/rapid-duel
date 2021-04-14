@@ -1,6 +1,6 @@
----@module DragUI
----@copyright Lilith Games, Avatar Team
----@author RopzTao
+--- @module DragUI 枪械模块：拖动UI
+--- @copyright Lilith Games, Avatar Team
+--- @author RopzTao
 local DragUI, this = {}, nil
 
 ---屏幕参数

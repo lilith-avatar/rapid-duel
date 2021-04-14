@@ -1,4 +1,4 @@
----@module GunAnimation 玩家的动画控制类
+---@module GunAnimation 枪械模块：玩家的动画控制类
 ---@copyright Lilith Games, Avatar Team
 ---@author Sharif Ma
 local GunAnimation = class('GunAnimation')

@@ -1,6 +1,6 @@
----@module SettingGUI
----@copyright Lilith Games, Avatar Team
----@author RopzTao
+--- @module SettingGUI 枪械模块：设置UI
+--- @copyright Lilith Games, Avatar Team
+--- @author RopzTao
 local SettingGUI, this = {}, nil
 
 ---屏幕参数

@@ -1,6 +1,6 @@
----@module BottomGUI
----@copyright Lilith Games, Avatar Team
----@author Sharif Ma,RopzTao
+--- @module BottomGUI，枪械模块：底部UI
+--- @copyright Lilith Games, Avatar Team
+--- @author Sharif Ma,RopzTao
 local BottomGUI, this = {}, nil
 
 local mainGunPos, deputyGunPos, shined, tt = Vector2(0.315, 0.5), Vector2(0.587, 0.5), true, 0
