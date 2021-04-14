@@ -1,4 +1,9 @@
 # Rapid Duel - Just Shoot!!!
+[![](https://img.shields.io/badge/-DaVinci-MediumPurple)](http://api.projectdavinci.com/)
+[![](https://img.shields.io/badge/project-Ava-ff69b4)](https://github.com/lilith-avatar/avatar-ava/projects/1)
+[![](https://img.shields.io/badge/-api%20plugin-9cf)](https://github.com/lilith-avatar/davinci-api-wrap)
+[![](https://img.shields.io/github/v/release/lilith-avatar/rapid-duel)](https://github.com/lilith-avatar/rapid-duel/releases)
+[![](https://img.shields.io/badge/smap-download-success)](https://github.com/lilith-avatar/rapid-duel/raw/main/Smap/Rapid_Duel.smap)
 * 中文译名：闪电决斗
 * 游戏类型：枪战TPS
 * 关键词：射击、爽快、对战
