@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/project-Ava-ff69b4)](https://github.com/lilith-avatar/avatar-ava/projects/1)
 [![](https://img.shields.io/badge/-api%20plugin-9cf)](https://github.com/lilith-avatar/davinci-api-wrap)
 [![](https://img.shields.io/github/v/release/lilith-avatar/rapid-duel)](https://github.com/lilith-avatar/rapid-duel/releases)
-[![](https://img.shields.io/badge/smap-download-success)](https://github.com/lilith-avatar/rapid-duel/releases/download/v1.0.2/Rapid_Duel.smap)
+[![](https://img.shields.io/badge/smap-download-success)](https://github.com/lilith-avatar/rapid-duel/releases/download/v1.0.3/Rapid_Duel.smap)
 
 :cn: 中文译名：闪电决斗
 
