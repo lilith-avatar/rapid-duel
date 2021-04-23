@@ -11,6 +11,8 @@
 
 :key: 关键词：射击、爽快、对战
 
+:arrow_double_down: 游戏地图：[下载`smap`](https://github.com/lilith-avatar/rapid-duel/releases/download/v1.0.3/Rapid_Duel.smap)
+
 ![A1002_Rapid Duel_720P](https://user-images.githubusercontent.com/64057282/114544449-3648e200-9c8d-11eb-83df-1e76383a9413.jpg)
 
 ## 游戏介绍：
@@ -44,7 +46,7 @@
 
 :hammer: 开发工具：达芬奇计划编辑器
 
-:computer: 编辑器版本：`Version:0.9.0.48110`
+:computer: 编辑器版本：`Version:0.10.0.50201`
 
 :1234: 开发语言：`Lua 5.3`
 
